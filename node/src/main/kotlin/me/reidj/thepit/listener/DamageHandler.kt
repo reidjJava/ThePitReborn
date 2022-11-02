@@ -19,6 +19,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
  * @project : ThePitReborn
  * @author : Рейдж
  **/
+
 class DamageHandler : Listener {
 
     @EventHandler
@@ -26,14 +27,21 @@ class DamageHandler : Listener {
         cancelled = cause == DamageCause.FALL
     }
 
+    private val minY = PreparePlayerBrain.getSpawnLocation().y - 3
+
     @EventHandler
     fun EntityDamageByEntityEvent.handle() {
         if ((damager is Player || damager is Arrow) && entity is Player) {
             val playerDamager =
                 if (damager is Projectile) ((damager as Projectile).shooter as Player) else damager as Player
-            val user = app.getUser(entity.uniqueId) ?: return
 
-            user.killer = playerDamager
+            if (playerDamager.location.y >= minY || entity == playerDamager || entity.location.y >= minY) {
+                cancelled = true
+            } else {
+                val user = app.getUser(entity.uniqueId) ?: return
+
+                user.killer = playerDamager
+            }
         }
     }
 

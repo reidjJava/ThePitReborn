@@ -14,5 +14,7 @@ object PreparePlayerBrain : Prepare {
         spawnTeleport(user.player)
     }
 
-    fun spawnTeleport(player: Player) = player.teleport(app.worldMeta.label("spawn").also { it!!.yaw = 180F })
+    fun getSpawnLocation() = app.worldMeta.label("spawn")!!
+
+    fun spawnTeleport(player: Player) = player.teleport(getSpawnLocation().also { it.yaw = 180F })
 }

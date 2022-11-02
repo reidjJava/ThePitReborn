@@ -13,7 +13,7 @@ dependencies {
     implementation 'implario:kotlin-api:1.1.1'
     implementation 'implario:bukkit-tools:4.4.12'
 
-    implementation 'cristalix:boards-bukkit-api:3.0.15'
+    implementation 'ru.cristalix:boards-bukkit-api:3.0.16'
 
     implementation 'me.func:atlas-api:1.0.10'
     implementation 'me.func:world-api:1.0.9'

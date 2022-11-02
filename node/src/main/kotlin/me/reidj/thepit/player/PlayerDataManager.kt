@@ -32,6 +32,17 @@ class PlayerDataManager : Listener {
         prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain)
     }
 
+    /*@EventHandler
+    fun AsyncPlayerPreLoginEvent.handle() = registerIntent(app).apply {
+        CoroutineScope(Dispatchers.IO).launch {
+            val statPackage = .writeAndAwaitResponse<LoadUserPackage>(LoadUserPackage(uniqueId)).await()
+            var stat = statPackage.stat
+            if (stat == null) stat = DefaultElements.createNewUser(uniqueId)
+            userMap[uniqueId] = User(stat)
+            completeIntent(app)
+        }
+    }*/
+
     @EventHandler
     fun PlayerJoinEvent.handle() {
         userMap[player.uniqueId] = User(Stat(player.uniqueId, 0.0, 0, 0, -1L, setOf()))

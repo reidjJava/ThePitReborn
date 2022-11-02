@@ -12,6 +12,6 @@ class ArmorChangeHandler : Listener {
 
     @EventHandler
     fun PlayerArmorChangeEvent.handle() {
-
+        // TODO
     }
 }
