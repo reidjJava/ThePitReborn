@@ -21,10 +21,10 @@ object ContractGenerator {
             create("Контракт2", "Убить 2 игроков", 2, ContractType.KILL, 59.0, 20.0),
             create("Контракт3", "Убить 3 игроков", 3, ContractType.KILL, 59.0, 20.0),
             create("Контракт4", "Убить 4 игроков", 4, ContractType.KILL, 59.0, 20.0),
-            create("Контракт5", "Квест на поинты", 5, ContractType.POINTS, 60.0, 20.0),
-            create("Контракт6", "Квест на поинты", 6, ContractType.POINTS, 60.0, 20.0),
-            create("Контракт7", "Квест на поинты", 7, ContractType.POINTS, 60.0, 20.0),
-            create("Контракт8", "Квест на поинты", 8, ContractType.POINTS, 60.0, 20.0)
+            create("Контракт5", "Квест на поинты66", 5, ContractType.POINTS, 60.0, 20.0),
+            create("Контракт6", "Квест на поинты77", 6, ContractType.POINTS, 60.0, 20.0),
+            create("Контракт7", "Квест на поинты88", 7, ContractType.POINTS, 60.0, 20.0),
+            create("Контракт8", "Квест на поинты99", 8, ContractType.POINTS, 60.0, 20.0)
         )
     )
 
