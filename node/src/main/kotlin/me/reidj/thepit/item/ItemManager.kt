@@ -27,7 +27,10 @@ class ItemManager {
                 val path = "list.$it."
                 items[it] = ItemStack(it, item {
                     type = Material.valueOf(configuration.getString("${path}material"))
-                    text(configuration.getString("${path}title"))
+                    text("""
+                        ${configuration.getString("${path}title")}
+                        ${configuration.getList("${path}lore").joinToString("\n")}
+                    """.trimIndent())
                     amount = 1
                     configuration.getList("${path}attributes").forEach { attributes ->
                         val attribute = attributes.toString().split(":")

@@ -5,6 +5,7 @@ import me.func.mod.util.after
 import me.func.protocol.ui.indicator.Indicators
 import me.reidj.thepit.app
 import me.reidj.thepit.data.Stat
+import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.player.prepare.Prepare
 import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
@@ -42,6 +43,8 @@ class PlayerDataManager : Listener {
         after(5) {
             Anime.hideIndicator(player, Indicators.ARMOR, Indicators.EXP, Indicators.HEALTH, Indicators.HUNGER)
             prepares.forEach { it.execute(user) }
+            player.inventory.addItem(ItemManager.items["TEST"]!!.getItem())
+
         }
     }
 
