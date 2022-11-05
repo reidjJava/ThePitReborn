@@ -1,5 +1,8 @@
 package me.reidj.thepit.contract
 
+import me.reidj.thepit.contract.Contract
+import me.reidj.thepit.contract.ContractType
+
 /**
  * @project : ThePitReborn
  * @author : Рейдж

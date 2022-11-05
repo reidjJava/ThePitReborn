@@ -5,6 +5,7 @@ import me.func.mod.ui.menu.selection
 import me.func.mod.util.command
 import me.reidj.thepit.app
 import me.reidj.thepit.player.User
+import me.reidj.thepit.contract.ContractType
 
 /**
  * @project : ThePitReborn
