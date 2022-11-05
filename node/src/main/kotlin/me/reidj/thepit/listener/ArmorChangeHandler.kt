@@ -16,10 +16,10 @@ class ArmorChangeHandler : Listener {
 
     @EventHandler
     fun PlayerArmorChangeEvent.handle() {
-        val tags = player.inventory.armorContents.map { CraftItemStack.asNMSCopy(it) }
+        val tags = player.inventory.armorContents.map { it }.toMutableList()
         AttributeType.values().map { it.name.lowercase() }.forEach {
-            val verifiedNewItem = getAttributeValue(it, newItem, tags)
-            val verifiedOldItem = getAttributeValue(it, oldItem, tags)
+            val verifiedNewItem = getAttributeValue(it, tags.apply { add(newItem) })
+            val verifiedOldItem = getAttributeValue(it, tags.apply { add(oldItem) })
             if (newItem != null) {
                 player.attributeUpdate(it, verifiedNewItem)
             } else if (oldItem != null) {
@@ -28,11 +28,9 @@ class ArmorChangeHandler : Listener {
         }
     }
 
-    private fun getAttributeValue(objectName: String, itemStack: ItemStack?, armor: List<net.minecraft.server.v1_12_R1.ItemStack>): Double {
-        val nmsItem = CraftItemStack.asNMSCopy(itemStack)
-        val tag = nmsItem.tag
-        return armor.filter { nmsItem.hasTag() && tag.hasKeyOfType(objectName, 99) }
-                    .filter { it.hasTag() && it.tag.hasKeyOfType(objectName, 99) }
-                    .sumOf { it.tag.getDouble(objectName) }
-    }
+    private fun getAttributeValue(objectName: String, items: List<ItemStack>) =
+        items.map { CraftItemStack.asNMSCopy(it) }
+            .filter { it.hasTag() && it.tag.hasKeyOfType(objectName, 99) }
+            .sumOf { it.tag.getDouble(objectName) }
+
 }
