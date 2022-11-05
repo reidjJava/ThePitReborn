@@ -20,5 +20,7 @@ data class Attribute(
     }
 ) {
 
-    fun updateContent(content: String) = text.content.replaceAfter("§9", content)
+    fun updateContent(content: String) {
+        text.content = text.content.replaceAfter("§9", content)
+    }
 }

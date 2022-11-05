@@ -23,14 +23,17 @@ class ItemManager {
 
             val configuration = file.configuration
 
-            configuration.getConfigurationSection("list").getKeys(false).forEach {
+            Atlas.section("items", "list").forEach {
+                println(it)
                 val path = "list.$it."
                 items[it] = ItemStack(it, item {
                     type = Material.valueOf(configuration.getString("${path}material"))
-                    text("""
+                    text(
+                        """
                         ${configuration.getString("${path}title")}
                         ${configuration.getList("${path}lore").joinToString("\n")}
-                    """.trimIndent())
+                    """.trimIndent()
+                    )
                     amount = 1
                     configuration.getList("${path}attributes").forEach { attributes ->
                         val attribute = attributes.toString().split(":")

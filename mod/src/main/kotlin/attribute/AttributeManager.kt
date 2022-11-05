@@ -19,7 +19,7 @@ class AttributeManager {
     private val attributes = mutableMapOf(
         "health" to Attribute("§cЗдоровье§7:"),
         "regeneration" to Attribute("§dРегенерация§7:"),
-        "damage" to Attribute("§9Урон§7:"),
+        "damage" to Attribute("§cУрон§7:"),
         "chance-critical-damage" to Attribute("§3Шанс критического урона§7:"),
         "critical-damage-strength" to Attribute("§3Сила критического урона§7:"),
         "move-speed" to Attribute("§bСкорость перемещения§7:"),

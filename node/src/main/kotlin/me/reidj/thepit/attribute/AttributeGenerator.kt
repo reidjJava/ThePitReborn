@@ -14,9 +14,9 @@ object AttributeGenerator {
         val nmsItem = CraftItemStack.asNMSCopy(item.getItem())
         val tag = nmsItem.tag
 
-        AttributeType.values().map { it.name.lowercase() }.forEach {
+        for (it in AttributeType.values().map { it.name.lowercase() }) {
             if (!tag.hasKey(it)) {
-                return nmsItem.asBukkitMirror()
+                continue
             }
             val pair = tag.getString(it).split(":")
             val minimum = pair[0].toDouble()

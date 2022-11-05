@@ -13,4 +13,5 @@ enum class AttributeType {
     MOVE_SPEED,
     VAMPIRISM,
     ENTITY_PROTECTION,
+    ;
 }
