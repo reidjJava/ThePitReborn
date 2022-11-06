@@ -4,6 +4,7 @@ import dev.xdark.clientapi.opengl.GlStateManager
 import ru.cristalix.uiengine.element.TextElement
 import ru.cristalix.uiengine.utility.RIGHT
 import ru.cristalix.uiengine.utility.text
+import util.Formatter
 
 /**
  * @project : ThePitReborn
@@ -11,7 +12,7 @@ import ru.cristalix.uiengine.utility.text
  **/
 data class Attribute(
     val title: String, var value: Double = 0.0, val text: TextElement = text {
-        content = "$title §9$value"
+        content = "$title §9${Formatter.toFormat(value)}"
         shadow = true
         origin = RIGHT
         align = RIGHT

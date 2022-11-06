@@ -9,6 +9,7 @@ import ru.cristalix.uiengine.utility.CENTER
 import ru.cristalix.uiengine.utility.TRANSPARENT
 import ru.cristalix.uiengine.utility.V3
 import ru.cristalix.uiengine.utility.rectangle
+import util.Formatter
 
 /**
  * @project : ThePitReborn
@@ -53,7 +54,7 @@ class AttributeManager {
         mod.registerChannel("thepit:change-attribute") {
             val name = readUtf8()
             val value = readDouble()
-            attributes[name]?.updateContent(value.toString())
+            attributes[name]?.updateContent(Formatter.toFormat(value))
         }
     }
 }
