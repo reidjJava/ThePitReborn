@@ -16,6 +16,7 @@ import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
+import me.reidj.thepit.rank.RankUtil
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.cristalix.core.realm.IRealmService

@@ -10,4 +10,14 @@ import org.bukkit.entity.Player
 
 fun Player.killBoardMessage(message: String) = ModTransfer(message).send("thepit:killboard", player)
 
-fun Player.attributeUpdate(name: String, value: Double) = ModTransfer(name, value).send("thepit:change-attribute", player)
+fun Player.attributeUpdate(name: String, value: Double) =
+    ModTransfer(name, value).send("thepit:change-attribute", player)
+
+fun Player.sendRank(player: Player, image: String, players: Player) =
+    ModTransfer()
+        .uuid(player.uniqueId)
+        .string("${image.lowercase()}.png")
+        .double(player.location.x)
+        .double(player.location.y)
+        .double(player.location.z)
+        .send("thepit:rank", players)

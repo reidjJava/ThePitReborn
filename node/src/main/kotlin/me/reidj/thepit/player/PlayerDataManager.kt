@@ -62,7 +62,7 @@ class PlayerDataManager : Listener {
 
     @EventHandler
     fun PlayerJoinEvent.handle() {
-        userMap[player.uniqueId] = User(Stat(player.uniqueId, 0.0, 0, 0, -1L, setOf()))
+        userMap[player.uniqueId] = User(Stat(player.uniqueId, 0.0, 0, 0, 0, 0, -1L, setOf()))
 
         val user = app.getUser(player) ?: return
 

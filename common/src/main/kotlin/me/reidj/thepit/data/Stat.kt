@@ -12,6 +12,8 @@ data class Stat(
     var money: Double,
     var kills: Int,
     var deaths: Int,
+    var rankingPoints: Int,
+    var maxRankingPoints: Int,
     var contractLastUpdate: Long,
     var contractsTypes: Set<Contract>,
 )
