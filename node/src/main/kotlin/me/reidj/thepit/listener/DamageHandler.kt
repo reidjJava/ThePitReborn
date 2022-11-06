@@ -41,7 +41,13 @@ class DamageHandler : Listener {
             } else {
                 val user = app.getUser(entity.uniqueId) ?: return
 
-                damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE.name.lowercase(), playerDamager.inventory.armorContents)
+                val armorContents = playerDamager.inventory.armorContents
+
+                damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE.name.lowercase(), armorContents)
+
+                if (Math.random() < AttributeUtil.getAttributeValue(AttributeType.CHANCE_CRITICAL_DAMAGE.name.lowercase(), armorContents)) {
+                    damage += AttributeUtil.getAttributeValue(AttributeType.CRITICAL_DAMAGE_STRENGTH.name.lowercase(), armorContents)
+                }
 
                 user.killer = playerDamager
             }

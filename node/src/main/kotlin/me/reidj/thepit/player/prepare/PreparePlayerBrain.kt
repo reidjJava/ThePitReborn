@@ -21,4 +21,8 @@ object PreparePlayerBrain : Prepare {
     fun setMaxHealth(player: Player, maxHealth: Double) {
         player.maxHealth = 20.0 + maxHealth
     }
+
+    fun setMoveSpeed(player: Player, speed: Double) {
+        player.walkSpeed += speed.toFloat()
+    }
 }

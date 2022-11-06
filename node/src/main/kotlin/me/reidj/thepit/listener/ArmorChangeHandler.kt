@@ -24,5 +24,9 @@ class ArmorChangeHandler : Listener {
             player,
             AttributeUtil.getAttributeValue(AttributeType.HEALTH.name.lowercase(), armorContents)
         )
+        PreparePlayerBrain.setMoveSpeed(
+            player,
+            AttributeUtil.getAttributeValue(AttributeType.MOVE_SPEED.name.lowercase(), armorContents)
+        )
     }
 }
