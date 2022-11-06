@@ -3,6 +3,8 @@ package me.reidj.thepit.listener
 import me.func.mod.Anime
 import me.func.mod.util.after
 import me.reidj.thepit.app
+import me.reidj.thepit.attribute.AttributeType
+import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.killBoardMessage
 import org.bukkit.entity.Arrow
@@ -34,11 +36,12 @@ class DamageHandler : Listener {
         if ((damager is Player || damager is Arrow) && entity is Player) {
             val playerDamager =
                 if (damager is Projectile) ((damager as Projectile).shooter as Player) else damager as Player
-
             if (playerDamager.location.y >= minY || entity == playerDamager || entity.location.y >= minY) {
                 cancelled = true
             } else {
                 val user = app.getUser(entity.uniqueId) ?: return
+
+                damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE.name.lowercase(), playerDamager.inventory.armorContents)
 
                 user.killer = playerDamager
             }

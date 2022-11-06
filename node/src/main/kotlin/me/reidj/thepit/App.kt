@@ -12,6 +12,7 @@ import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.ArmorChangeHandler
 import me.reidj.thepit.listener.DamageHandler
+import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
@@ -56,7 +57,7 @@ class App : JavaPlugin() {
         ContractManager()
         ItemManager()
 
-        listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener())
+        listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
     }
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)

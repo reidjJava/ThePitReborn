@@ -28,7 +28,7 @@ object AttributeUtil {
         return nmsItem.asBukkitMirror()
     }
 
-    fun getAttributeValue(objectName: String, items: List<ItemStack>) =
+    fun getAttributeValue(objectName: String, items: Array<ItemStack>) =
         items.map { CraftItemStack.asNMSCopy(it) }
             .filter { it.hasTag() && it.tag.hasKeyOfType(objectName, 99) }
             .sumOf { it.tag.getDouble(objectName) }

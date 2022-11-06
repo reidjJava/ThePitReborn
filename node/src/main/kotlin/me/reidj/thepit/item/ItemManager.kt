@@ -34,6 +34,7 @@ class ItemManager {
                     """.trimIndent()
                     )
                     amount = 1
+                    nbt("thepit", configuration.getString("${path}texture"))
                     configuration.getList("${path}attributes").forEach { attributes ->
                         val attribute = attributes.toString().split(":")
                         nbt(attribute[0], attribute[1] + ":" + attribute[2])

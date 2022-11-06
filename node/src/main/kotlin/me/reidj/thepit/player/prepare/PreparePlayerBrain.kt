@@ -17,4 +17,8 @@ object PreparePlayerBrain : Prepare {
     fun getSpawnLocation() = app.worldMeta.label("spawn")!!
 
     fun spawnTeleport(player: Player) = player.teleport(getSpawnLocation().also { it.yaw = 180F })
+
+    fun setMaxHealth(player: Player, maxHealth: Double) {
+        player.maxHealth = 20.0 + maxHealth
+    }
 }
