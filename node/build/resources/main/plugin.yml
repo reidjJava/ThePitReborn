@@ -1,5 +1,0 @@
-name: ThePitReborn
-main: me.reidj.thepit.App
-version: 1.0
-depend:
-  - CoreAPI
