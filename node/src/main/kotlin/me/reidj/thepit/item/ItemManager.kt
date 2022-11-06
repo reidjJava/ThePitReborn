@@ -24,7 +24,6 @@ class ItemManager {
             val configuration = file.configuration
 
             Atlas.section("items", "list").forEach {
-                println(it)
                 val path = "list.$it."
                 items[it] = ItemStack(it, item {
                     type = Material.valueOf(configuration.getString("${path}material"))
