@@ -5,10 +5,10 @@ import dev.implario.platform.impl.darkpaper.PlatformDarkPaper
 import me.func.mod.Anime
 import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
-import me.func.mod.util.command
 import me.func.mod.util.listener
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
+import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.ArmorChangeHandler
@@ -17,6 +17,7 @@ import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.cristalix.core.network.ISocketClient
@@ -61,9 +62,7 @@ class App : JavaPlugin() {
 
         listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
 
-        command("rating") { player, args ->
-            getUser(player)!!.giveRankingPoints(args[0].toInt())
-        }
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf()), 0, 1)
     }
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)
