@@ -19,6 +19,7 @@ import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import ru.cristalix.core.network.ISocketClient
 import ru.cristalix.core.realm.IRealmService
 import ru.cristalix.core.realm.RealmStatus
 import java.util.*
@@ -69,3 +70,5 @@ class App : JavaPlugin() {
 
     fun getUser(uuid: UUID): User? = playerDataManager.userMap[uuid]
 }
+
+fun client() = ISocketClient.get()

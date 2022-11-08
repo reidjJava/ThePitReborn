@@ -1,5 +1,7 @@
 package me.reidj.thepit.player
 
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 import me.func.mod.Anime
 import me.func.mod.ui.token.Token
 import me.func.mod.ui.token.TokenGroup
@@ -8,19 +10,22 @@ import me.func.protocol.data.emoji.Emoji
 import me.func.protocol.ui.indicator.Indicators
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeUtil
-import me.reidj.thepit.data.Stat
+import me.reidj.thepit.client
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.player.prepare.Prepare
 import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.protocol.BulkSaveUserPackage
+import me.reidj.thepit.protocol.LoadUserPackage
 import me.reidj.thepit.protocol.SaveUserPackage
 import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.ImageType
+import me.reidj.thepit.util.coroutine
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
@@ -35,7 +40,6 @@ class PlayerDataManager : Listener {
     val userMap = mutableMapOf<UUID, User>()
 
     var prepares: MutableSet<Prepare> by notNull()
-
 
     private val group = TokenGroup(
         Token.builder()
@@ -52,21 +56,19 @@ class PlayerDataManager : Listener {
         prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain)
     }
 
-    /*@EventHandler
+    @EventHandler
     fun AsyncPlayerPreLoginEvent.handle() = registerIntent(app).apply {
-        CoroutineScope(Dispatchers.IO).launch {
-            val statPackage = .writeAndAwaitResponse<LoadUserPackage>(LoadUserPackage(uniqueId)).await()
+        coroutine().launch {
+            val statPackage = client().writeAndAwaitResponse<LoadUserPackage>(LoadUserPackage(uniqueId)).await()
             var stat = statPackage.stat
             if (stat == null) stat = DefaultElements.createNewUser(uniqueId)
             userMap[uniqueId] = User(stat)
             completeIntent(app)
         }
-    }*/
+    }
 
     @EventHandler
     fun PlayerJoinEvent.handle() {
-        userMap[player.uniqueId] = User(Stat(player.uniqueId, 0.0, 0, 0, 0, -1L, setOf()))
-
         val user = app.getUser(player) ?: return
 
         user.player = player

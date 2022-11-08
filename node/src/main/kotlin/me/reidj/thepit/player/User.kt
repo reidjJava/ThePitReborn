@@ -37,7 +37,7 @@ class User(stat: Stat) {
         if (rank.ordinal > prevRank.ordinal) {
             rank.reward(this)
             RankUtil.updateRank(this)
-            Anime.alert(player, "Поздравляем!", "Вы ранг был повышен\n${prevRank.title} §f➠§l ${rank.title}")
+            Anime.alert(player, "Поздравляем!", "Ваш ранг был повышен\n${prevRank.title} §f➠§l ${rank.title}")
         }
     }
 }

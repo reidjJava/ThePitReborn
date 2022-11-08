@@ -16,4 +16,5 @@ rootProject.name = 'ThePitReborn'
 include 'node'
 include 'mod'
 include 'common'
+include 'service'
 
