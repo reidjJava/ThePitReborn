@@ -8,11 +8,13 @@ import java.util.*
  * @author : Рейдж
  **/
 data class Stat(
-    var uuid: UUID,
+    val uuid: UUID,
     var money: Double,
     var kills: Int,
     var deaths: Int,
     var rankingPoints: Int,
     var contractLastUpdate: Long,
     var contractsTypes: Set<Contract>,
+    var playerInventory: String,
+    var playerEnderChest: String,
 )

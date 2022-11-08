@@ -9,9 +9,7 @@ import me.func.mod.util.after
 import me.func.protocol.data.emoji.Emoji
 import me.func.protocol.ui.indicator.Indicators
 import me.reidj.thepit.app
-import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.client
-import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.player.prepare.Prepare
 import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
@@ -86,9 +84,11 @@ class PlayerDataManager : Listener {
             }
 
             prepares.forEach { it.execute(user) }
-            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items["TEST2"]!!))
-            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items["TEST3"]!!))
-            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items["TEST4"]!!))
+
+            player.inventory.clear()
+
+            user.fromBase64(user.stat.playerInventory, player.inventory)
+            user.fromBase64(user.stat.playerEnderChest, player.enderChest)
         }
     }
 
@@ -96,8 +96,11 @@ class PlayerDataManager : Listener {
     fun PlayerQuitEvent.handle() {
         val uuid = player.uniqueId
 
-        userMap.remove(uuid)
         RankUtil.remove(uuid)
+
+        val user = userMap.remove(uuid) ?: return
+
+        client().write(SaveUserPackage(uuid, user.generateStat()))
     }
 
     fun bulkSave(remove: Boolean): BulkSaveUserPackage? = BulkSaveUserPackage(Bukkit.getOnlinePlayers().map {

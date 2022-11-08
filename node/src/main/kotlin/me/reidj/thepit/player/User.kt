@@ -4,6 +4,13 @@ import me.func.mod.Anime
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.rank.RankUtil
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
+import org.bukkit.util.io.BukkitObjectInputStream
+import org.bukkit.util.io.BukkitObjectOutputStream
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 /**
  * @project : ThePitReborn
@@ -20,11 +27,48 @@ class User(stat: Stat) {
         this.stat = stat
     }
 
-    fun giveMoney(money: Double) { stat.money += money }
+    private fun toBase64(inventory: Inventory): String {
+        val outputStream = ByteArrayOutputStream()
+        val dataOutput = BukkitObjectOutputStream(outputStream)
 
-    fun giveKill(kill: Int) { stat.kills += kill }
+        for (slot in 0..inventory.size) {
+            dataOutput.writeObject(inventory.getItem(slot))
+        }
+        dataOutput.close()
+        return Base64Coder.encodeLines(outputStream.toByteArray())
+    }
 
-    fun giveDeath(death: Int) { stat.deaths += death }
+    fun fromBase64(data: String, inventory: Inventory) {
+        try {
+            val inputStream = ByteArrayInputStream(Base64Coder.decodeLines(data))
+            val dataInput = BukkitObjectInputStream(inputStream)
+
+            for (slot in 0..41) {
+                val readObject = dataInput.readObject() ?: continue
+                val itemStack = readObject as ItemStack
+                inventory.setItem(slot, itemStack)
+            }
+            dataInput.close()
+        } catch (ignored: Throwable) {}
+    }
+
+    fun generateStat(): Stat {
+        stat.playerInventory = toBase64(player.inventory)
+        stat.playerEnderChest = toBase64(player.enderChest)
+        return stat
+    }
+
+    fun giveMoney(money: Double) {
+        stat.money += money
+    }
+
+    fun giveKill(kill: Int) {
+        stat.kills += kill
+    }
+
+    fun giveDeath(death: Int) {
+        stat.deaths += death
+    }
 
     fun giveRankingPoints(points: Int) {
         val prevRankingPoints = stat.rankingPoints

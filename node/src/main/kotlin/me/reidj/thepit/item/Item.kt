@@ -12,6 +12,4 @@ interface Item {
     fun getAddress(): String
 
     fun getItem(): ItemStack
-
-    fun getUUID(): UUID
 }
