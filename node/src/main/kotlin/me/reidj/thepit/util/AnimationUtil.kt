@@ -13,7 +13,7 @@ fun Player.killBoardMessage(message: String) = ModTransfer(message).send("thepit
 fun Player.attributeUpdate(name: String, value: Double) =
     ModTransfer(name, value).send("thepit:change-attribute", player)
 
-fun Player.sendRank(player: Player, image: String, players: Player) =
+fun sendRank(player: Player, image: String, players: Player) =
     ModTransfer()
         .uuid(player.uniqueId)
         .string("${image.lowercase()}.png")

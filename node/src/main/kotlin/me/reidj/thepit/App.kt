@@ -5,6 +5,7 @@ import dev.implario.platform.impl.darkpaper.PlatformDarkPaper
 import me.func.mod.Anime
 import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
+import me.func.mod.util.command
 import me.func.mod.util.listener
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
@@ -16,7 +17,6 @@ import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
-import me.reidj.thepit.rank.RankUtil
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.cristalix.core.realm.IRealmService
@@ -59,6 +59,10 @@ class App : JavaPlugin() {
         ItemManager()
 
         listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
+
+        command("rating") { player, args ->
+            getUser(player)!!.giveRankingPoints(args[0].toInt())
+        }
     }
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)

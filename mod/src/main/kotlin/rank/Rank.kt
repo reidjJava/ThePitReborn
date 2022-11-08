@@ -7,6 +7,7 @@ import dev.xdark.clientapi.event.render.RenderTickPre
 import dev.xdark.clientapi.resource.ResourceLocation
 import dev.xdark.feder.NetUtil
 import ru.cristalix.clientapi.KotlinModHolder.mod
+import ru.cristalix.clientapi.readId
 import ru.cristalix.uiengine.UIEngine
 import ru.cristalix.uiengine.element.Context3D
 import ru.cristalix.uiengine.eventloop.animate
@@ -20,8 +21,8 @@ import kotlin.math.sqrt
  * @author : Рейдж
  **/
 
-const val ENTITY_SIZE = 30
-const val VIEW_DISTANCE = 30
+private const val ENTITY_SIZE = 30
+private const val VIEW_DISTANCE = 30
 
 class Rank {
 
@@ -34,7 +35,7 @@ class Rank {
 
     init {
         mod.registerChannel("thepit:rank") {
-            val uuid = UUID.fromString(NetUtil.readUtf8(this))
+            val uuid = readId()
             val texture = NetUtil.readUtf8(this)
             val x = readDouble()
             val y = readDouble() + 3.3

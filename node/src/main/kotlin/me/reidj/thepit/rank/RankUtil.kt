@@ -14,26 +14,29 @@ import java.util.*
 object RankUtil {
 
     fun createRank(user: User) {
-        val rank = getRank(user.stat.rankingPoints) ?: return
-        Bukkit.getOnlinePlayers().forEach { it.sendRank(user.player, rank.name, it) }
+        val rank = getRank(user.stat.rankingPoints)
+        if (rank == RankType.NONE) return
+        Bukkit.getOnlinePlayers().forEach { sendRank(user.player, rank.name, it) }
     }
 
     fun showAll(user: User) {
         Bukkit.getOnlinePlayers().mapNotNull { app.getUser(it) }.forEach {
-            val rank = getRank(user.stat.rankingPoints) ?: return
-            user.player.sendRank(it.player, rank.name, user.player)
+            val rank = getRank(it.stat.rankingPoints)
+            if (rank == RankType.NONE) return
+            sendRank(it.player, rank.name, user.player)
         }
     }
 
     fun updateRank(user: User) {
-        val rank = getRank(user.stat.rankingPoints) ?: return
+        val rank = getRank(user.stat.rankingPoints)
+        if (rank == RankType.NONE) return
         Bukkit.getOnlinePlayers().forEach {
             remove(it.uniqueId)
-            it.sendRank(user.player, rank.name, it)
+            sendRank(user.player, rank.name, it)
         }
     }
 
     fun remove(uuid: UUID) = ModTransfer(uuid.toString()).send("thepit:rank-remove", Bukkit.getOnlinePlayers())
 
-    private fun getRank(points: Int) = RankType.values().first { points in it.points }.takeIf { it != RankType.NONE }
+    fun getRank(points: Int) = RankType.values().first { points in it.points }
 }

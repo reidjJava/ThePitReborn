@@ -15,11 +15,14 @@ import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.protocol.BulkSaveUserPackage
 import me.reidj.thepit.protocol.SaveUserPackage
+import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.Formatter
+import me.reidj.thepit.util.ImageType
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import kotlin.properties.Delegates.notNull
 
@@ -41,7 +44,7 @@ class PlayerDataManager : Listener {
             .build(),
         Token.builder()
             .title("Рейтинг")
-            .content { player -> Emoji.DONATE_WHITE }
+            .content { player -> Emoji.DONATE_WHITE + " " + app.getUser(player)!!.stat.rankingPoints }
             .build()
     )
 
@@ -62,22 +65,37 @@ class PlayerDataManager : Listener {
 
     @EventHandler
     fun PlayerJoinEvent.handle() {
-        userMap[player.uniqueId] = User(Stat(player.uniqueId, 0.0, 0, 0, 0, 0, -1L, setOf()))
+        userMap[player.uniqueId] = User(Stat(player.uniqueId, 0.0, 0, 0, 0, -1L, setOf()))
 
         val user = app.getUser(player) ?: return
 
         user.player = player
 
         after(5) {
+            Anime.loadTextures(player, *ImageType.values().map { it.path() }.toTypedArray())
+
             Anime.hideIndicator(player, Indicators.ARMOR, Indicators.EXP, Indicators.HEALTH, Indicators.HUNGER)
 
             group.subscribe(player)
+
+            RankUtil.run {
+                createRank(user)
+                showAll(user)
+            }
 
             prepares.forEach { it.execute(user) }
             player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items["TEST2"]!!))
             player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items["TEST3"]!!))
             player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items["TEST4"]!!))
         }
+    }
+
+    @EventHandler
+    fun PlayerQuitEvent.handle() {
+        val uuid = player.uniqueId
+
+        userMap.remove(uuid)
+        RankUtil.remove(uuid)
     }
 
     fun bulkSave(remove: Boolean): BulkSaveUserPackage? = BulkSaveUserPackage(Bukkit.getOnlinePlayers().map {
