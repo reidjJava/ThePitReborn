@@ -54,7 +54,7 @@ class App : JavaPlugin() {
             groupName = "ThePitReborn"
         }
 
-        worldMeta = MapLoader.load("POTH", "DragonsLore")
+        worldMeta = MapLoader.load("POTH", "DragonsLor")
 
         playerDataManager = PlayerDataManager()
 
