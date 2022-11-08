@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import me.reidj.thepit.protocol.BulkSaveUserPackage
 import me.reidj.thepit.protocol.LoadUserPackage
 import me.reidj.thepit.protocol.SaveUserPackage
+import me.reidj.thepit.protocol.TopPackage
 import ru.cristalix.core.CoreApi
 import ru.cristalix.core.microservice.MicroServicePlatform
 import ru.cristalix.core.microservice.MicroserviceBootstrap
@@ -21,7 +22,8 @@ fun main() {
         capabilities(
             LoadUserPackage::class,
             BulkSaveUserPackage::class,
-            SaveUserPackage::class
+            SaveUserPackage::class,
+            TopPackage::class
         )
 
         CoreApi.get().registerService(IPermissionService::class.java, PermissionService(this))
@@ -41,6 +43,12 @@ fun main() {
         addListener(BulkSaveUserPackage::class.java) { realmId, pckg ->
             mongoAdapter.save(pckg.packages.map { it.stat })
             println("Received BulkSaveUserPackage from ${realmId.realmName}")
+        }
+        addListener(TopPackage::class.java) { realmId, pckg ->
+            val top = mongoAdapter.getTop(pckg.topType, pckg.limit)
+            pckg.entries = top
+            forward(realmId, pckg)
+            println("Top generated for ${realmId.realmName}")
         }
     }
 

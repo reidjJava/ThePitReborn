@@ -4,14 +4,18 @@ import com.mongodb.ClientSessionOptions
 import com.mongodb.async.client.MongoClient
 import com.mongodb.async.client.MongoClients
 import com.mongodb.async.client.MongoCollection
-import com.mongodb.client.model.Filters
-import com.mongodb.client.model.UpdateOneModel
-import com.mongodb.client.model.UpdateOptions
-import com.mongodb.client.model.WriteModel
+import com.mongodb.client.model.*
+import com.mongodb.client.model.Aggregates.limit
+import com.mongodb.client.model.Aggregates.project
 import com.mongodb.session.ClientSession
 import me.reidj.thepit.data.Stat
+import me.reidj.thepit.top.PlayerTopEntry
+import me.reidj.thepit.top.TopEntry
+import me.reidj.thepit.uitl.UtilCristalix
 import org.bson.Document
 import ru.cristalix.core.GlobalSerializers
+import ru.cristalix.core.network.ISocketClient
+import ru.cristalix.core.network.packages.BulkGroupsPackage
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
@@ -87,24 +91,22 @@ open class MongoAdapter(dbUrl: String, dbName: String, collection: String) {
 
     private fun handle(throwable: Throwable?) = throwable?.printStackTrace()
 
-    /*open fun <V> makeRatingByField(fieldName: String, limit: Int, isSortAscending: Boolean): List<TopEntry<Stat, V>> {
+    open fun <V> makeRatingByField(fieldName: String, limit: Int): List<TopEntry<Stat, V>> {
         val entries = ArrayList<TopEntry<Stat, V>>()
         val future: CompletableFuture<List<TopEntry<Stat, V>>> = CompletableFuture<List<TopEntry<Stat, V>>>()
 
-        data.createIndex(hashed("_id")) { _, _ -> }
-        data.createIndex(hashed("uuid")) { _, _ -> }
-        data.createIndex(ascending(fieldName)) { _, _ -> }
-
-        data.aggregate(listOf(
+        val operations = listOf(
             project(
                 Projections.fields(
                     Projections.include(fieldName),
                     Projections.include("uuid"),
                     Projections.exclude("_id")
                 )
-            ), sort(if (isSortAscending) Sorts.ascending(fieldName) else Sorts.descending(fieldName)),
+            ), Aggregates.sort(Sorts.descending(fieldName, "experience")),
             limit(limit)
-        )).forEach({ document: Document ->
+        )
+
+        data.aggregate(operations).forEach({ document: Document ->
             if (readDocument(document) == null) {
                 throw NullPointerException("Document is null")
             }
@@ -116,11 +118,12 @@ open class MongoAdapter(dbUrl: String, dbName: String, collection: String) {
             }
             future.complete(entries)
         }
+
         return future.get()
     }
 
-    suspend fun getTop(topType: String, limit: Int, isSortAscending: Boolean): List<PlayerTopEntry<Any>> {
-        val entries = makeRatingByField<String>(topType, limit, isSortAscending)
+    fun getTop(topType: String, limit: Int): List<PlayerTopEntry<Any>> {
+        val entries = makeRatingByField<String>(topType, limit)
         val playerEntries = mutableListOf<PlayerTopEntry<Any>>()
 
         entries.forEach { it.key.let { stat -> playerEntries.add(PlayerTopEntry(stat, it.value)) } }
@@ -132,7 +135,8 @@ open class MongoAdapter(dbUrl: String, dbName: String, collection: String) {
 
             val map = ISocketClient.get()
                 .writeAndAwaitResponse<BulkGroupsPackage>(BulkGroupsPackage(uuids))
-                .await().groups.associateBy { it.uuid }
+                .get(5L, TimeUnit.SECONDS)
+                .groups.associateBy { it.uuid }
 
             playerEntries.forEach {
                 map[it.key.uuid]?.let {data ->
@@ -140,7 +144,7 @@ open class MongoAdapter(dbUrl: String, dbName: String, collection: String) {
                     it.displayName = UtilCristalix.createDisplayName(data)
                 }
             }
-        } catch (exception: java.lang.Exception) {
+        } catch (exception: Exception) {
             exception.printStackTrace()
             playerEntries.forEach {
                 it.userName = "ERROR"
@@ -153,7 +157,7 @@ open class MongoAdapter(dbUrl: String, dbName: String, collection: String) {
                 new.userName = it.userName
             }
         }
-    }*/
+    }
 
     fun clear(uuid: UUID) {
         data.deleteOne(Filters.eq("uuid", uuid.toString())) { _, throwable: Throwable? ->

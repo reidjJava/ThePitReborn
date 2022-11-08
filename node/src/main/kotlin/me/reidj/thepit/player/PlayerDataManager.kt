@@ -83,12 +83,10 @@ class PlayerDataManager : Listener {
                 showAll(user)
             }
 
-            prepares.forEach { it.execute(user) }
-
-            player.inventory.clear()
-
             user.fromBase64(user.stat.playerInventory, player.inventory)
             user.fromBase64(user.stat.playerEnderChest, player.enderChest)
+
+            prepares.forEach { it.execute(user) }
         }
     }
 

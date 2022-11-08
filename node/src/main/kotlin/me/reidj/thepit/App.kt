@@ -9,6 +9,7 @@ import me.func.mod.util.listener
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
 import me.reidj.thepit.clock.GameTimer
+import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.ArmorChangeHandler
@@ -62,7 +63,7 @@ class App : JavaPlugin() {
 
         listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf()), 0, 1)
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager())), 0, 1)
     }
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)
