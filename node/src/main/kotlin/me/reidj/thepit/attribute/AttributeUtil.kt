@@ -1,6 +1,5 @@
 package me.reidj.thepit.attribute
 
-import me.reidj.thepit.item.Item
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
 import kotlin.random.Random
@@ -11,8 +10,8 @@ import kotlin.random.Random
  **/
 object AttributeUtil {
 
-    fun generateAttribute(item: Item): ItemStack {
-        val nmsItem = CraftItemStack.asNMSCopy(item.getItem())
+    fun generateAttribute(item: ItemStack): ItemStack {
+        val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag
 
         for (it in AttributeType.values().map { it.name.lowercase() }) {

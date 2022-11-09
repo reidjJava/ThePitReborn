@@ -1,13 +1,19 @@
 package me.reidj.thepit.item
 
-import org.bukkit.inventory.ItemStack
-import java.util.*
+import dev.implario.bukkit.item.ItemBuilder
+import me.func.atlas.Atlas
 
 /**
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-interface Item {
+abstract class Item {
 
-    fun getItem(): ItemStack
+    val configuration = Atlas.find("items")
+
+    val path = "items."
+
+    abstract val itemBuilder: ItemBuilder
+
+    abstract fun init(objectName: String)
 }
