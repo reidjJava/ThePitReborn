@@ -21,20 +21,7 @@ class TopManager : ClockInject {
     private val tops = Maps.newConcurrentMap<String, List<TopEntry<String, String>>>()
     private val boards = Maps.newConcurrentMap<String, Board>()
 
-    private val TOP_PRESTIGE: Location = app.worldMeta.getLabel("top")!!
-
     private val topDataFormat = DecimalFormat("###,###,###")
-
-    init {
-        boards["kills"] = newBoard(
-            "Топ по престижу",
-            "Престиж",
-            TOP_PRESTIGE.x + 0.1,
-            TOP_PRESTIGE.y + 4.5,
-            TOP_PRESTIGE.z + 0.5,
-            -90F
-        )
-    }
 
     private fun newBoard(title: String, fieldName: String, x: Double, y: Double, z: Double, yaw: Float) =
         Boards.newBoard().also {

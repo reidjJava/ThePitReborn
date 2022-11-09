@@ -23,6 +23,8 @@ class User(stat: Stat) {
     lateinit var killer: Player
     lateinit var player: Player
 
+    var isArmLock = false
+
     init {
         this.stat = stat
     }
@@ -49,7 +51,8 @@ class User(stat: Stat) {
                 inventory.setItem(slot, itemStack)
             }
             dataInput.close()
-        } catch (ignored: Throwable) {}
+        } catch (_: Throwable) {
+        }
     }
 
     fun generateStat(): Stat {

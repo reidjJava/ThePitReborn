@@ -22,7 +22,7 @@ object AttributeUtil {
             val pair = tag.getString(it).split(":")
             val minimum = pair[0].toDouble()
             val maximum = pair[1].toDouble()
-            val result = Random.nextDouble(minimum, maximum)
+            val result = Random.nextDouble((maximum - minimum) + 1) + minimum
             tag.setDouble(it, result)
         }
         return nmsItem.asBukkitMirror()

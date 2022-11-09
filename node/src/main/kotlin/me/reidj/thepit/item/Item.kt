@@ -9,7 +9,5 @@ import java.util.*
  **/
 interface Item {
 
-    fun getAddress(): String
-
     fun getItem(): ItemStack
 }

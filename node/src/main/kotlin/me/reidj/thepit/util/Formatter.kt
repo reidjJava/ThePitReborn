@@ -9,6 +9,9 @@ import java.text.DecimalFormat
 object Formatter {
 
     private val doubleFormat = DecimalFormat("#,###.##")
+    private val moneyFormat = DecimalFormat("###,###,###,###,###,###.##")
 
     fun toFormat(double: Double): String = doubleFormat.format(double)
+
+    fun toMoneyFormat(money: Double) = moneyFormat.format(money)
 }

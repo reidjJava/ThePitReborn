@@ -2,12 +2,15 @@ package me.reidj.thepit
 
 import dev.implario.bukkit.platform.Platforms
 import dev.implario.platform.impl.darkpaper.PlatformDarkPaper
+import kotlinx.coroutines.runBlocking
 import me.func.mod.Anime
 import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
+import me.func.mod.util.command
 import me.func.mod.util.listener
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
+import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.contract.ContractManager
@@ -18,6 +21,7 @@ import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
+import me.reidj.thepit.sharpening.SharpeningManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -54,16 +58,26 @@ class App : JavaPlugin() {
             groupName = "ThePitReborn"
         }
 
-        worldMeta = MapLoader.load("POTH", "DragonsLor")
+        worldMeta = MapLoader.load("POTH", "DragonsLore")
 
         playerDataManager = PlayerDataManager()
 
         ContractManager()
         ItemManager()
+        SharpeningManager()
 
         listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager())), 0, 1)
+
+        command("item") { player, args ->
+            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items[args[0]]!!))
+        }
+    }
+
+    override fun onDisable() {
+        runBlocking { client().write(playerDataManager.bulkSave(true)) }
+        Thread.sleep(1000)
     }
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)
@@ -71,4 +85,4 @@ class App : JavaPlugin() {
     fun getUser(uuid: UUID): User? = playerDataManager.userMap[uuid]
 }
 
-fun client() = ISocketClient.get()
+fun client(): ISocketClient = ISocketClient.get()

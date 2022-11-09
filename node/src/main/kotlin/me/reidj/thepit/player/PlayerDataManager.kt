@@ -54,9 +54,19 @@ class PlayerDataManager : Listener {
         prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain)
     }
 
+    private val uuid = setOf(
+        UUID.fromString("ca87474e-b15c-11e9-80c4-1cb72caa35fd"),
+        UUID.fromString("bf30a1df-85de-11e8-a6de-1cb72caa35fd")
+    )
+
     @EventHandler
     fun AsyncPlayerPreLoginEvent.handle() = registerIntent(app).apply {
         coroutine().launch {
+            if (uniqueId !in uuid) {
+                result = AsyncPlayerPreLoginEvent.Result.KICK_OTHER
+                disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Сейчас нельзя зайти на этот сервер")
+                return@launch
+            }
             val statPackage = client().writeAndAwaitResponse<LoadUserPackage>(LoadUserPackage(uniqueId)).await()
             var stat = statPackage.stat
             if (stat == null) stat = DefaultElements.createNewUser(uniqueId)
@@ -83,6 +93,8 @@ class PlayerDataManager : Listener {
                 showAll(user)
             }
 
+            player.isOp = player.uniqueId in uuid
+
             user.fromBase64(user.stat.playerInventory, player.inventory)
             user.fromBase64(user.stat.playerEnderChest, player.enderChest)
 
@@ -104,6 +116,6 @@ class PlayerDataManager : Listener {
     fun bulkSave(remove: Boolean): BulkSaveUserPackage? = BulkSaveUserPackage(Bukkit.getOnlinePlayers().map {
         val uuid = it.uniqueId
         val user = (if (remove) userMap.remove(uuid) else userMap[uuid]) ?: return null
-        SaveUserPackage(uuid, user.stat)
+        SaveUserPackage(uuid, user.generateStat())
     })
 }
