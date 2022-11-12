@@ -23,8 +23,10 @@ class ItemManager {
 
             val configuration = file.configuration
 
+
             configuration.getConfigurationSection("items").getKeys(false).forEach {
                 val path = "items.$it."
+                val sharpeningLevelPath = "${path}sharpeningLevel"
                 items[it] = item {
                     Equipment(this).init(it)
                     SharpeningStone(this).init(it)
@@ -33,10 +35,14 @@ class ItemManager {
                         """
                         ${configuration.getString("${path}title")}
                         ${configuration.getList("${path}lore").joinToString("\n")}
+                        
                     """.trimIndent()
                     )
                     amount(1)
                     nbt("thepit", configuration.getString("${path}texture"))
+                    if (configuration.isInt(sharpeningLevelPath)) {
+                        nbt("sharpeningLevel", configuration.getInt(sharpeningLevelPath))
+                    }
                 }
             }
         }

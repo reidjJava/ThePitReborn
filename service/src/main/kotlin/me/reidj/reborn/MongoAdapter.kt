@@ -102,7 +102,7 @@ open class MongoAdapter(dbUrl: String, dbName: String, collection: String) {
                     Projections.include("uuid"),
                     Projections.exclude("_id")
                 )
-            ), Aggregates.sort(Sorts.descending(fieldName, "experience")),
+            ), Aggregates.sort(Sorts.descending(fieldName)),
             limit(limit)
         )
 

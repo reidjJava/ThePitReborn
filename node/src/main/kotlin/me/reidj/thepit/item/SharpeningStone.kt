@@ -9,8 +9,9 @@ import dev.implario.bukkit.item.ItemBuilder
 class SharpeningStone(override val itemBuilder: ItemBuilder) : Item() {
 
     override fun init(objectName: String) {
-        val sharpeningChancePath = "${path}$objectName.sharpening_chance"
-        val sharpeningPricePath = "${path}$objectName.sharpening_price"
+        val path = "${path}$objectName."
+        val sharpeningChancePath = "${path}sharpening_chance"
+        val sharpeningPricePath = "${path}sharpening_price"
         if (configuration.isDouble(sharpeningChancePath)) {
             itemBuilder.nbt("sharpening_chance", configuration.getDouble(sharpeningChancePath))
         }

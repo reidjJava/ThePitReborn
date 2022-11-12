@@ -72,7 +72,8 @@ class SharpeningManager {
                                 player.errorMessage("Точильный камень был разрушен")
                             } else {
                                 Anime.topMessage(player, "§aПредмет был заточен")
-                                attributes.filter { tag.hasKeyOfType(it, 99) }.forEach { tag.setDouble(it, tag.getDouble(it) + 1.0) }
+                                attributes.filter { tag.hasKeyOfType(it, 99) }
+                                    .forEach { tag.setDouble(it, tag.getDouble(it) + 1.0) }
                                 player.itemInHand.setAmount(0)
                                 player.inventory.addItem(nmsItem.asBukkitMirror())
                             }
