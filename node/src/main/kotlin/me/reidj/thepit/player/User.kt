@@ -8,6 +8,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.io.BukkitObjectInputStream
 import org.bukkit.util.io.BukkitObjectOutputStream
+import org.spigotmc.AsyncCatcher
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -22,6 +23,8 @@ class User(stat: Stat) {
 
     lateinit var killer: Player
     lateinit var player: Player
+
+    private var state: State? = null
 
     var isArmLock = false
 
@@ -53,6 +56,14 @@ class User(stat: Stat) {
             dataInput.close()
         } catch (_: Throwable) {
         }
+    }
+
+    fun setState(state: State) {
+        AsyncCatcher.catchOp("Async state change")
+        if (this.state != null && this.state != state)
+            state.leaveState(this)
+        this.state = state
+        state.enterState(this)
     }
 
     fun generateStat(): Stat {
