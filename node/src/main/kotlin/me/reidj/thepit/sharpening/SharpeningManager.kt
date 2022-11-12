@@ -34,7 +34,6 @@ class SharpeningManager {
                 .find { CraftItemStack.asNMSCopy(it).tag.hasKeyOfType("sharpening_chance", 99) }
                 ?: return@command
             val sharpeningTag = CraftItemStack.asNMSCopy(sharpening).tag
-            val attributes = AttributeType.values().map { it.name.lowercase() }
             val chance = sharpeningTag.getDouble("sharpening_chance")
             val price = sharpeningTag.getDouble("sharpening_price")
 
@@ -59,10 +58,8 @@ class SharpeningManager {
                         val nmsItem = CraftItemStack.asNMSCopy(player.itemInHand)
                         val tag = nmsItem.tag
 
-                        for (objectName in attributes) {
-                            if (!nmsItem.hasTag() && !tag.hasKeyOfType(objectName, 99)) {
-                                return@onClick
-                            }
+                        if (AttributeType.getAttributeWithNbt(tag).isEmpty()) {
+                            return@onClick
                         }
 
                         if (user.stat.money >= price) {
@@ -72,9 +69,13 @@ class SharpeningManager {
                                 player.errorMessage("Точильный камень был разрушен")
                             } else {
                                 Anime.topMessage(player, "§aПредмет был заточен")
-                                attributes.filter { tag.hasKeyOfType(it, 99) }
-                                    .forEach { tag.setDouble(it, tag.getDouble(it) + 1.0) }
+
+                                AttributeType.getAttributeWithNbt(tag).forEach {
+                                    tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 1.0)
+                                }
+
                                 player.itemInHand.setAmount(0)
+
                                 player.inventory.addItem(nmsItem.asBukkitMirror())
                             }
                             sharpening.setAmount(sharpening.getAmount() - 1)

@@ -1,5 +1,6 @@
 package me.reidj.thepit.attribute
 
+import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.Formatter
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
@@ -16,29 +17,33 @@ object AttributeUtil {
         val tag = nmsItem.tag
         val newLore = mutableListOf<String>()
 
-        for (attribute in AttributeType.values()) {
-            val objectName = attribute.name.lowercase()
-            if (!tag.hasKey(objectName)) {
-                continue
-            }
+        AttributeType.getAttributeWithNbt(tag).forEach {
+            val objectName = it.name.lowercase()
             val pair = tag.getString(objectName).split(":")
             val minimum = pair[0].toDouble()
             val maximum = pair[1].toDouble()
             val result = Random.nextDouble((maximum - minimum) + 1) + minimum
             tag.setDouble(objectName, result)
-            newLore.add("${attribute.title}§7: §9${Formatter.toFormat(result)}")
+            newLore.add(getTextWithAttribute(it.title, result))
         }
 
         val itemStack = nmsItem.asBukkitMirror()
 
-        addLoreWithAttribute(itemStack, newLore)
+        itemStack.itemMeta = itemStack.itemMeta.apply {
+            lore = lore.also { it.addAll(newLore) }
+        }
 
         return itemStack
     }
 
-    fun addLoreWithAttribute(itemStack: ItemStack, newLore: List<String>){
-        itemStack.itemMeta = itemStack.itemMeta.apply {
-            lore = lore.also { it.addAll(newLore) }
+    fun setNewLoreWithAttributes(itemStack: ItemStack) {
+        val tag = CraftItemStack.asNMSCopy(itemStack).tag
+        itemStack.itemMeta = itemStack.itemMeta.also { meta ->
+            meta.lore = ItemManager.items[tag.getString("address")]?.lore.apply {
+                AttributeType.getAttributeWithNbt(tag).forEach {
+                    this?.add(getTextWithAttribute(it.title, tag.getDouble(it.getObjectName())))
+                }
+            }
         }
     }
 
@@ -46,4 +51,6 @@ object AttributeUtil {
         items.map { CraftItemStack.asNMSCopy(it) }
             .filter { it.hasTag() && it.tag.hasKeyOfType(objectName, 99) }
             .sumOf { it.tag.getDouble(objectName) }
+
+    private fun getTextWithAttribute(title: String, value: Double) = "$title§7: §9${Formatter.toFormat(value)}"
 }
