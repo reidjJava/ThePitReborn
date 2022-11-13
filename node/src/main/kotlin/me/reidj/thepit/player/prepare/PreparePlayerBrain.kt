@@ -34,6 +34,6 @@ object PreparePlayerBrain : Prepare {
 
     fun addPotionEffect(player: Player, potionEffectType: PotionEffectType, duration: Int, amplifier: Int) {
         player.removePotionEffect(potionEffectType)
-        player.addPotionEffect(PotionEffect(potionEffectType, duration, amplifier * 20, false))
+        player.addPotionEffect(PotionEffect(potionEffectType, duration * 20, amplifier))
     }
 }

@@ -66,9 +66,15 @@ class App : JavaPlugin() {
         ContractManager()
         ItemManager()
         SharpeningManager()
-        ConsumableManager()
 
-        listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
+        listener(
+            playerDataManager,
+            DamageHandler(),
+            ArmorChangeHandler(),
+            UnusedListener(),
+            PlayerRegenerationHandler(),
+            ConsumableManager()
+        )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager())), 0, 1)
 

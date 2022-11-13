@@ -1,15 +1,15 @@
 package me.reidj.thepit.consumable
 
-import me.func.mod.ui.Glow
+import dev.implario.bukkit.item.item
 import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.selection
 import me.func.mod.util.command
-import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.emoji.Emoji
 import me.reidj.thepit.app
 import me.reidj.thepit.sound.SoundType
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
+import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -25,7 +25,7 @@ class ConsumableManager : Listener {
     private val menu = selection {
         title = "Флаконы"
         vault = Emoji.COIN
-        columns = 3
+        columns = 2
     }
 
     init {
@@ -41,25 +41,36 @@ class ConsumableManager : Listener {
             button {
                 title = it.title
                 description = it.description
-                item = it.item
+                price = it.price.toLong()
+                item = item {
+                    type(Material.CLAY_BALL)
+                    nbt("thepit", it.getObjectName())
+                }
                 onClick { player, _, _ ->
                     val user = app.getUser(player) ?: return@onClick
 
-                    if (player.inventory.map { CraftItemStack.asNMSCopy(it) }
-                            .count { itemStack ->
-                                itemStack.hasTag() && itemStack.tag.hasKeyOfType(
-                                    "consumable",
-                                    8
-                                )
-                            } == 5) {
+                    val consumableAmount = player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
+                        itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8) }
+
+                    if (consumableAmount.count() >= 2 || consumableAmount.any { it.asBukkitMirror().getAmount() >= 5 }) {
                         player.errorMessage("У вас максимальное количество флаконов!")
                         return@onClick
                     }
 
                     if (user.stat.money >= it.price) {
                         user.giveMoney(-it.price)
-                        Glow.animate(player, 1.0, GlowColor.GREEN)
-                        player.inventory.addItem(it.item)
+                        player.inventory.addItem(item {
+                            type(Material.CLAY_BALL)
+                            text(
+                                """
+                            ${it.title}
+                            ${it.description}
+                            """.trimIndent()
+                            )
+                            amount(1)
+                            nbt("thepit", it.getObjectName())
+                            nbt("consumable", it.getObjectName())
+                        })
                         generateButtons(player)
                     } else {
                         player.errorMessage("Недостаточно средств!")
