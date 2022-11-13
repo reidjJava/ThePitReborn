@@ -13,6 +13,7 @@ import me.func.world.WorldMeta
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.TopManager
+import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.ArmorChangeHandler
@@ -65,13 +66,14 @@ class App : JavaPlugin() {
         ContractManager()
         ItemManager()
         SharpeningManager()
+        ConsumableManager()
 
         listener(playerDataManager, DamageHandler(), ArmorChangeHandler(), UnusedListener(), PlayerRegenerationHandler())
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager())), 0, 1)
 
         command("item") { player, args ->
-            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager.items[args[0]]!!))
+            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager[args[0]]!!))
         }
     }
 

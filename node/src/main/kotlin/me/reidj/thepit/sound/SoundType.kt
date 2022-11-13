@@ -9,10 +9,10 @@ import org.bukkit.entity.Player
  * @author : Рейдж
  **/
 
-private const val STORAGE = "https://storage.c7x.dev/reidj/tower/"
+private const val STORAGE = "https://storage.c7x.dev/reidj/thepit/"
 
 enum class SoundType {
-
+    USE_CONSUMABLE,
     ;
 
     fun send(player: Player) = Sound("${STORAGE}${name.lowercase()}.ogg")

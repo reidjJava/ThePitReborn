@@ -12,7 +12,9 @@ import org.bukkit.inventory.ItemStack
 class ItemManager {
 
     companion object {
-        val items = hashMapOf<String, ItemStack>()
+        private val items = hashMapOf<String, ItemStack>()
+
+        operator fun get(objectName: String) = items[objectName]
     }
 
     init {
@@ -39,6 +41,8 @@ class ItemManager {
                     """.trimIndent()
                     )
                     amount(1)
+                    nbt("HideFlags", 63)
+                    nbt("Unbreakable", 1)
                     nbt("thepit", configuration.getString("${path}texture"))
                     if (configuration.isInt(sharpeningLevelPath)) {
                         nbt("sharpeningLevel", configuration.getInt(sharpeningLevelPath))

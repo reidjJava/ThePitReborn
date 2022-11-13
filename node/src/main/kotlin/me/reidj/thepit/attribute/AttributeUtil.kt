@@ -39,7 +39,7 @@ object AttributeUtil {
     fun setNewLoreWithAttributes(itemStack: ItemStack) {
         val tag = CraftItemStack.asNMSCopy(itemStack).tag
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
-            meta.lore = ItemManager.items[tag.getString("address")]?.lore.apply {
+            meta.lore = ItemManager[tag.getString("address")]?.lore.apply {
                 AttributeType.getAttributeWithNbt(tag).forEach {
                     this?.add(getTextWithAttribute(it.title, tag.getDouble(it.getObjectName())))
                 }
