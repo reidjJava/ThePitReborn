@@ -7,10 +7,13 @@ import me.func.mod.util.command
 import me.func.protocol.data.emoji.Emoji
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
+import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 /**
  * @project : ThePitReborn
@@ -57,6 +60,12 @@ class SharpeningManager {
                         val user = app.getUser(player) ?: return@onClick
                         val nmsItem = CraftItemStack.asNMSCopy(player.itemInHand)
                         val tag = nmsItem.tag
+                        val sharpeningLevel = tag.getInt("sharpeningLevel")
+
+                        if (sharpeningLevel == 10) {
+                            player.errorMessage("У вас максимальный уровень заточки!")
+                            return@onClick
+                        }
 
                         if (AttributeType.getAttributeWithNbt(tag).isEmpty()) {
                             return@onClick
@@ -72,11 +81,17 @@ class SharpeningManager {
 
                                 AttributeType.getAttributeWithNbt(tag).forEach {
                                     tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 1.0)
+                                    tag.setInt("sharpeningLevel", sharpeningLevel + 1)
                                 }
 
                                 player.itemInHand.setAmount(0)
 
-                                player.inventory.addItem(nmsItem.asBukkitMirror())
+                                val itemStack = nmsItem.asBukkitMirror()
+
+                                setNewNameWithSharpening(itemStack)
+                                AttributeUtil.setNewLoreWithAttributes(itemStack)
+
+                                player.inventory.addItem(itemStack)
                             }
                             sharpening.setAmount(sharpening.getAmount() - 1)
                         } else {
@@ -91,5 +106,14 @@ class SharpeningManager {
 
     private fun openMenu(player: Player) {
         menu.open(player)
+    }
+
+    private fun setNewNameWithSharpening(itemStack: ItemStack) {
+        val tag = CraftItemStack.asNMSCopy(itemStack).tag
+        val sharpeningLevel = tag.getInt("sharpeningLevel")
+        itemStack.itemMeta = itemStack.itemMeta.also { meta ->
+            meta.displayName =
+                ItemManager.items[tag.getString("address")]?.itemMeta?.displayName + if (sharpeningLevel == 0) "" else " +$sharpeningLevel"
+        }
     }
 }
