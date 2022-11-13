@@ -32,24 +32,30 @@ class SharpeningManager {
     }
 
     init {
-        command("sharpening") { sender, _ -> openMenu(sender) }
+        command("sharpening") { player, _ ->
+            val itemInHand = player.itemInHand
+            val itemMeta = itemInHand.itemMeta
+            if (itemInHand == null || itemMeta == null || itemMeta.displayName == null) {
+                player.errorMessage("Вы не можете заточить этот предмет!")
+                return@command
+            } else if (findSharpeningStone(player) == null) {
+                player.errorMessage("У вас нету точильных камней!")
+                return@command
+            }
+            generateButtons(player)
+            menu.open(player)
+        }
     }
 
-    private fun openMenu(player: Player) {
+    private fun generateButtons(player: Player) {
         val itemInHand = player.itemInHand
         val itemMeta = itemInHand.itemMeta
-        val sharpening = player.inventory.filterNotNull()
-            .find { CraftItemStack.asNMSCopy(it).tag.hasKeyOfType("sharpening_chance", 99) }
-            ?: return
+        val sharpening = findSharpeningStone(player)!!
         val sharpeningTag = CraftItemStack.asNMSCopy(sharpening).tag
         val chance = sharpeningTag.getDouble("sharpening_chance")
         val price = sharpeningTag.getDouble("sharpening_price")
 
-        if (itemInHand == null || itemMeta == null || itemMeta.displayName == null) {
-            player.errorMessage("Вы не можете заточить этот предмет!")
-            return
-        }
-
+        menu.money = Formatter.toMoneyFormat((app.getUser(player) ?: return).stat.money)
         menu.storage.clear()
         menu.storage.add(
             button {
@@ -106,7 +112,6 @@ class SharpeningManager {
                 }
             }
         )
-        menu.open(player)
     }
 
     private fun setNewNameWithSharpening(itemStack: ItemStack) {
@@ -117,4 +122,7 @@ class SharpeningManager {
                 ItemManager[tag.getString("address")]?.itemMeta?.displayName + if (sharpeningLevel == 0) "" else " +$sharpeningLevel"
         }
     }
+
+    private fun findSharpeningStone(player: Player) = player.inventory.filterNotNull()
+        .find { CraftItemStack.asNMSCopy(it).tag.hasKeyOfType("sharpening_chance", 99) }
 }
