@@ -11,6 +11,7 @@ import ru.cristalix.uiengine.utility.V3
 import ru.cristalix.uiengine.utility.rectangle
 import util.Formatter
 
+
 /**
  * @project : ThePitReborn
  * @author : Рейдж
@@ -34,7 +35,7 @@ class AttributeManager {
         origin = CENTER
         align = CENTER
         color = TRANSPARENT
-        offset = V3(-110.0, -65.0)
+        offset = V3(120.0, -65.0)
     }
 
     private val margin = 25.0

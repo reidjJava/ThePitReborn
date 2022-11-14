@@ -8,11 +8,14 @@ import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
 import me.func.mod.util.command
 import me.func.mod.util.listener
+import me.func.sound.Category
+import me.func.sound.Music
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.TopManager
+import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.item.ItemManager
@@ -66,6 +69,10 @@ class App : JavaPlugin() {
         ContractManager()
         ItemManager()
         SharpeningManager()
+
+        AdminCommands()
+
+        Music.block(Category.VOICE).block(Category.PLAYERS)
 
         listener(
             playerDataManager,

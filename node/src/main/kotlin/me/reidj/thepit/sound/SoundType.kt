@@ -12,11 +12,11 @@ import org.bukkit.entity.Player
 private const val STORAGE = "https://storage.c7x.dev/reidj/thepit/"
 
 enum class SoundType {
-    USE_CONSUMABLE,
+    USE_POTION,
     ;
 
     fun send(player: Player) = Sound("${STORAGE}${name.lowercase()}.ogg")
-        .category(Category.MUSIC)
+        .category(Category.BLOCKS)
         .pitch(1.0f)
         .volume(1.5f)
         .repeating(false)

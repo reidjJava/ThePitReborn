@@ -36,9 +36,13 @@ import kotlin.properties.Delegates.notNull
 class PlayerDataManager : Listener {
 
     val userMap = mutableMapOf<UUID, User>()
+    val godSet = hashSetOf(
+        "307264a1-2c69-11e8-b5ea-1cb72caa35fd", // Func
+        "bf30a1df-85de-11e8-a6de-1cb72caa35fd", // Reidj
+        "ca87474e-b15c-11e9-80c4-1cb72caa35fd", // Moisei
+    )
 
-    var prepares: MutableSet<Prepare> by notNull()
-
+    private var prepares: MutableSet<Prepare> by notNull()
     private val group = TokenGroup(
         Token.builder()
             .title("Монеты")
@@ -54,15 +58,10 @@ class PlayerDataManager : Listener {
         prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain)
     }
 
-    private val uuid = setOf(
-        UUID.fromString("ca87474e-b15c-11e9-80c4-1cb72caa35fd"),
-        UUID.fromString("bf30a1df-85de-11e8-a6de-1cb72caa35fd")
-    )
-
     @EventHandler
     fun AsyncPlayerPreLoginEvent.handle() = registerIntent(app).apply {
         coroutine().launch {
-            if (uniqueId !in uuid) {
+            if (uniqueId.toString() !in godSet) {
                 result = AsyncPlayerPreLoginEvent.Result.KICK_OTHER
                 disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Сейчас нельзя зайти на этот сервер")
                 return@launch
@@ -84,7 +83,13 @@ class PlayerDataManager : Listener {
         after(5) {
             Anime.loadTextures(player, *ImageType.values().map { it.path() }.toTypedArray())
 
-            Anime.hideIndicator(player, Indicators.ARMOR, Indicators.EXP, Indicators.HEALTH, Indicators.HUNGER)
+            Anime.hideIndicator(
+                player,
+                Indicators.ARMOR,
+                Indicators.EXP,
+                Indicators.HEALTH,
+                Indicators.HUNGER
+            )
 
             group.subscribe(player)
 
@@ -93,7 +98,7 @@ class PlayerDataManager : Listener {
                 showAll(user)
             }
 
-            player.isOp = player.uniqueId in uuid
+            player.isOp = player.uniqueId.toString() in godSet
 
             user.fromBase64(user.stat.playerInventory, player.inventory)
             user.fromBase64(user.stat.playerEnderChest, player.enderChest)
