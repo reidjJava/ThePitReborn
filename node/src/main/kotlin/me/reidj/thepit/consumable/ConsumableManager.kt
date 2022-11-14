@@ -40,7 +40,7 @@ class ConsumableManager : Listener {
         menu.storage = ConsumableType.values().map {
             button {
                 title = it.title
-                description = it.description
+                description = "§7" + it.description
                 price = it.price.toLong()
                 item = item {
                     type(Material.CLAY_BALL)
@@ -63,8 +63,10 @@ class ConsumableManager : Listener {
                             type(Material.CLAY_BALL)
                             text(
                                 """
-                            ${it.title}
-                            ${it.description}
+                            §6${it.title}
+                            §7${it.description}
+                            
+                            §7§oЩёлкните ПКМ, чтобы выпить.
                             """.trimIndent()
                             )
                             amount(1)
