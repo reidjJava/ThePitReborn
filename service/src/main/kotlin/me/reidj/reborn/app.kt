@@ -1,10 +1,7 @@
 package me.reidj.reborn
 
 import kotlinx.coroutines.runBlocking
-import me.reidj.thepit.protocol.BulkSaveUserPackage
-import me.reidj.thepit.protocol.LoadUserPackage
-import me.reidj.thepit.protocol.SaveUserPackage
-import me.reidj.thepit.protocol.TopPackage
+import me.reidj.thepit.protocol.*
 import ru.cristalix.core.CoreApi
 import ru.cristalix.core.microservice.MicroServicePlatform
 import ru.cristalix.core.microservice.MicroserviceBootstrap
@@ -23,7 +20,10 @@ fun main() {
             LoadUserPackage::class,
             BulkSaveUserPackage::class,
             SaveUserPackage::class,
-            TopPackage::class
+            TopPackage::class,
+            AuctionPutLotPackage::class,
+            MoneyDepositPackage::class,
+            AuctionRemoveItemPackage::class
         )
 
         CoreApi.get().registerService(IPermissionService::class.java, PermissionService(this))
@@ -50,6 +50,9 @@ fun main() {
             forward(realmId, pckg)
             println("Top generated for ${realmId.realmName}")
         }
+        addListener(AuctionPutLotPackage::class.java) { _, pckg -> write(pckg) }
+        addListener(MoneyDepositPackage::class.java) { _, pckg -> write(pckg) }
+        addListener(AuctionRemoveItemPackage::class.java) { _, pckg -> write(pckg) }
     }
 
     runBlocking {

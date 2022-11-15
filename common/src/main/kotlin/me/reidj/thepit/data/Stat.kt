@@ -15,6 +15,7 @@ data class Stat(
     var rankingPoints: Int,
     var contractLastUpdate: Long,
     var contractsTypes: Set<Contract>,
+    val auctionData: HashSet<AuctionData>,
     var playerInventory: String,
     var playerEnderChest: String,
 )

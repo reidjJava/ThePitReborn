@@ -13,5 +13,5 @@ object Formatter {
 
     fun toFormat(double: Double): String = doubleFormat.format(double)
 
-    fun toMoneyFormat(money: Double) = moneyFormat.format(money)
+    fun toMoneyFormat(money: Double): String = moneyFormat.format(money)
 }

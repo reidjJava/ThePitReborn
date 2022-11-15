@@ -8,11 +8,14 @@ import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
 import me.func.mod.util.command
 import me.func.mod.util.listener
+import me.func.protocol.data.color.GlowColor
+import me.func.protocol.data.status.MessageStatus
 import me.func.sound.Category
 import me.func.sound.Music
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
 import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.auction.AuctionManager
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.command.AdminCommands
@@ -25,7 +28,11 @@ import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
+import me.reidj.thepit.protocol.AuctionPutLotPackage
+import me.reidj.thepit.protocol.AuctionRemoveItemPackage
+import me.reidj.thepit.protocol.MoneyDepositPackage
 import me.reidj.thepit.sharpening.SharpeningManager
+import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -49,6 +56,23 @@ class App : JavaPlugin() {
     override fun onEnable() {
         app = this
 
+        client().addListener(AuctionPutLotPackage::class.java) { _, pckg -> AuctionManager[pckg.auctionData] }
+        client().addListener(MoneyDepositPackage::class.java) { _, pckg ->
+            AuctionManager.remove(pckg.data)
+
+            val user = getUser(pckg.seller) ?: return@addListener
+
+            user.player.systemMessage(
+                MessageStatus.FINE,
+                GlowColor.GREEN,
+                "Ваш лот: ${pckg.displayName} §fбыл куплен игроком §b${pckg.customer}§f."
+            )
+
+            user.stat.auctionData.removeIf { it.uuid == pckg.data }
+            user.giveMoney(pckg.money.toDouble())
+        }
+        client().addListener(AuctionRemoveItemPackage::class.java) { _, pckg -> AuctionManager.remove(pckg.uuid) }
+
         Platforms.set(PlatformDarkPaper())
 
         Anime.include(Kit.NPC, Kit.EXPERIMENTAL, Kit.STANDARD, Kit.HEALTH_BAR)
@@ -69,6 +93,7 @@ class App : JavaPlugin() {
         ContractManager()
         ItemManager()
         SharpeningManager()
+        AuctionManager()
 
         AdminCommands()
 
