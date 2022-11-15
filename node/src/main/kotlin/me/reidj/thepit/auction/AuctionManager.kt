@@ -129,6 +129,10 @@ class AuctionManager {
                     Confirmation("Купить", displayName, "за ${it.price} ${Emoji.COIN}") { confirmPlayer ->
                         val confirmUser = app.getUser(confirmPlayer) ?: return@Confirmation
 
+                        if (confirmUser.armLock()) {
+                            return@Confirmation
+                        }
+
                         if (confirmUser.stat.money >= it.price) {
                             if (it in auctionData) {
                                 client().write(MoneyDepositPackage(
@@ -166,6 +170,11 @@ class AuctionManager {
                 hover(itemStack.itemMeta.lore)
                 onClick { player, _, _ ->
                     val clickUser = app.getUser(player) ?: return@onClick
+
+                    if (clickUser.armLock()) {
+                        return@onClick
+                    }
+
                     if (it !in clickUser.stat.auctionData) {
                         Anime.close(player)
                         return@onClick

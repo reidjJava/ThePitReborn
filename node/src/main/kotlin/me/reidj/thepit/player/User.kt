@@ -1,6 +1,7 @@
 package me.reidj.thepit.player
 
 import me.func.mod.Anime
+import me.func.mod.util.after
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.rank.RankUtil
 import org.bukkit.entity.Player
@@ -56,6 +57,15 @@ class User(stat: Stat) {
             dataInput.close()
         } catch (_: Throwable) {
         }
+    }
+
+    fun armLock(): Boolean {
+        if (isArmLock) {
+            return true
+        }
+        isArmLock = true
+        after(5) { isArmLock = false }
+        return false
     }
 
     fun setState(state: State) {
