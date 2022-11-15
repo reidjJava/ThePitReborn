@@ -76,6 +76,10 @@ class User(stat: Stat) {
         stat.money += money
     }
 
+    fun giveMoneyWithBooster(money: Double) {
+        giveMoney(money)
+    }
+
     fun giveKill(kill: Int) {
         stat.kills += kill
     }

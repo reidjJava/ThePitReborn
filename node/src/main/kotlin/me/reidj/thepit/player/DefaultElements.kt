@@ -10,6 +10,6 @@ import java.util.*
 object DefaultElements {
 
     fun createNewUser(uuid: UUID) = Stat(
-        uuid, 0.0, 0, 0, 0, -1L, setOf(), "", ""
+        uuid, 0.0, 0, 0, 0, -1L, setOf(), hashSetOf(),"", ""
     )
 }

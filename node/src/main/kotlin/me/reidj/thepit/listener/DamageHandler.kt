@@ -74,7 +74,7 @@ class DamageHandler : Listener {
 
                 val killer = app.getUser(user.killer) ?: return@after
 
-                killer.giveMoney(3.0)
+                killer.giveMoneyWithBooster(3.0)
                 killer.giveKill(1)
             }
         }

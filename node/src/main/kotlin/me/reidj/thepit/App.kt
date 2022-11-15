@@ -86,6 +86,9 @@ class App : JavaPlugin() {
             groupName = "ThePitReborn"
         }
 
+        config.options().copyDefaults(true)
+        saveConfig()
+
         worldMeta = MapLoader.load("POTH", "DragonsLore")
 
         playerDataManager = PlayerDataManager()
