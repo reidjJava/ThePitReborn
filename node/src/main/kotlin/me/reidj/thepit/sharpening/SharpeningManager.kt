@@ -73,6 +73,10 @@ class SharpeningManager {
                     val tag = nmsItem.tag
                     val sharpeningLevel = tag.getInt("sharpeningLevel")
 
+                    if (user.armLock()) {
+                        return@onClick
+                    }
+
                     if (sharpeningLevel == 10) {
                         player.errorMessage("У вас максимальный уровень заточки!")
                         return@onClick

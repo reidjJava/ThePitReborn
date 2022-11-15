@@ -49,6 +49,10 @@ class ConsumableManager : Listener {
                 onClick { player, _, _ ->
                     val user = app.getUser(player) ?: return@onClick
 
+                    if (user.armLock()) {
+                        return@onClick
+                    }
+
                     val consumableAmount = player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
                         itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8) }
 
