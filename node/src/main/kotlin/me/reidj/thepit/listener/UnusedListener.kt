@@ -1,8 +1,9 @@
 package me.reidj.thepit.listener
 
-import org.bukkit.event.Listener
+import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.EntityChangeBlockEvent
 import org.bukkit.event.entity.EntityCombustEvent
@@ -10,16 +11,18 @@ import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent
-import org.bukkit.event.player.PlayerBedEnterEvent
-import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerSwapHandItemsEvent
+import org.bukkit.event.player.*
 
 /**
  * @project : ThePitReborn
  * @author : Рейдж
  **/
 class UnusedListener : Listener {
+
+    @EventHandler
+    fun PlayerInteractEvent.handle() {
+        isCancelled = blockClicked != null && blockClicked.type != Material.ENDER_CHEST
+    }
 
     @EventHandler
     fun PlayerDropItemEvent.handle() { cancel = !player.isOp }

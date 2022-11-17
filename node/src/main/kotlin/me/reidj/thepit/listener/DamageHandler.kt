@@ -5,6 +5,7 @@ import me.func.mod.util.after
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.killBoardMessage
 import org.bukkit.entity.Arrow
@@ -39,6 +40,9 @@ class DamageHandler : Listener {
             if (playerDamager.location.y >= minY || entity == playerDamager || entity.location.y >= minY) {
                 cancelled = true
             } else {
+                CombatManager.put(playerDamager)
+                CombatManager.put(entity as Player)
+
                 val user = app.getUser(entity.uniqueId) ?: return
 
                 val armorContents = playerDamager.inventory.armorContents

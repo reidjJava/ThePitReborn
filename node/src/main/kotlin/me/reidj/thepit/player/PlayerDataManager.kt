@@ -45,7 +45,7 @@ class PlayerDataManager : Listener {
     private var prepares: MutableSet<Prepare> by notNull()
     private val group = TokenGroup(
         Token.builder()
-            .title("Монеты")
+            .title("§6Монеты")
             .content { player -> Emoji.COIN + "§6 " + Formatter.toFormat(app.getUser(player)!!.stat.money) }
             .build(),
         Token.builder()

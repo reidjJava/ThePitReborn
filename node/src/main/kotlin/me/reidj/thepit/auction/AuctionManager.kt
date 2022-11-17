@@ -76,24 +76,27 @@ class AuctionManager {
     }
 
     init {
-        command("auction") { player, _ -> mainGui.open(player) }
+        command("ah") { player, _ -> mainGui.open(player) }
         command("sell") { player, args ->
             val user = app.getUser(player) ?: return@command
             val itemInHand = player.itemInHand
             val nmsItem = CraftItemStack.asNMSCopy(itemInHand)
             val tag = nmsItem.tag
-            val price = args[0].toInt()
 
             if (args.isEmpty()) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Использование §b/sell §6[Цена].")
                 return@command
-            } else if (!nmsItem.hasTag() && !tag.hasKeyOfType("isTrade", 99) && !tag.hasKeyOfType("address", 99)) {
+            } else if (!nmsItem.hasTag() || !tag.hasKeyOfType("isTrade", 99) || !tag.hasKeyOfType("address", 99)) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы не можете продать этот предмет!")
                 return@command
             } else if (!NumberUtils.isNumber(args[0])) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы использовали недопустимый символ!")
                 return@command
-            } else if (price < 10 || price > 300000000) {
+            }
+
+            val price = args[0].toInt()
+
+            if (price < 10 || price > 300000000) {
                 player.systemMessage(
                     MessageStatus.ERROR,
                     GlowColor.RED,
@@ -135,13 +138,15 @@ class AuctionManager {
 
                         if (confirmUser.stat.money >= it.price) {
                             if (it in auctionData) {
-                                client().write(MoneyDepositPackage(
-                                    it.seller,
-                                    it.uuid,
-                                    confirmPlayer.displayName,
-                                    displayName,
-                                    it.price
-                                ))
+                                client().write(
+                                    MoneyDepositPackage(
+                                        it.seller,
+                                        it.uuid,
+                                        confirmPlayer.displayName,
+                                        displayName,
+                                        it.price
+                                    )
+                                )
 
                                 auctionData.remove(it)
 
@@ -162,7 +167,7 @@ class AuctionManager {
 
     private fun generateMyItemsButtons(user: User) {
         myItems.storage = user.stat.auctionData.map {
-        val itemStack = ItemManager[it.objectName] ?: return
+            val itemStack = ItemManager[it.objectName] ?: return
             button {
                 title = itemStack.i18NDisplayName
                 item = itemStack
