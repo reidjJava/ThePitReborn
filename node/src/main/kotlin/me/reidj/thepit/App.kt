@@ -26,6 +26,7 @@ import me.reidj.thepit.listener.ArmorChangeHandler
 import me.reidj.thepit.listener.DamageHandler
 import me.reidj.thepit.listener.PlayerRegenerationHandler
 import me.reidj.thepit.listener.UnusedListener
+import me.reidj.thepit.lootbox.LootBoxManager
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
 import me.reidj.thepit.protocol.AuctionPutLotPackage
@@ -75,7 +76,7 @@ class App : JavaPlugin() {
 
         Platforms.set(PlatformDarkPaper())
 
-        Anime.include(Kit.NPC, Kit.EXPERIMENTAL, Kit.STANDARD, Kit.HEALTH_BAR)
+        Anime.include(Kit.NPC, Kit.EXPERIMENTAL, Kit.STANDARD, Kit.HEALTH_BAR, Kit.LOOTBOX)
 
         ModLoader.loadAll("mods")
 
@@ -97,6 +98,7 @@ class App : JavaPlugin() {
         ItemManager()
         SharpeningManager()
         AuctionManager()
+        LootBoxManager()
 
         AdminCommands()
 
