@@ -23,10 +23,7 @@ import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.item.ItemManager
-import me.reidj.thepit.listener.ArmorChangeHandler
-import me.reidj.thepit.listener.DamageHandler
-import me.reidj.thepit.listener.PlayerRegenerationHandler
-import me.reidj.thepit.listener.UnusedListener
+import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
@@ -111,7 +108,8 @@ class App : JavaPlugin() {
             ArmorChangeHandler(),
             UnusedListener(),
             PlayerRegenerationHandler(),
-            ConsumableManager()
+            ConsumableManager(),
+            SpawnHandler()
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)

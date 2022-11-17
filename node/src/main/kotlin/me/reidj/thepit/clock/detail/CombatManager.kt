@@ -25,6 +25,8 @@ class CombatManager : ClockInject {
 
         operator fun get(uuid: UUID) = combatMap[uuid]
 
+        fun containKey(uuid: UUID) = combatMap.containsKey(uuid)
+
         fun put(player: Player) {
             combatMap[player.uniqueId] = AtomicInteger(COMBAT_COOL_DOWN)
             Anime.timer(player, "Вы выйдите из боя через", COMBAT_COOL_DOWN, color.red, color.blue, color.green)
