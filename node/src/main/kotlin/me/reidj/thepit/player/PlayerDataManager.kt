@@ -3,6 +3,8 @@ package me.reidj.thepit.player
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import me.func.mod.Anime
+import me.func.mod.ui.menu.button
+import me.func.mod.ui.menu.dailyReward
 import me.func.mod.ui.token.Token
 import me.func.mod.ui.token.TokenGroup
 import me.func.mod.util.after
@@ -10,6 +12,7 @@ import me.func.protocol.data.emoji.Emoji
 import me.func.protocol.ui.indicator.Indicators
 import me.reidj.thepit.app
 import me.reidj.thepit.client
+import me.reidj.thepit.content.DailyReward
 import me.reidj.thepit.player.prepare.Prepare
 import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
@@ -26,6 +29,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import ru.cristalix.core.formatting.Formatting
 import java.util.*
 import kotlin.properties.Delegates.notNull
 
@@ -77,6 +81,7 @@ class PlayerDataManager : Listener {
     @EventHandler
     fun PlayerJoinEvent.handle() {
         val user = app.getUser(player) ?: return
+        val stat = user.stat
 
         user.player = player
 
@@ -100,9 +105,32 @@ class PlayerDataManager : Listener {
 
             player.isOp = player.uniqueId.toString() in godSet
 
-            user.fromBase64(user.stat.playerInventory, player.inventory)
-            user.fromBase64(user.stat.playerEnderChest, player.enderChest)
+            user.fromBase64(stat.playerInventory, player.inventory)
+            user.fromBase64(stat.playerEnderChest, player.enderChest)
 
+            val now = System.currentTimeMillis()
+
+            // Обнулить комбо сбора наград если прошло больше суток или комбо > 7
+            if (stat.rewardStreak > 0 && now - stat.lastEnter * 10000 > 24 * 60 * 60 * 1000 || stat.rewardStreak > 6) {
+                stat.rewardStreak = 0
+            }
+            if (now - stat.dailyClaimTimestamp * 10000 > 14 * 60 * 60 * 1000) {
+                stat.dailyClaimTimestamp = now / 10000
+                dailyReward {
+                    currentDay = stat.rewardStreak
+                    storage = DailyReward.values().map {
+                        button {
+                            title = it.title
+                            item = it.itemStack
+                        }
+                    }.toMutableList()
+                }.open(player)
+                val dailyReward = DailyReward.values()[stat.rewardStreak]
+                player.sendMessage(Formatting.fine("Ваша ежедневная награда: " + dailyReward.title))
+                dailyReward.give(user)
+                stat.rewardStreak++
+            }
+            stat.lastEnter = now / 10000
             prepares.forEach { it.execute(user) }
         }
     }

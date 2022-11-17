@@ -49,14 +49,18 @@ class SpawnHandler : Listener {
         val uuid = player.uniqueId
         if (uuid in uuids && (to.blockX != from.blockX || to.blockZ != from.blockZ)) {
             uuids.remove(uuid)
-            player.systemMessage(MessageStatus.ERROR,GlowColor.RED_LIGHT, "Телепортация на спавн была отменена!")
+            player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Телепортация на спавн была отменена!")
             Anime.timer(player, "До телепортации на спавн", 0)
         }
     }
 
     @EventHandler
-    fun PlayerQuitEvent.handle() { uuids.remove(player.uniqueId) }
+    fun PlayerQuitEvent.handle() {
+        uuids.remove(player.uniqueId)
+    }
 
     @EventHandler
-    fun PlayerKickEvent.handle() { uuids.remove(player.uniqueId) }
+    fun PlayerKickEvent.handle() {
+        uuids.remove(player.uniqueId)
+    }
 }

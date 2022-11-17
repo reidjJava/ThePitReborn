@@ -21,7 +21,7 @@ class CombatManager : ClockInject {
 
     companion object {
         private val combatMap = hashMapOf<UUID, AtomicInteger>()
-        private val color = GlowColor.RED_LIGHT
+        private val color = GlowColor.RED
 
         operator fun get(uuid: UUID) = combatMap[uuid]
 
