@@ -22,6 +22,7 @@ import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
+import me.reidj.thepit.dungeon.DungeonGenerator
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
@@ -97,6 +98,7 @@ class App : JavaPlugin() {
         SharpeningManager()
         AuctionManager()
         LootBoxManager()
+        DungeonGenerator()
 
         AdminCommands()
 

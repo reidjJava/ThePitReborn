@@ -12,9 +12,7 @@ class Zombie(location: Location) : Entity(EntityType.ZOMBIE, location) {
 
     override var damage: Double = 5.0
 
-    override var moveSpeed: Double = 3.0
-
-    override var attackSpeed: Double = 1.5
+    override var moveSpeed: Double = 1.0
 
     override var health: Double = 20.0
 

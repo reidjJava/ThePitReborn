@@ -3,6 +3,7 @@ package me.reidj.thepit.player
 import me.func.mod.Anime
 import me.func.mod.util.after
 import me.reidj.thepit.data.Stat
+import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PlayerConnection
@@ -27,8 +28,9 @@ class User(stat: Stat) {
     lateinit var killer: Player
     lateinit var player: Player
     lateinit var connection: PlayerConnection
+    lateinit var dungeon: DungeonData
 
-    private var state: State? = null
+    var state: State? = null
 
     var isArmLock = false
 
@@ -71,6 +73,7 @@ class User(stat: Stat) {
         return false
     }
 
+    @JvmName("updateState")
     fun setState(state: State) {
         AsyncCatcher.catchOp("Async state change")
         if (this.state != null && this.state != state)

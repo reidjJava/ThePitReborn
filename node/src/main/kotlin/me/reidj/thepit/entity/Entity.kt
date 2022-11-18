@@ -13,16 +13,14 @@ import org.bukkit.metadata.FixedMetadataValue
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-abstract class Entity(entityType: EntityType, private val location: Location) {
+abstract class Entity(entityType: EntityType, location: Location) {
 
-    val current: CraftEntity = app.worldMeta.world.createEntity(location, entityType.clazz).getBukkitEntity()
+    var current: CraftEntity = app.worldMeta.world.createEntity(location, entityType.clazz).getBukkitEntity()
     val entity = current as LivingEntity
 
     protected abstract var damage: Double
 
     protected abstract var moveSpeed: Double
-
-    protected abstract var attackSpeed: Double
 
     protected abstract var health: Double
 
@@ -42,56 +40,62 @@ abstract class Entity(entityType: EntityType, private val location: Location) {
 
     protected abstract var boots: ItemStack?
 
-    fun damage() {
+    private fun damage() {
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage
     }
 
-    fun moveSpeed() {
+    private fun moveSpeed() {
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).baseValue = moveSpeed
     }
 
-    fun attackSpeed() {
-        entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED).baseValue = attackSpeed
-    }
-
-    fun health() {
+    private fun health() {
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = health
     }
 
-    fun attackRange() {
+    private fun attackRange() {
         entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).baseValue = attackRange
     }
 
-    fun knockBackResistance() {
+    private fun knockBackResistance() {
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).baseValue = knockBackResistance
     }
 
-    fun name() {
+    private fun name() {
         entity.isCustomNameVisible = true
         entity.customName = customName
     }
 
-    fun location() {
-        entity.teleport(location)
-    }
-
-    fun helmet() {
+    private fun helmet() {
         entity.equipment.helmet = helmet
     }
 
-    fun chestPlate() {
+    private fun chestPlate() {
         entity.equipment.chestplate = chestPlate
     }
 
-    fun leggings() {
+    private fun leggings() {
         entity.equipment.leggings = leggings
     }
 
-    fun boots() {
+    private fun boots() {
         entity.equipment.boots = boots
     }
 
-    fun metadata() {
+    private fun metadata() {
         entity.setMetadata("entity", FixedMetadataValue(app, metadata))
+    }
+
+    fun create() {
+        damage()
+        moveSpeed()
+        health()
+        attackRange()
+        knockBackResistance()
+        name()
+        helmet()
+        chestPlate()
+        leggings()
+        boots()
+        metadata()
     }
 }

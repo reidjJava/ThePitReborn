@@ -4,6 +4,7 @@ import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
 import me.reidj.thepit.app
+import me.reidj.thepit.player.User
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PacketPlayOutMultiPacket
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving
@@ -16,30 +17,22 @@ import java.util.*
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-class EntityManager {
+object EntityUtil {
 
-    companion object {
-        private val viewEntities = hashMapOf<Player, HashSet<Int>>()
+    private val viewEntities = hashMapOf<Player, HashSet<Int>>()
 
-        operator fun get(player: Player) = viewEntities[player]
-
-        inline fun <reified T : Packet<*>> packetListener(player: Player, noinline handler: T.() -> Unit) {
-            (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
-                .addBefore("packet_handler", UUID.randomUUID().toString(), object : ChannelDuplexHandler() {
-                    override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
-                        if (msg is T) {
-                            handler.invoke(msg)
-                        }
-                        super.write(ctx, msg, promise)
-                    }
-                })
+    fun generateEntities(user: User) {
+        // TODO Добавить спавн несколько мобов
+        user.dungeon.type.entities.forEach {
+            repeat(it.value) {
+                spawn(user.player)
+            }
         }
     }
 
-    private val entities = hashSetOf<Entity>()
-
-    fun spawn(player: Player) {
-        entities.forEach {
+    private fun spawn(player: Player) {
+        EntityGenerator.all().forEach {
+            it.create()
             viewEntities[player]?.add(it.current.entityId)
             app.worldMeta.world.handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
         }
@@ -59,5 +52,17 @@ class EntityManager {
                 }
             }
         }
+    }
+
+    private inline fun <reified T : Packet<*>> packetListener(player: Player, noinline handler: T.() -> Unit) {
+        (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
+            .addBefore("packet_handler", UUID.randomUUID().toString(), object : ChannelDuplexHandler() {
+                override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
+                    if (msg is T) {
+                        handler.invoke(msg)
+                    }
+                    super.write(ctx, msg, promise)
+                }
+            })
     }
 }
