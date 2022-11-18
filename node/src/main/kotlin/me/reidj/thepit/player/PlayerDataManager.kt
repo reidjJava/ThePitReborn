@@ -24,6 +24,7 @@ import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.ImageType
 import me.reidj.thepit.util.coroutine
 import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
@@ -44,6 +45,7 @@ class PlayerDataManager : Listener {
         "307264a1-2c69-11e8-b5ea-1cb72caa35fd", // Func
         "bf30a1df-85de-11e8-a6de-1cb72caa35fd", // Reidj
         "ca87474e-b15c-11e9-80c4-1cb72caa35fd", // Moisei
+        "d5c6967a-2fd9-11eb-acca-1cb72caa35fd", // pokanoname
     )
 
     private var prepares: MutableSet<Prepare> by notNull()
@@ -82,8 +84,10 @@ class PlayerDataManager : Listener {
     fun PlayerJoinEvent.handle() {
         val user = app.getUser(player) ?: return
         val stat = user.stat
+        val connection = (player as CraftPlayer).handle.playerConnection
 
         user.player = player
+        user.connection = connection
 
         after(5) {
             Anime.loadTextures(player, *ImageType.values().map { it.path() }.toTypedArray())

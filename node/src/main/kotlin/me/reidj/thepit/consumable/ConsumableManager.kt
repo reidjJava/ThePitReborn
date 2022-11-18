@@ -91,7 +91,6 @@ class ConsumableManager : Listener {
         if (item == null) {
             return
         }
-
         val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag ?: return
 

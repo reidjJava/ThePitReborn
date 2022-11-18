@@ -4,6 +4,8 @@ import me.func.mod.Anime
 import me.func.mod.util.after
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.rank.RankUtil
+import net.minecraft.server.v1_12_R1.Packet
+import net.minecraft.server.v1_12_R1.PlayerConnection
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -24,6 +26,7 @@ class User(stat: Stat) {
 
     lateinit var killer: Player
     lateinit var player: Player
+    lateinit var connection: PlayerConnection
 
     private var state: State? = null
 
@@ -111,5 +114,9 @@ class User(stat: Stat) {
             RankUtil.updateRank(this)
             Anime.alert(player, "Поздравляем!", "Ваш ранг был повышен\n${prevRank.title} §f➠§l ${rank.title}")
         }
+    }
+
+    fun sendPacket(packet: Packet<*>) {
+        connection.sendPacket(packet)
     }
 }
