@@ -10,8 +10,6 @@ import me.func.mod.util.command
 import me.func.mod.util.listener
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
-import me.func.sound.Category
-import me.func.sound.Music
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
 import me.reidj.thepit.attribute.AttributeUtil
@@ -109,8 +107,6 @@ class App : JavaPlugin() {
         DungeonGenerator()
 
         AdminCommands()
-
-        Music.block(Category.VOICE).block(Category.PLAYERS)
 
         listener(
             playerDataManager,

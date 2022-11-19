@@ -109,7 +109,6 @@ class ConsumableManager : Listener {
             itemInHand.setAmount(itemInHand.getAmount() - 1)
             ConsumableType.values()
                 .find { tag.getString("consumable") == it.getObjectName() }?.overlay?.let { it(player) }
-            SoundType.USE_POTION.send(player)
         }
     }
 }
