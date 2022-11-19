@@ -36,6 +36,10 @@ import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import ru.cristalix.core.CoreApi
+import ru.cristalix.core.command.ICommandService
+import ru.cristalix.core.coupons.BukkitCouponsService
+import ru.cristalix.core.coupons.ICouponsService
 import ru.cristalix.core.network.ISocketClient
 import ru.cristalix.core.realm.IRealmService
 import ru.cristalix.core.realm.RealmStatus
@@ -72,6 +76,10 @@ class App : JavaPlugin() {
             user.giveMoney(pckg.money.toDouble())
         }
         client().addListener(AuctionRemoveItemPackage::class.java) { _, pckg -> AuctionManager.remove(pckg.uuid) }
+
+        CoreApi.get().also {
+            it.registerService(ICouponsService::class.java, BukkitCouponsService(client(), ICommandService.get()))
+        }
 
         Platforms.set(PlatformDarkPaper())
 

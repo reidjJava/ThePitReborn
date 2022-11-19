@@ -1,6 +1,7 @@
 package me.reidj.thepit.rank
 
 import me.func.mod.conversation.ModTransfer
+import me.func.mod.util.after
 import me.reidj.thepit.app
 import me.reidj.thepit.player.User
 import me.reidj.thepit.util.sendRank
@@ -23,7 +24,7 @@ object RankUtil {
         Bukkit.getOnlinePlayers().mapNotNull { app.getUser(it) }.forEach {
             val rank = getRank(it.stat.rankingPoints)
             if (rank == RankType.NONE) return
-            sendRank(it.player, rank.name, user.player)
+            after(5) { sendRank(it.player, rank.name, user.player) }
         }
     }
 
@@ -31,7 +32,7 @@ object RankUtil {
         val rank = getRank(user.stat.rankingPoints)
         if (rank == RankType.NONE) return
         Bukkit.getOnlinePlayers().forEach {
-            remove(it.uniqueId)
+            remove(user.stat.uuid)
             sendRank(user.player, rank.name, it)
         }
     }

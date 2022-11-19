@@ -26,8 +26,8 @@ private const val VIEW_DISTANCE = 30
 
 class Rank {
 
-    private val ranks = mutableMapOf<UUID, Context3D>()
-    private val playerBuffTextures: MutableMap<UUID, ResourceLocation> = mutableMapOf()
+    private val ranks = hashMapOf<UUID, Context3D>()
+    private val playerBuffTextures = hashMapOf<UUID, ResourceLocation>()
     private val activeEntities = mutableListOf<Entity>()
 
     private val minecraft = UIEngine.clientApi.minecraft()
@@ -41,8 +41,9 @@ class Rank {
             val y = readDouble() + 3.3
             val z = readDouble()
 
-            if (playerUUID == uuid)
+            if (playerUUID == uuid) {
                 return@registerChannel
+            }
 
             val context = Context3D(V3(x, y, z))
 
