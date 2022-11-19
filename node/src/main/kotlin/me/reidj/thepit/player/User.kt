@@ -122,4 +122,6 @@ class User(stat: Stat) {
     fun sendPacket(packet: Packet<*>) {
         connection.sendPacket(packet)
     }
+
+    fun isKillerInitialized() = this::killer.isInitialized
 }

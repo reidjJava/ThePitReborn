@@ -12,6 +12,7 @@ import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
@@ -32,28 +33,37 @@ class DamageHandler : Listener {
 
     private val minY = PreparePlayerBrain.getSpawnLocation().y - 3
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     fun EntityDamageByEntityEvent.handle() {
         if ((damager is Player || damager is Arrow) && entity is Player) {
             val playerDamager =
                 if (damager is Projectile) ((damager as Projectile).shooter as Player) else damager as Player
+            val entity = getEntity() as Player
             if (playerDamager.location.y >= minY || entity == playerDamager || entity.location.y >= minY) {
                 cancelled = true
             } else {
                 CombatManager.put(playerDamager)
-                CombatManager.put(entity as Player)
+                CombatManager.put(entity)
 
-                val user = app.getUser(entity.uniqueId) ?: return
+                playerDamager.closeInventory()
+                entity.closeInventory()
 
                 val armorContents = playerDamager.inventory.armorContents
 
                 damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE.name.lowercase(), armorContents)
 
-                if (Math.random() < AttributeUtil.getAttributeValue(AttributeType.CHANCE_CRITICAL_DAMAGE.name.lowercase(), armorContents)) {
-                    damage += AttributeUtil.getAttributeValue(AttributeType.CRITICAL_DAMAGE_STRENGTH.name.lowercase(), armorContents)
+                if (Math.random() < AttributeUtil.getAttributeValue(
+                        AttributeType.CHANCE_CRITICAL_DAMAGE.name.lowercase(),
+                        armorContents
+                    )
+                ) {
+                    damage += AttributeUtil.getAttributeValue(
+                        AttributeType.CRITICAL_DAMAGE_STRENGTH.name.lowercase(),
+                        armorContents
+                    )
                 }
 
-                user.killer = playerDamager
+                (app.getUser(entity.uniqueId) ?: return).killer = playerDamager
             }
         }
     }
@@ -74,9 +84,13 @@ class DamageHandler : Listener {
 
                 user.giveDeath(1)
 
-                user.killer.killBoardMessage("㥚 §c${getEntity().name}")
+                if (!user.isKillerInitialized()) {
+                    return@after
+                }
 
                 val killer = app.getUser(user.killer) ?: return@after
+
+                user.killer.killBoardMessage("㥚 §c${getEntity().name}")
 
                 killer.giveMoneyWithBooster(3.0)
                 killer.giveKill(1)

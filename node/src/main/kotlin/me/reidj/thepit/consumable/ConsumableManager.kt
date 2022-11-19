@@ -6,11 +6,6 @@ import me.func.mod.ui.menu.selection
 import me.func.mod.util.command
 import me.func.protocol.data.emoji.Emoji
 import me.reidj.thepit.app
-import me.reidj.thepit.dungeon.Dungeon
-import me.reidj.thepit.dungeon.DungeonData
-import me.reidj.thepit.dungeon.DungeonGenerator
-import me.reidj.thepit.entity.EntityUtil
-import me.reidj.thepit.sound.SoundType
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
 import org.bukkit.Material
@@ -92,11 +87,11 @@ class ConsumableManager : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.handle() {
-        val user = app.getUser(player) ?: return
+        /*val user = app.getUser(player) ?: return
         val dungeon = DungeonGenerator["DUNGEON_TEST"]
         user.dungeon = DungeonData(dungeon!!, hashSetOf(player.uniqueId))
         user.setState(Dungeon())
-        EntityUtil.register(player)
+        EntityUtil.register(player)*/
 
         if (item == null) {
             return

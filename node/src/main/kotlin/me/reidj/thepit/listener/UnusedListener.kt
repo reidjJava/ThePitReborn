@@ -4,7 +4,6 @@ import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.util.systemMessage
-import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -23,11 +22,6 @@ import org.bukkit.event.player.*
  * @author : Рейдж
  **/
 class UnusedListener : Listener {
-
-    @EventHandler
-    fun PlayerInteractEvent.handle() {
-        isCancelled = blockClicked != null && blockClicked.type != Material.ENDER_CHEST
-    }
 
     @EventHandler
     fun InventoryCloseEvent.handle() {
