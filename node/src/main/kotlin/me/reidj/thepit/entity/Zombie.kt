@@ -3,6 +3,7 @@ package me.reidj.thepit.entity
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemStack
+import ru.cristalix.core.math.V3
 
 /**
  * @project : ThePitReborn
@@ -31,4 +32,6 @@ class Zombie(location: Location) : Entity(EntityType.ZOMBIE, location) {
     override var leggings: ItemStack? = null
 
     override var boots: ItemStack? = null
+
+    override var scale: V3 = V3(1.0, 1.0, 1.0)
 }

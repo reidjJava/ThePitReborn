@@ -38,6 +38,7 @@ import ru.cristalix.core.CoreApi
 import ru.cristalix.core.command.ICommandService
 import ru.cristalix.core.coupons.BukkitCouponsService
 import ru.cristalix.core.coupons.ICouponsService
+import ru.cristalix.core.datasync.EntityDataParameters
 import ru.cristalix.core.network.ISocketClient
 import ru.cristalix.core.realm.IRealmService
 import ru.cristalix.core.realm.RealmStatus
@@ -91,6 +92,8 @@ class App : JavaPlugin() {
             readableName = "ThePitReborn"
             groupName = "ThePitReborn"
         }
+
+        EntityDataParameters.register()
 
         config.options().copyDefaults(true)
         saveConfig()

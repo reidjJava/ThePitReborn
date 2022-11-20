@@ -8,6 +8,8 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
+import ru.cristalix.core.math.V3
+import ru.cristalix.core.util.UtilEntity
 
 /**
  * @project : ThePitReborn
@@ -39,6 +41,8 @@ abstract class Entity(entityType: EntityType, location: Location) {
     protected abstract var leggings: ItemStack?
 
     protected abstract var boots: ItemStack?
+
+    protected abstract var scale: V3
 
     private fun damage() {
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage
@@ -85,6 +89,10 @@ abstract class Entity(entityType: EntityType, location: Location) {
         entity.setMetadata("entity", FixedMetadataValue(app, metadata))
     }
 
+    private fun scale() {
+        UtilEntity.setScale(entity, scale.x, scale.y, scale.z)
+    }
+
     fun create() {
         damage()
         moveSpeed()
@@ -97,5 +105,6 @@ abstract class Entity(entityType: EntityType, location: Location) {
         leggings()
         boots()
         metadata()
+        scale()
     }
 }
