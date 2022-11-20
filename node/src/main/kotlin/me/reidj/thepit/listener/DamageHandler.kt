@@ -31,7 +31,7 @@ class DamageHandler : Listener {
         cancelled = cause == DamageCause.FALL
     }
 
-    private val minY = PreparePlayerBrain.getSpawnLocation().y - 3
+    private val minY = PreparePlayerBrain.getSpawnLocation().y - 20
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun EntityDamageByEntityEvent.handle() {

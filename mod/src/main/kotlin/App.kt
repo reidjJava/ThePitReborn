@@ -1,4 +1,5 @@
 import attribute.AttributeManager
+import overlay.TimerBar
 import player.KillBoard
 import player.PlayerManager
 import rank.Rank
@@ -18,6 +19,7 @@ class App : KotlinMod() {
         UIEngine.initialize(this)
 
         PlayerManager()
+        TimerBar()
         Rank()
         AttributeManager()
         KillBoard()

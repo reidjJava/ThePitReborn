@@ -1,10 +1,10 @@
 package me.reidj.thepit.clock.detail
 
-import me.func.mod.Anime
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.clock.ClockInject
 import me.reidj.thepit.util.systemMessage
+import me.reidj.thepit.util.timer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
@@ -15,21 +15,26 @@ import java.util.concurrent.atomic.AtomicInteger
  * @author : Рейдж
  **/
 
-private const val COMBAT_COOL_DOWN = 20
+private const val COMBAT_COOL_DOWN = 5
 
 class CombatManager : ClockInject {
 
     companion object {
         private val combatMap = hashMapOf<UUID, AtomicInteger>()
-        private val color = GlowColor.RED
 
         operator fun get(uuid: UUID) = combatMap[uuid]
 
         fun containKey(uuid: UUID) = combatMap.containsKey(uuid)
 
         fun put(player: Player) {
-            combatMap[player.uniqueId] = AtomicInteger(COMBAT_COOL_DOWN)
-            Anime.timer(player, "Вы выйдите из боя через", COMBAT_COOL_DOWN, color.red, color.blue, color.green)
+            val uuid = player.uniqueId
+            val atomicInteger = AtomicInteger(COMBAT_COOL_DOWN)
+            if (uuid in combatMap) {
+                combatMap.replace(uuid, atomicInteger)
+            } else {
+                combatMap[uuid] = atomicInteger
+            }
+            player.timer("Вы выйдите из боя через", COMBAT_COOL_DOWN, true)
         }
     }
 
@@ -43,10 +48,11 @@ class CombatManager : ClockInject {
             val time = atomicInteger.get()
 
             atomicInteger.getAndDecrement()
+            it.timer("Вы выйдите из боя через", time, false)
 
             if (time <= 0) {
-                combatMap.remove(uuid)
                 it.systemMessage(MessageStatus.FINE, GlowColor.GREEN, "Вы вышли из боя.")
+                combatMap.remove(uuid)
             }
         }
     }

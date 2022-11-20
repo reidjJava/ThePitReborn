@@ -21,7 +21,7 @@ class AdminCommands {
             (app.getUser(Bukkit.getPlayer(args[0])) ?: return@regAdminCommand).giveRankingPoints(args[1].toInt())
         }
         regAdminCommand("gm") { user, args ->
-            user.player.gameMode = if (args[0].toInt() == 0) GameMode.CREATIVE else GameMode.SURVIVAL
+            user.player.gameMode = if (args[0].toInt() == 1) GameMode.CREATIVE else GameMode.SURVIVAL
         }
         regAdminCommand("kills") { _, args ->
             (app.getUser(Bukkit.getPlayer(args[0])) ?: return@regAdminCommand).giveKill(args[1].toInt())

@@ -95,7 +95,7 @@ class App : JavaPlugin() {
         config.options().copyDefaults(true)
         saveConfig()
 
-        worldMeta = MapLoader.load("POTH", "DragonsLore")
+        worldMeta = MapLoader.load("ThePit", "ThePitReborn")
 
         playerDataManager = PlayerDataManager()
 

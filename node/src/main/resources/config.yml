@@ -1,0 +1,5 @@
+npc:
+  sharpening:
+    title: 'Брайан'
+    command: 'sharpening'
+    skin: 'd5c6967a-2fd9-11eb-acca-1cb72caa35fd'
