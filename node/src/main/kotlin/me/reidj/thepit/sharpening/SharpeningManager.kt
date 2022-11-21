@@ -7,6 +7,7 @@ import me.func.mod.ui.menu.selection
 import me.func.mod.util.command
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.emoji.Emoji
+import me.func.protocol.ui.dialog.*
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
@@ -31,8 +32,38 @@ class SharpeningManager {
         vault = Emoji.COIN
     }
 
+    private val guideDialog = Dialog(
+        Entrypoint(
+            "sharpeningPageOne",
+            "Заточка",
+            Screen("Чем могу помочь?").buttons(
+                Button("Заточить предмет").actions(
+                    Action(Actions.COMMAND).command("/sharpeningMenu"),
+                    Action(Actions.CLOSE)
+                ),
+                Button("Что это такое?").actions(
+                    Action(Actions.COMMAND).command("/sharpeningPageTwo"),
+                    Action(Actions.CLOSE)
+                )
+            )
+        ),
+        Entrypoint(
+            "sharpeningPageTwo",
+            "Заточка",
+            Screen(
+                "Используя камни определенного качества,",
+                "можно заточить вещи и оружие повысив характеристики предмета.",
+                "Каждая заточка имеет определенный шанс на неудачу.",
+                "Чтобы повысить шансы на успешную заточку есть особые точильные камни,",
+                "которые можно получить, в игровом магазине."
+            ).buttons(Button("Закрыть").actions(Action(Actions.CLOSE)))
+        )
+    )
+
     init {
-        command("sharpening") { player, _ ->
+        command("sharpening") { player, _ -> me.func.mod.ui.dialog.Dialog.dialog(player, guideDialog, "sharpeningPageOne") }
+        command("sharpeningPageTwo") { player, _ -> me.func.mod.ui.dialog.Dialog.dialog(player, guideDialog, "sharpeningPageTwo") }
+        command("sharpeningMenu") { player, _ ->
             val itemInHand = player.itemInHand
             val itemMeta = itemInHand.itemMeta
             if (itemInHand == null || itemMeta == null || itemMeta.displayName == null) {
@@ -128,5 +159,8 @@ class SharpeningManager {
     }
 
     private fun findSharpeningStone(player: Player) = player.inventory.filterNotNull()
-        .find { CraftItemStack.asNMSCopy(it).tag.hasKeyOfType("sharpening_chance", 99) }
+        .find {
+            val nmsItem = CraftItemStack.asNMSCopy(it)
+            nmsItem.hasTag() && nmsItem.tag.hasKeyOfType("sharpening_chance", 99)
+        }
 }
