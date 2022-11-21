@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * @author : Рейдж
  **/
 
-private const val COMBAT_COOL_DOWN = 5
+private const val COMBAT_COOL_DOWN = 20
 
 class CombatManager : ClockInject {
 
@@ -25,6 +25,11 @@ class CombatManager : ClockInject {
         operator fun get(uuid: UUID) = combatMap[uuid]
 
         fun containKey(uuid: UUID) = combatMap.containsKey(uuid)
+
+        fun remove(player: Player) {
+            combatMap.remove(player.uniqueId)
+            player.timer("Вы выйдите из боя через", 0, false)
+        }
 
         fun put(player: Player) {
             val uuid = player.uniqueId

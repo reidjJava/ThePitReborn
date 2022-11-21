@@ -33,6 +33,7 @@ class User(stat: Stat) {
     var state: State? = null
 
     var isArmLock = false
+    var isActive = false
 
     init {
         this.stat = stat

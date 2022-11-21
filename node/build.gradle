@@ -17,7 +17,7 @@ dependencies {
 
     implementation 'me.func:atlas-api:1.0.10'
     implementation 'me.func:world-api:1.0.9'
-    implementation 'me.func:visual-driver:3.2.9.RELEASE'
+    implementation 'me.func:visual-driver:3.2.58.TEST'
 
     implementation project(':common')
 }

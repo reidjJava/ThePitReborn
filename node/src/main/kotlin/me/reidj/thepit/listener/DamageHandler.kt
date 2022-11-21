@@ -75,26 +75,26 @@ class DamageHandler : Listener {
         dropExp = 0
         drops.clear()
 
-        getEntity().run {
-            after(1) {
-                PreparePlayerBrain.spawnTeleport(this)
-                Anime.title(this, "§cВЫ ПОГИБЛИ!")
+        after(1) {
+            PreparePlayerBrain.spawnTeleport(getEntity())
+            Anime.title(getEntity(), "§cВЫ ПОГИБЛИ!")
 
-                val user = app.getUser(this) ?: return@after
+            CombatManager.remove(getEntity())
 
-                user.giveDeath(1)
+            val user = app.getUser(getEntity()) ?: return@after
 
-                if (!user.isKillerInitialized()) {
-                    return@after
-                }
+            user.giveDeath(1)
 
-                val killer = app.getUser(user.killer) ?: return@after
-
-                user.killer.killBoardMessage("㥚 §c${getEntity().name}")
-
-                killer.giveMoneyWithBooster(3.0)
-                killer.giveKill(1)
+            if (!user.isKillerInitialized()) {
+                return@after
             }
+
+            val killer = app.getUser(user.killer) ?: return@after
+
+            user.killer.killBoardMessage("㥚 §c${getEntity().name}")
+
+            killer.giveMoneyWithBooster(3.0)
+            killer.giveKill(1)
         }
     }
 }

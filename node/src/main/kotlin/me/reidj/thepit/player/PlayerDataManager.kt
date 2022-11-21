@@ -25,6 +25,7 @@ import me.reidj.thepit.util.coroutine
 import net.minecraft.server.v1_12_R1.PacketDataSerializer
 import net.minecraft.server.v1_12_R1.PacketPlayOutCustomPayload
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
@@ -50,6 +51,8 @@ class PlayerDataManager : Listener {
         "ca87474e-b15c-11e9-80c4-1cb72caa35fd", // Moisei
         "d5c6967a-2fd9-11eb-acca-1cb72caa35fd", // pokanoname
         "0e7c0015-b27b-11eb-acca-1cb72caa35fd", // 3а6ив
+        "3a372df5-8708-11ea-acca-1cb72caa35fd", // CanQtop1gg
+        "e83dff51-e312-11eb-acca-1cb72caa35fd", // 3BeZDYuK_NDO
     )
 
     private var prepares: MutableSet<Prepare> by notNull()
@@ -113,6 +116,7 @@ class PlayerDataManager : Listener {
 
             player.isOp = player.uniqueId.toString() in godSet
             player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).baseValue = 1000.0
+            player.gameMode = GameMode.ADVENTURE
 
             user.fromBase64(stat.playerInventory, player.inventory)
             user.fromBase64(stat.playerEnderChest, player.enderChest)
