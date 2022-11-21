@@ -1,5 +1,6 @@
 package player
 
+import dev.xdark.clientapi.event.lifecycle.GameLoop
 import dev.xdark.clientapi.event.render.RenderTickPre
 import ru.cristalix.clientapi.KotlinModHolder.mod
 import ru.cristalix.uiengine.UIEngine
@@ -20,6 +21,11 @@ class PlayerManager {
 
     init {
         UIEngine.overlayContext.addChild(healthPanel, protectionPanel)
+
+        mod.registerHandler<GameLoop> {
+            healthPanel.enabled = screenCheck()
+            protectionPanel.enabled = screenCheck()
+        }
 
         mod.registerHandler<RenderTickPre> {
             val player = UIEngine.clientApi.minecraft().player
@@ -43,6 +49,11 @@ class PlayerManager {
             shadow = true
             content = "Загрузка..."
         }
+    }
+
+    private fun screenCheck(): Boolean {
+        val currentScreen = UIEngine.clientApi.minecraft().currentScreen()
+        return currentScreen == null || currentScreen::class.java.simpleName == "aV"
     }
 
     private fun toFormat(double: Double): String = format.format(double)
