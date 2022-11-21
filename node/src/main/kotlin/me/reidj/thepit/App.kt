@@ -20,10 +20,11 @@ import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
-import me.reidj.thepit.dungeon.DungeonGenerator
+import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
+import me.reidj.thepit.npc.NpcManager
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.User
 import me.reidj.thepit.protocol.AuctionPutLotPackage
@@ -107,7 +108,7 @@ class App : JavaPlugin() {
         SharpeningManager()
         AuctionManager()
         LootBoxManager()
-        DungeonGenerator()
+        NpcManager()
 
         AdminCommands()
 
@@ -118,7 +119,8 @@ class App : JavaPlugin() {
             UnusedListener(),
             PlayerRegenerationHandler(),
             ConsumableManager(),
-            SpawnHandler()
+            SpawnHandler(),
+            Dungeon()
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)

@@ -87,12 +87,6 @@ class ConsumableManager : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.handle() {
-        /*val user = app.getUser(player) ?: return
-        val dungeon = DungeonGenerator["DUNGEON_TEST"]
-        user.dungeon = DungeonData(dungeon!!, hashSetOf(player.uniqueId))
-        user.setState(Dungeon())
-        EntityUtil.register(player)*/
-
         if (item == null) {
             return
         }

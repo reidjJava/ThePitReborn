@@ -20,10 +20,12 @@ import java.util.*
 object EntityUtil {
 
     private val viewEntities = hashMapOf<Player, HashSet<Int>>()
+    private val entities = hashSetOf<Entity>()
 
     fun generateEntities(user: User) {
         // TODO Добавить спавн несколько мобов
-        user.dungeon.type.entities.forEach {
+        user.dungeon.entities.forEach {
+            entities.add(it.key)
             repeat(it.value) {
                 spawn(user.player)
             }
@@ -31,7 +33,7 @@ object EntityUtil {
     }
 
     private fun spawn(player: Player) {
-        EntityGenerator.all().forEach {
+        entities.forEach {
             it.create()
             viewEntities[player]?.add(it.current.entityId)
             app.worldMeta.world.handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
