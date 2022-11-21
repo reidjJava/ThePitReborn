@@ -69,4 +69,7 @@ object PreparePlayerBrain : Prepare {
         player.removePotionEffect(potionEffectType)
         player.addPotionEffect(PotionEffect(potionEffectType, duration * 20, amplifier))
     }
+
+    fun getNearbyPlayers(player: Player, radius: Double) =
+        player.getNearbyEntities(radius, radius, radius).filterIsInstance<Player>()
 }

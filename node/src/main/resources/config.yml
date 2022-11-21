@@ -6,4 +6,12 @@ npc:
   consumable:
     title: 'Франк'
     command: 'consumable'
-    skin: 'bf30a1df-85de-11e8-a6de-1cb72caa35fd'
+    skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'
+  contracts:
+    title: 'Франк'
+    command: 'contracts'
+    skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'
+  barter:
+    title: 'Франк'
+    command: 'contracts'
+    skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'

@@ -53,6 +53,24 @@ enum class ConsumableType(
         {
             PreparePlayerBrain.addPotionEffect(it, PotionEffectType.SPEED, 5, 0)
         }),
+    DRAGON_BREATH(
+        "Драконье дыхание",
+        "В течении 10 секунд Вам даётся\n§7эффект Сопротивление урону I.",
+        600.0,
+        {
+            PreparePlayerBrain.addPotionEffect(it, PotionEffectType.DAMAGE_RESISTANCE, 10, 0)
+        }
+    ),
+    SCROLL_OF_DARKNESS(
+        "Свиток тьмы",
+        "Накладывает эффект Слепоты I в течении 5 секунд\n§7на игроков в радиусе 5 блоков.",
+        800.0,
+        {
+            PreparePlayerBrain.getNearbyPlayers(it, 5.0).forEach { nearby ->
+                PreparePlayerBrain.addPotionEffect(nearby, PotionEffectType.BLINDNESS, 5, 0)
+            }
+        }
+    )
     ;
 
     fun getObjectName() = name.lowercase()
