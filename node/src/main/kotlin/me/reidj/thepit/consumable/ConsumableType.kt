@@ -16,14 +16,14 @@ enum class ConsumableType(
 ) {
     MAJOR_HEALTH_POTION(
         "Большой флакон жизни",
-        "Восстанавливает 2 §c❤ §7Вашего\n§7здоровья.",
+        "Восстанавливает 3 §c❤ §7Вашего\n§7здоровья.",
         1500.0,
-        { PreparePlayerBrain.setHealth(it, 4.0) }),
+        { PreparePlayerBrain.setHealth(it, 6.0) }),
     LESSER_HEALTH_POTION(
         "Маленький флакон жизни",
-        "Восстанавливает 1 §c❤ §7Вашего\n§7здоровья.",
+        "Восстанавливает 2 §c❤ §7Вашего\n§7здоровья.",
         700.0,
-        { PreparePlayerBrain.setHealth(it, 2.0) }),
+        { PreparePlayerBrain.setHealth(it, 4.0) }),
     MAJOR_POTION_REGENERATION(
         "Большой флакон восстановления",
         "В течении 10 секунд Вам даётся\n§7эффект Регенерация I.",

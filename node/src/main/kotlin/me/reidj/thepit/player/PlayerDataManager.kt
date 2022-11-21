@@ -49,6 +49,7 @@ class PlayerDataManager : Listener {
         "bf30a1df-85de-11e8-a6de-1cb72caa35fd", // Reidj
         "ca87474e-b15c-11e9-80c4-1cb72caa35fd", // Moisei
         "d5c6967a-2fd9-11eb-acca-1cb72caa35fd", // pokanoname
+        "0e7c0015-b27b-11eb-acca-1cb72caa35fd", // 3а6ив
     )
 
     private var prepares: MutableSet<Prepare> by notNull()

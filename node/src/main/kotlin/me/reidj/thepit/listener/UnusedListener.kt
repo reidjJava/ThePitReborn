@@ -33,6 +33,9 @@ class UnusedListener : Listener {
     }
 
     @EventHandler
+    fun LeavesDecayEvent.handle() { isCancelled = true }
+
+    @EventHandler
     fun PlayerCommandPreprocessEvent.handle() {
         if (CombatManager.containKey(player.uniqueId)) {
             player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы в ПВП")
