@@ -49,17 +49,12 @@ class Dungeon : State, Listener {
             val label = app.worldMeta.labels("dungeon").first { it.tag.split(" ")[0] == dungeonName }
             val itemInHand = player.itemInHand
             val locations = app.worldMeta.labels("$dungeonName-mob")
-            val mobCount = locations.size
+            val mobCounts = locations.size
 
             itemInHand.setAmount(itemInHand.getAmount() - 1)
 
-            user.dungeon = DungeonData(
-                label,
-                listOf(Zombie()),
-                locations.toMutableList(),
-                hashSetOf(player.uniqueId),
-                mobCount,
-            )
+            user.dungeon =
+                DungeonData(label, listOf(Zombie()), locations.toMutableList(), hashSetOf(player.uniqueId), mobCounts)
             user.setState(Dungeon())
         }
     }

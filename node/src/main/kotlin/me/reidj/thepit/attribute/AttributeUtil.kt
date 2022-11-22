@@ -2,7 +2,9 @@ package me.reidj.thepit.attribute
 
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.Formatter
+import me.reidj.thepit.util.attributeUpdate
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import kotlin.random.Random
 
@@ -45,6 +47,13 @@ object AttributeUtil {
                 }
             }
         }
+    }
+
+    fun updateAllAttributes(player: Player) {
+        val armorContents =
+            player.inventory.armorContents.toMutableList().apply { add(player.itemInHand) }.toTypedArray()
+        AttributeType.values().map { it.name.lowercase() }
+            .forEach { player.attributeUpdate(it, getAttributeValue(it, armorContents)) }
     }
 
     fun getAttributeValue(objectName: String, items: Array<ItemStack>) =

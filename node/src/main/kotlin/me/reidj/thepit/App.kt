@@ -124,7 +124,8 @@ class App : JavaPlugin() {
             ConsumableManager(),
             SpawnHandler(),
             Dungeon(),
-            EntityHandler()
+            EntityHandler(),
+            HeldItemHandler()
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)
