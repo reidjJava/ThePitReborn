@@ -5,6 +5,7 @@ import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.selection
 import me.func.mod.util.command
 import me.func.protocol.data.emoji.Emoji
+import me.func.protocol.ui.dialog.*
 import me.reidj.thepit.app
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
@@ -22,13 +23,53 @@ import org.bukkit.event.player.PlayerInteractEvent
 class ConsumableManager : Listener {
 
     private val menu = selection {
-        title = "Флаконы"
+        title = "Расходка"
         vault = Emoji.COIN
         columns = 2
     }
 
+    private val guideDialog = Dialog(
+        Entrypoint(
+            "consumablePageOne",
+            "Франк",
+            Screen(
+                "Приветствую вас в нашем клубе самоубийц-неудачников! Нет,",
+                "серьезно, местные же иногда такое вытворяют, что действительно",
+                "кажется, будто они самоубийцы. Однако раз за разом они",
+                "возвращаются ко мне пропустить стопку-другую, либо приобрести",
+                "мои волшебные Зелья и Свитки, а значит, все-таки самоубийцы-неудачники.",
+                "А что насчёт тебя? Хочешь поторговаться?"
+            ).buttons(
+                Button("Да, давай поторгуем.").actions(
+                    Action(Actions.COMMAND).command("/consumableMenu"),
+                    Action(Actions.CLOSE)
+                ),
+                Button("Расскажи про другие ресурсы, которые здесь в ходу.").actions(
+                    Action(Actions.COMMAND).command("/consumablePageTwo"),
+                    Action(Actions.CLOSE)
+                )
+            )
+        ),
+        Entrypoint(
+            "consumablePageTwo",
+            "Франк",
+            Screen(
+                "Подземелья есть подземелья. В подземелье много всякого",
+                "ценного находят, и далеко не только сокровище, но и что-то более невиданное...",
+                "Советую заглянуть к Умбре, он пускай и отшибленный на всю голову,",
+                "но он единственный, кто может предложить хорошую работу."
+            ).buttons(Button("Закрыть").actions(Action(Actions.CLOSE)))
+        ),
+    )
+
     init {
         command("consumable") { player, _ ->
+            me.func.mod.ui.dialog.Dialog.dialog(player, guideDialog, "consumablePageOne")
+        }
+        command("consumablePageTwo") { player, _ ->
+            me.func.mod.ui.dialog.Dialog.dialog(player, guideDialog, "consumablePageTwo")
+        }
+        command("consumableMenu") { player, _ ->
             generateButtons(player)
             menu.open(player)
         }
@@ -53,9 +94,12 @@ class ConsumableManager : Listener {
                     }
 
                     val consumableAmount = player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
-                        itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8) }
+                        itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
+                    }
 
-                    if (consumableAmount.count() >= 2 || consumableAmount.any { it.asBukkitMirror().getAmount() >= 5 }) {
+                    if (consumableAmount.count() >= 2 || consumableAmount.any {
+                            it.asBukkitMirror().getAmount() >= 5
+                        }) {
                         player.errorMessage("У вас максимальное количество флаконов!")
                         return@onClick
                     }

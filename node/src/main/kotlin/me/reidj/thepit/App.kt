@@ -14,6 +14,7 @@ import me.func.world.MapLoader
 import me.func.world.WorldMeta
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.auction.AuctionManager
+import me.reidj.thepit.barter.BarterManager
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.clock.detail.TopManager
@@ -21,6 +22,7 @@ import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.dungeon.Dungeon
+import me.reidj.thepit.entity.EntityHandler
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
@@ -108,6 +110,7 @@ class App : JavaPlugin() {
         SharpeningManager()
         AuctionManager()
         LootBoxManager()
+        BarterManager()
         NpcManager()
 
         AdminCommands()
@@ -120,7 +123,8 @@ class App : JavaPlugin() {
             PlayerRegenerationHandler(),
             ConsumableManager(),
             SpawnHandler(),
-            Dungeon()
+            Dungeon(),
+            EntityHandler()
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)
@@ -134,6 +138,8 @@ class App : JavaPlugin() {
         runBlocking { client().write(playerDataManager.bulkSave(true)) }
         Thread.sleep(1000)
     }
+
+    fun getWorld() = app.worldMeta.world
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)
 

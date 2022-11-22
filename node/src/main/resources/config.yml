@@ -12,6 +12,6 @@ npc:
     command: 'contracts'
     skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'
   barter:
-    title: 'Франк'
-    command: 'contracts'
+    title: 'Умбра'
+    command: 'barter'
     skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'

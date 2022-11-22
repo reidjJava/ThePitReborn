@@ -26,7 +26,6 @@ class SharpeningManager {
 
     private val menu = selection {
         title = "Улучшение предметов"
-        info = "Затачивая вещь Вы с определённым шансом улучшаете все её характеристики"
         rows = 3
         columns = 1
         vault = Emoji.COIN
@@ -35,9 +34,9 @@ class SharpeningManager {
     private val guideDialog = Dialog(
         Entrypoint(
             "sharpeningPageOne",
-            "Заточка",
+            "Дальгриг",
             Screen("Чем могу помочь?").buttons(
-                Button("Заточить предмет").actions(
+                Button("Заточка").actions(
                     Action(Actions.COMMAND).command("/sharpeningMenu"),
                     Action(Actions.CLOSE)
                 ),
@@ -49,13 +48,13 @@ class SharpeningManager {
         ),
         Entrypoint(
             "sharpeningPageTwo",
-            "Заточка",
+            "Дальгриг",
             Screen(
                 "Используя камни определенного качества,",
-                "можно заточить вещи и оружие, повысив характеристики предмета.",
-                "Каждая заточка имеет определенный шанс неудачи.",
-                "Чтобы повысить шансы на успешную заточку, есть особые точильные камни,",
-                "которые можно получить в игровом магазине."
+                "можно заточить предмет, повысив его характеристики.",
+                "С каждой успешной заточкой, уровень предмета повышается на +1,",
+                "а при неудаче - заточка ломается, не повышая уровень предмета.",
+                "Максимальный уровень заточки у каждого предмета - 10."
             ).buttons(Button("Закрыть").actions(Action(Actions.CLOSE)))
         )
     )
@@ -92,11 +91,11 @@ class SharpeningManager {
             button {
                 title = itemMeta.displayName
                 item = itemInHand
+                this.price = price.toLong()
                 hint = "Заточить"
                 description = """
                             §7Вы можете улучшить характеристики предмета на 1 единицу.
                             §cШанс разрушить точильный камень ${(chance * 100).toInt()}%
-                            §6Стоимость заточки ${Formatter.toMoneyFormat(price)} §f${Emoji.COIN}
                         """.trimIndent()
                 onClick { player, _, _ ->
                     val user = app.getUser(player) ?: return@onClick
