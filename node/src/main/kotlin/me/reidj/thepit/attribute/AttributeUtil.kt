@@ -31,9 +31,14 @@ object AttributeUtil {
 
         val itemStack = nmsItem.asBukkitMirror()
 
-        itemStack.itemMeta = itemStack.itemMeta.apply {
-            lore = lore.also { it.addAll(newLore) }
+        itemStack.itemMeta = itemStack.itemMeta.also { meta ->
+            meta.lore = meta.lore.apply {
+                add("")
+                addAll(newLore)
+            }
         }
+
+        newLore.clear()
 
         return itemStack
     }
@@ -42,6 +47,7 @@ object AttributeUtil {
         val tag = CraftItemStack.asNMSCopy(itemStack).tag
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
             meta.lore = ItemManager[tag.getString("address")]?.lore.apply {
+                this?.add("")
                 AttributeType.getAttributeWithNbt(tag).forEach {
                     this?.add(getTextWithAttribute(it.title, tag.getDouble(it.getObjectName())))
                 }
@@ -49,9 +55,7 @@ object AttributeUtil {
         }
     }
 
-    fun updateAllAttributes(player: Player) {
-        val armorContents =
-            player.inventory.armorContents.toMutableList().apply { add(player.itemInHand) }.toTypedArray()
+    fun updateAllAttributes(player: Player, armorContents: Array<ItemStack>) {
         AttributeType.values().map { it.name.lowercase() }
             .forEach { player.attributeUpdate(it, getAttributeValue(it, armorContents)) }
     }
