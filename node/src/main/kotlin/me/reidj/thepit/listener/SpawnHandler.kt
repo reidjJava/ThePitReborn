@@ -5,7 +5,9 @@ import me.func.mod.util.after
 import me.func.mod.util.command
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
+import me.reidj.thepit.app
 import me.reidj.thepit.clock.detail.CombatManager
+import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.event.EventHandler
@@ -26,8 +28,9 @@ class SpawnHandler : Listener {
     init {
         command("spawn") { player, _ ->
             val uuid = player.uniqueId
+            val user = app.getUser(uuid) ?: return@command
 
-            if (uuid in uuids || CombatManager.containKey(uuid)) {
+            if (uuid in uuids || CombatManager.containKey(uuid) || user.state is Dungeon) {
                 return@command
             }
 

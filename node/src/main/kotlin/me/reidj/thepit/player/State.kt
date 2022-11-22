@@ -16,6 +16,7 @@ interface State {
                 type(Material.CLAY_BALL)
                 text("§cВернуться")
                 nbt("other", "cancel")
+                nbt("click", "exit")
             }
         }
     }

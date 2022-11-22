@@ -125,7 +125,8 @@ class App : JavaPlugin() {
             SpawnHandler(),
             Dungeon(),
             EntityHandler(),
-            HeldItemHandler()
+            HeldItemHandler(),
+            ThePitHandler()
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)
@@ -136,7 +137,10 @@ class App : JavaPlugin() {
     }
 
     override fun onDisable() {
-        runBlocking { client().write(playerDataManager.bulkSave(true)) }
+        runBlocking {
+            Bukkit.getOnlinePlayers().mapNotNull { getUser(it) }.filter { it.state is Dungeon }.forEach { it.state!!.leaveState(it) }
+            client().write(playerDataManager.bulkSave(true))
+        }
         Thread.sleep(1000)
     }
 

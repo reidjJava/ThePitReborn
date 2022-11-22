@@ -11,7 +11,7 @@ import java.util.*
  **/
 data class DungeonData(
     val dungeonLocation: Location,
-    val entities: List<Entity>,
+    val entities: MutableList<Entity>,
     val entitiesLocations: MutableList<Location>,
     val party: HashSet<UUID>,
     val mobCounts: Int

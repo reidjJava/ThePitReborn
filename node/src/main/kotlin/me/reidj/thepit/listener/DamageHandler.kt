@@ -6,6 +6,7 @@ import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.clock.detail.CombatManager
+import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.killBoardMessage
 import org.bukkit.entity.Arrow
@@ -84,6 +85,11 @@ class DamageHandler : Listener {
             val user = app.getUser(getEntity()) ?: return@after
 
             user.giveDeath(1)
+
+            if (user.state is Dungeon) {
+                user.state!!.leaveState(user)
+                user.setState(null)
+            }
 
             if (!user.isKillerInitialized()) {
                 return@after

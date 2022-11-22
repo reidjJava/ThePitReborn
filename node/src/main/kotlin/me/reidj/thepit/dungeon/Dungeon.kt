@@ -21,18 +21,25 @@ class Dungeon : State, Listener {
     override fun enterState(user: User) {
         val player = user.player
 
-        player.inventory.setItem(9, State.backItem)
+        player.inventory.setItem(8, State.backItem)
 
         EntityUtil.spawn(user)
 
         Anime.topMessage(user.player, "Вы вошли в подземелье")
-        user.dungeon.teleport(user.player)
+        user.dungeon?.teleport(player)
     }
 
     override fun leaveState(user: User) {
+        val player = user.player
+
         EntityUtil.clearEntities(user)
-        Anime.topMessage(user.player, "Вы покинули подземелье")
-        PreparePlayerBrain.spawnTeleport(user.player)
+
+        player.inventory.remove(State.backItem)
+
+        user.dungeon = null
+
+        Anime.topMessage(player, "Вы покинули подземелье")
+        PreparePlayerBrain.spawnTeleport(player)
     }
 
     @EventHandler
@@ -53,8 +60,13 @@ class Dungeon : State, Listener {
 
             itemInHand.setAmount(itemInHand.getAmount() - 1)
 
-            user.dungeon =
-                DungeonData(label, listOf(Zombie()), locations.toMutableList(), hashSetOf(player.uniqueId), mobCounts)
+            user.dungeon = DungeonData(
+                label.also { it.yaw = label.tag.split(" ")[1].toFloat() },
+                mutableListOf(Zombie()),
+                locations.toMutableList(),
+                hashSetOf(player.uniqueId),
+                mobCounts
+            )
             user.setState(Dungeon())
         }
     }

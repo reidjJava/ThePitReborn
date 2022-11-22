@@ -28,9 +28,9 @@ class User(stat: Stat) {
     lateinit var killer: Player
     lateinit var player: Player
     lateinit var connection: PlayerConnection
-    lateinit var dungeon: DungeonData
 
     var state: State? = null
+    var dungeon: DungeonData? = null
 
     var isArmLock = false
     var isActive = false
@@ -39,7 +39,7 @@ class User(stat: Stat) {
         this.stat = stat
     }
 
-    private fun toBase64(inventory: Inventory): String {
+    fun toBase64(inventory: Inventory): String {
         val outputStream = ByteArrayOutputStream()
         val dataOutput = BukkitObjectOutputStream(outputStream)
 
@@ -75,12 +75,12 @@ class User(stat: Stat) {
     }
 
     @JvmName("updateState")
-    fun setState(state: State) {
+    fun setState(state: State?) {
         AsyncCatcher.catchOp("Async state change")
         if (this.state != null && this.state != state)
-            state.leaveState(this)
+            state?.leaveState(this)
         this.state = state
-        state.enterState(this)
+        state?.enterState(this)
     }
 
     fun generateStat(): Stat {

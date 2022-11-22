@@ -23,14 +23,14 @@ object EntityUtil {
 
     fun spawn(user: User) {
         val dungeon = user.dungeon
-        dungeon.entities.forEach {
+        dungeon?.entities?.forEach {
             repeat(dungeon.mobCounts) { _ ->
                 val location = dungeon.getLocation()
 
                 it.create(location)
 
                 viewEntities[user.stat.uuid]?.add(it.entity.entityId)
-                app.worldMeta.world.handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
+                app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
                 dungeon.removeLocation(location)
             }
@@ -55,7 +55,8 @@ object EntityUtil {
     }
 
     fun clearEntities(user: User) {
-        user.dungeon.entities.forEach { removeEntity(it.entity) }
+        user.dungeon?.entities?.forEach { removeEntity(it.entity) }
+        user.dungeon?.entities?.clear()
     }
 
    fun removeEntity(entity: org.bukkit.entity.Entity) {

@@ -12,6 +12,7 @@ import me.func.protocol.data.emoji.Emoji
 import me.func.protocol.ui.indicator.Indicators
 import me.reidj.thepit.app
 import me.reidj.thepit.client
+import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.entity.EntityUtil
 import me.reidj.thepit.player.prepare.Prepare
 import me.reidj.thepit.player.prepare.PrepareMods
@@ -124,12 +125,10 @@ class PlayerDataManager : Listener {
             user.fromBase64(stat.playerInventory, player.inventory)
             user.fromBase64(stat.playerEnderChest, player.enderChest)
 
-            player.inventory.addItem(
-                item {
-                    type(Material.CLAY_BALL)
-                    nbt("dungeon", "mine")
-                }
-            )
+            player.inventory.addItem(item {
+                type(Material.CLAY_BALL)
+                nbt("dungeon", "mine")
+            })
 
             prepares.forEach { it.execute(user) }
         }
@@ -155,6 +154,10 @@ class PlayerDataManager : Listener {
         RankUtil.remove(uuid)
 
         val user = userMap.remove(uuid) ?: return
+
+        if (user.state is Dungeon) {
+            user.state!!.leaveState(user)
+        }
 
         client().write(SaveUserPackage(uuid, user.generateStat()))
     }

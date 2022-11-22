@@ -9,7 +9,6 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import ru.cristalix.core.math.V3
-import ru.cristalix.core.util.UtilEntity
 
 /**
  * @project : ThePitReborn
@@ -45,7 +44,7 @@ abstract class Entity(val entityType: EntityType) {
     protected abstract var scale: V3
 
     fun create(location: Location) {
-        current = app.worldMeta.world.createEntity(location, entityType.clazz).getBukkitEntity()
+        current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity()
         entity = current as LivingEntity
 
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage

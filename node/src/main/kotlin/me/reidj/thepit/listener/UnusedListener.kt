@@ -1,9 +1,5 @@
 package me.reidj.thepit.listener
 
-import me.func.protocol.data.color.GlowColor
-import me.func.protocol.data.status.MessageStatus
-import me.reidj.thepit.clock.detail.CombatManager
-import me.reidj.thepit.util.systemMessage
 import org.bukkit.entity.EntityType
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -13,9 +9,11 @@ import org.bukkit.event.entity.EntityCombustEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
-import org.bukkit.event.player.*
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent
+import org.bukkit.event.player.PlayerBedEnterEvent
+import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
 
 /**
  * @project : ThePitReborn
@@ -24,24 +22,7 @@ import org.bukkit.event.player.*
 class UnusedListener : Listener {
 
     @EventHandler
-    fun InventoryCloseEvent.handle() {
-        val inventory = player.inventory
-        if (inventory.itemInOffHand != null) {
-            inventory.addItem(inventory.itemInOffHand)
-            inventory.itemInOffHand = null
-        }
-    }
-
-    @EventHandler
     fun LeavesDecayEvent.handle() { isCancelled = true }
-
-    @EventHandler
-    fun PlayerCommandPreprocessEvent.handle() {
-        if (CombatManager.containKey(player.uniqueId)) {
-            player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы в ПВП")
-            cancel = true
-        }
-    }
 
     @EventHandler
     fun PlayerDropItemEvent.handle() {

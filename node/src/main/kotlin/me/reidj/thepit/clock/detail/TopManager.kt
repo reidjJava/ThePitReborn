@@ -29,7 +29,7 @@ class TopManager : ClockInject {
             it.addColumn("Игрок", 110.0)
             it.addColumn(fieldName, 80.0)
             it.title = title
-            it.location = Location(app.worldMeta.world, x, y, z, yaw, 0F)
+            it.location = Location(app.getWorld(), x, y, z, yaw, 0F)
         }.also(Boards::addBoard)
 
     private fun updateData() {
