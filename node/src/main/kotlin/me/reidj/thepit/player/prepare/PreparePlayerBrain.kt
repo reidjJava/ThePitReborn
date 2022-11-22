@@ -3,9 +3,12 @@ package me.reidj.thepit.player.prepare
 import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.dailyReward
 import me.reidj.thepit.app
+import me.reidj.thepit.attribute.AttributeType
+import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.content.DailyReward
 import me.reidj.thepit.player.User
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import ru.cristalix.core.formatting.Formatting
@@ -72,4 +75,19 @@ object PreparePlayerBrain : Prepare {
 
     fun getNearbyPlayers(player: Player, radius: Double) =
         player.getNearbyEntities(radius, radius, radius).filterIsInstance<Player>()
+
+    fun applyAttributes(player: Player, armorContents: Array<ItemStack>, vararg attributes: AttributeType) {
+        if (attributes.any { it == AttributeType.HEALTH }) {
+            setMaxHealth(
+                player,
+                AttributeUtil.getAttributeValue(AttributeType.HEALTH.name.lowercase(), armorContents)
+            )
+        }
+        if (attributes.any { it == AttributeType.MOVE_SPEED }) {
+            setMoveSpeed(
+                player,
+                AttributeUtil.getAttributeValue(AttributeType.MOVE_SPEED.name.lowercase(), armorContents)
+            )
+        }
+    }
 }
