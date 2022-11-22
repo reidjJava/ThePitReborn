@@ -11,9 +11,10 @@ import java.util.*
  **/
 data class DungeonData(
     val dungeonLocation: Location,
-    val entities: HashMap<Entity, Int>,
+    val entities: List<Entity>,
     val entitiesLocations: MutableList<Location>,
-    val party: HashSet<UUID>
+    val party: HashSet<UUID>,
+    val mobCounts: Int
 ) {
     fun teleport(player: Player) = player.teleport(dungeonLocation)
 

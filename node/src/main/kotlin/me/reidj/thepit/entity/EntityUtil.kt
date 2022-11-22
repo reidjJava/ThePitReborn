@@ -9,9 +9,9 @@ import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PacketPlayOutMultiPacket
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
+import java.util.*
 
 /**
  * @project : ThePitReborn
@@ -19,30 +19,32 @@ import org.bukkit.event.entity.CreatureSpawnEvent
  **/
 object EntityUtil {
 
-    private val viewEntities = hashMapOf<Player, HashSet<Int>>()
+    private val viewEntities = hashMapOf<UUID, HashSet<Int>>()
 
     fun spawn(user: User) {
-        user.dungeon.entities.forEach { entry ->
-            repeat(entry.value) { 
-                val location = user.dungeon.getLocation()
-                val current = app.worldMeta.world.createEntity(location, entry.key.entityType.clazz).getBukkitEntity()
-                val entity = current as LivingEntity
+        val dungeon = user.dungeon
+        dungeon.entities.forEach {
+            repeat(dungeon.mobCounts) { _ ->
+                val location = dungeon.getLocation()
 
-                viewEntities[user.player]?.add(entity.entityId)
-                app.worldMeta.world.handle.addEntity(current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
-                entry.key.create(entity)
-                user.dungeon.removeLocation(location)
+                it.create(location)
+
+                viewEntities[user.stat.uuid]?.add(it.entity.entityId)
+                app.worldMeta.world.handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
+
+                dungeon.removeLocation(location)
             }
         }
     }
 
     fun register(player: Player) {
-        viewEntities[player] = hashSetOf()
+        val uuid = player.uniqueId
+        viewEntities[uuid] = hashSetOf()
 
         packetListener<PacketPlayOutMultiPacket>(player) {
             packets.forEach { packet ->
                 if (packet is PacketPlayOutSpawnEntityLiving) {
-                    if (viewEntities[player]?.contains(packet.a) == true) return@forEach
+                    if (viewEntities[uuid]?.contains(packet.a) == true) return@forEach
                     packet.c = 1
                     packet.d = 0.0
                     packet.e = 0.0
@@ -51,6 +53,17 @@ object EntityUtil {
             }
         }
     }
+
+    fun clearEntities(user: User) {
+        user.dungeon.entities.forEach { removeEntity(it.entity) }
+    }
+
+   fun removeEntity(entity: org.bukkit.entity.Entity) {
+       viewEntities.keys.forEach {
+           viewEntities[it]?.remove(entity.entityId)
+       }
+       entity.remove()
+   }
 
     private inline fun <reified T : Packet<*>> packetListener(player: Player, noinline handler: T.() -> Unit) {
         (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()

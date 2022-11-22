@@ -30,6 +30,7 @@ class Dungeon : State, Listener {
     }
 
     override fun leaveState(user: User) {
+        EntityUtil.clearEntities(user)
         Anime.topMessage(user.player, "Вы покинули подземелье")
         PreparePlayerBrain.spawnTeleport(user.player)
     }
@@ -54,9 +55,10 @@ class Dungeon : State, Listener {
 
             user.dungeon = DungeonData(
                 label,
-                hashMapOf(Zombie() to mobCount),
+                listOf(Zombie()),
                 locations.toMutableList(),
-                hashSetOf(player.uniqueId)
+                hashSetOf(player.uniqueId),
+                mobCount,
             )
             user.setState(Dungeon())
         }

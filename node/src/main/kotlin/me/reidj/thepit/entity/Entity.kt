@@ -1,7 +1,9 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.app
+import org.bukkit.Location
 import org.bukkit.attribute.Attribute
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
@@ -14,6 +16,9 @@ import ru.cristalix.core.util.UtilEntity
  * @author : Рейдж
  **/
 abstract class Entity(val entityType: EntityType) {
+
+    lateinit var current: CraftEntity
+    lateinit var entity: LivingEntity
 
     protected abstract var damage: Double
 
@@ -39,7 +44,10 @@ abstract class Entity(val entityType: EntityType) {
 
     protected abstract var scale: V3
 
-    fun create(entity: LivingEntity) {
+    fun create(location: Location) {
+        current = app.worldMeta.world.createEntity(location, entityType.clazz).getBukkitEntity()
+        entity = current as LivingEntity
+
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).baseValue = moveSpeed
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = health
@@ -54,6 +62,5 @@ abstract class Entity(val entityType: EntityType) {
         entity.removeWhenFarAway = false
         entity.canPickupItems = false
         entity.setMetadata("entity", FixedMetadataValue(app, metadata))
-        UtilEntity.setScale(entity, scale.x, scale.y, scale.z)
     }
 }
