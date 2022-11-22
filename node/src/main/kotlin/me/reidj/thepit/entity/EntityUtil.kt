@@ -9,9 +9,9 @@ import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PacketPlayOutMultiPacket
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
-import java.util.*
 
 /**
  * @project : ThePitReborn
@@ -20,23 +20,19 @@ import java.util.*
 object EntityUtil {
 
     private val viewEntities = hashMapOf<Player, HashSet<Int>>()
-    private val entities = hashSetOf<Entity>()
 
-    fun generateEntities(user: User) {
-        // TODO Добавить спавн несколько мобов
-        user.dungeon.entities.forEach {
-            entities.add(it.key)
-            repeat(it.value) {
-                spawn(user.player)
+    fun spawn(user: User) {
+        user.dungeon.entities.forEach { entry ->
+            repeat(entry.value) { 
+                val location = user.dungeon.getLocation()
+                val current = app.worldMeta.world.createEntity(location, entry.key.entityType.clazz).getBukkitEntity()
+                val entity = current as LivingEntity
+
+                viewEntities[user.player]?.add(entity.entityId)
+                app.worldMeta.world.handle.addEntity(current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
+                entry.key.create(entity)
+                user.dungeon.removeLocation(location)
             }
-        }
-    }
-
-    private fun spawn(player: Player) {
-        entities.forEach {
-            it.create()
-            viewEntities[player]?.add(it.current.entityId)
-            app.worldMeta.world.handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
         }
     }
 
@@ -58,7 +54,7 @@ object EntityUtil {
 
     private inline fun <reified T : Packet<*>> packetListener(player: Player, noinline handler: T.() -> Unit) {
         (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
-            .addBefore("packet_handler", UUID.randomUUID().toString(), object : ChannelDuplexHandler() {
+            .addBefore("packet_handler", player.name, object : ChannelDuplexHandler() {
                 override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
                     if (msg is T) {
                         handler.invoke(msg)

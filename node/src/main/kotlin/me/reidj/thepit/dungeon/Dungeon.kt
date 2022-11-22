@@ -3,6 +3,7 @@ package me.reidj.thepit.dungeon
 import me.func.mod.Anime
 import me.reidj.thepit.app
 import me.reidj.thepit.entity.EntityUtil
+import me.reidj.thepit.entity.Zombie
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
@@ -22,7 +23,7 @@ class Dungeon : State, Listener {
 
         player.inventory.setItem(9, State.backItem)
 
-        EntityUtil.generateEntities(user)
+        EntityUtil.spawn(user)
 
         Anime.topMessage(user.player, "Вы вошли в подземелье")
         user.dungeon.teleport(user.player)
@@ -38,18 +39,25 @@ class Dungeon : State, Listener {
         if (item == null) {
             return
         }
+        val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag
-        val user = app.getUser(player) ?: return
 
         if (nmsItem.hasTag() && tag.hasKeyOfType("dungeon", 8)) {
             val dungeonName = tag.getString("dungeon")
             val label = app.worldMeta.labels("dungeon").first { it.tag.split(" ")[0] == dungeonName }
             val itemInHand = player.itemInHand
+            val locations = app.worldMeta.labels("$dungeonName-mob")
+            val mobCount = locations.size
 
             itemInHand.setAmount(itemInHand.getAmount() - 1)
 
-            user.dungeon = DungeonData(label, hashMapOf(), hashSetOf())
+            user.dungeon = DungeonData(
+                label,
+                hashMapOf(Zombie() to mobCount),
+                locations.toMutableList(),
+                hashSetOf(player.uniqueId)
+            )
             user.setState(Dungeon())
         }
     }

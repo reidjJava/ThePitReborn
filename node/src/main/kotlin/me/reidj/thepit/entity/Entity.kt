@@ -1,9 +1,7 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.app
-import org.bukkit.Location
 import org.bukkit.attribute.Attribute
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
@@ -15,10 +13,7 @@ import ru.cristalix.core.util.UtilEntity
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-abstract class Entity(entityType: EntityType, location: Location) {
-
-    var current: CraftEntity = app.worldMeta.world.createEntity(location, entityType.clazz).getBukkitEntity()
-    val entity = current as LivingEntity
+abstract class Entity(val entityType: EntityType) {
 
     protected abstract var damage: Double
 
@@ -44,67 +39,21 @@ abstract class Entity(entityType: EntityType, location: Location) {
 
     protected abstract var scale: V3
 
-    private fun damage() {
+    fun create(entity: LivingEntity) {
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage
-    }
-
-    private fun moveSpeed() {
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).baseValue = moveSpeed
-    }
-
-    private fun health() {
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = health
-    }
-
-    private fun attackRange() {
         entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).baseValue = attackRange
-    }
-
-    private fun knockBackResistance() {
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).baseValue = knockBackResistance
-    }
-
-    private fun name() {
         entity.isCustomNameVisible = true
         entity.customName = customName
-    }
-
-    private fun helmet() {
         entity.equipment.helmet = helmet
-    }
-
-    private fun chestPlate() {
         entity.equipment.chestplate = chestPlate
-    }
-
-    private fun leggings() {
         entity.equipment.leggings = leggings
-    }
-
-    private fun boots() {
         entity.equipment.boots = boots
-    }
-
-    private fun metadata() {
+        entity.removeWhenFarAway = false
+        entity.canPickupItems = false
         entity.setMetadata("entity", FixedMetadataValue(app, metadata))
-    }
-
-    private fun scale() {
         UtilEntity.setScale(entity, scale.x, scale.y, scale.z)
-    }
-
-    fun create() {
-        damage()
-        moveSpeed()
-        health()
-        attackRange()
-        knockBackResistance()
-        name()
-        helmet()
-        chestPlate()
-        leggings()
-        boots()
-        metadata()
-        scale()
     }
 }

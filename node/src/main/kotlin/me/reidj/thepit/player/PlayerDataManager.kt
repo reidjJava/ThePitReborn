@@ -12,6 +12,7 @@ import me.func.protocol.data.emoji.Emoji
 import me.func.protocol.ui.indicator.Indicators
 import me.reidj.thepit.app
 import me.reidj.thepit.client
+import me.reidj.thepit.entity.EntityUtil
 import me.reidj.thepit.player.prepare.Prepare
 import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
@@ -108,6 +109,8 @@ class PlayerDataManager : Listener {
             )
 
             group.subscribe(player)
+
+            EntityUtil.register(player)
 
             RankUtil.run {
                 createRank(user)
