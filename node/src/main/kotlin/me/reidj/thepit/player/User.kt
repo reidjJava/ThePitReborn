@@ -5,6 +5,7 @@ import me.func.mod.util.after
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
+import me.reidj.thepit.util.errorMessage
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PlayerConnection
 import org.bukkit.entity.Player
@@ -65,13 +66,22 @@ class User(stat: Stat) {
         }
     }
 
-    fun armLock(): Boolean {
+    fun armLock(handler: () -> Unit) {
         if (isArmLock) {
-            return true
+            return
         }
         isArmLock = true
+        handler.invoke()
         after(5) { isArmLock = false }
-        return false
+    }
+
+    fun tryPurchase(price: Double, acceptAction: () -> Unit, errorMessage: String) {
+        if (stat.money >= price) {
+            giveMoney(-price)
+            acceptAction()
+        } else {
+            player.errorMessage(errorMessage)
+        }
     }
 
     @JvmName("updateState")

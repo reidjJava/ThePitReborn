@@ -30,10 +30,7 @@ class NpcManager {
                 onClick { event ->
                     val player = event.player
                     val user = app.getUser(player) ?: return@onClick
-                    if (user.armLock()) {
-                        return@onClick
-                    }
-                    player.performCommand(data.getString("command"))
+                    user.armLock { player.performCommand(data.getString("command")) }
                 }
             }
         }

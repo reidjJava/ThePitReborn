@@ -131,33 +131,28 @@ class AuctionManager {
                 onClick { player, _, _ ->
                     Confirmation("Купить", displayName, "за ${it.price} ${Emoji.COIN}") { confirmPlayer ->
                         val confirmUser = app.getUser(confirmPlayer) ?: return@Confirmation
-
-                        if (confirmUser.armLock()) {
-                            return@Confirmation
-                        }
-
-                        if (confirmUser.stat.money >= it.price) {
-                            if (it in auctionData) {
-                                client().write(
-                                    MoneyDepositPackage(
-                                        it.seller,
-                                        it.uuid,
-                                        confirmPlayer.displayName,
-                                        displayName,
-                                        it.price
+                        confirmUser.armLock {
+                            confirmUser.tryPurchase(it.price.toDouble(), {
+                                if (it in auctionData) {
+                                    client().write(
+                                        MoneyDepositPackage(
+                                            it.seller,
+                                            it.uuid,
+                                            confirmPlayer.displayName,
+                                            displayName,
+                                            it.price
+                                        )
                                     )
-                                )
 
-                                auctionData.remove(it)
+                                    auctionData.remove(it)
 
-                                confirmUser.giveMoney(-it.price.toDouble())
+                                    confirmUser.giveMoney(-it.price.toDouble())
 
-                                confirmPlayer.inventory.addItem(itemStack)
-                            } else {
-                                confirmPlayer.errorMessage("Этого лота не существует!")
-                            }
-                        } else {
-                            confirmPlayer.errorMessage("Недостаточно средств")
+                                    confirmPlayer.inventory.addItem(itemStack)
+                                } else {
+                                    confirmPlayer.errorMessage("Этого лота не существует!")
+                                }
+                            }, "Недостаточно средств")
                         }
                     }.open(player)
                 }
@@ -175,19 +170,16 @@ class AuctionManager {
                 hover(itemStack.itemMeta.lore)
                 onClick { player, _, _ ->
                     val clickUser = app.getUser(player) ?: return@onClick
-
-                    if (clickUser.armLock()) {
-                        return@onClick
-                    }
-
-                    if (it !in clickUser.stat.auctionData) {
+                    clickUser.armLock {
+                        if (it !in clickUser.stat.auctionData) {
+                            Anime.close(player)
+                            return@armLock
+                        }
+                        client().write(AuctionRemoveItemPackage(it.uuid))
+                        clickUser.stat.auctionData.remove(it)
+                        player.inventory.addItem(itemStack)
                         Anime.close(player)
-                        return@onClick
                     }
-                    client().write(AuctionRemoveItemPackage(it.uuid))
-                    clickUser.stat.auctionData.remove(it)
-                    player.inventory.addItem(itemStack)
-                    Anime.close(player)
                 }
             }
         }.toMutableList()

@@ -60,8 +60,20 @@ class SharpeningManager {
     )
 
     init {
-        command("sharpening") { player, _ -> me.func.mod.ui.dialog.Dialog.dialog(player, guideDialog, "sharpeningPageOne") }
-        command("sharpeningPageTwo") { player, _ -> me.func.mod.ui.dialog.Dialog.dialog(player, guideDialog, "sharpeningPageTwo") }
+        command("sharpening") { player, _ ->
+            me.func.mod.ui.dialog.Dialog.dialog(
+                player,
+                guideDialog,
+                "sharpeningPageOne"
+            )
+        }
+        command("sharpeningPageTwo") { player, _ ->
+            me.func.mod.ui.dialog.Dialog.dialog(
+                player,
+                guideDialog,
+                "sharpeningPageTwo"
+            )
+        }
         command("sharpeningMenu") { player, _ ->
             val itemInHand = player.itemInHand
             val itemMeta = itemInHand.itemMeta
@@ -103,45 +115,40 @@ class SharpeningManager {
                     val tag = nmsItem.tag
                     val sharpeningLevel = tag.getInt("sharpeningLevel")
 
-                    if (user.armLock()) {
-                        return@onClick
-                    }
-
-                    if (sharpeningLevel == 10) {
-                        player.errorMessage("У вас максимальный уровень заточки!")
-                        return@onClick
-                    }
-
-                    if (AttributeType.getAttributeWithNbt(tag).isEmpty()) {
-                        return@onClick
-                    }
-
-                    if (user.stat.money >= price) {
-                        user.giveMoney(-price)
-                        Anime.close(player)
-                        if (Math.random() < CraftItemStack.asNMSCopy(sharpening).tag.getDouble("sharpening_chance")) {
-                            player.errorMessage("Точильный камень был разрушен")
-                        } else {
-                            Anime.topMessage(player, "§aПредмет был заточен")
-                            Glow.animate(player, 1.0, GlowColor.GREEN)
-
-                            AttributeType.getAttributeWithNbt(tag).forEach {
-                                tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 1.0)
-                                tag.setInt("sharpeningLevel", sharpeningLevel + 1)
-                            }
-
-                            player.itemInHand.setAmount(0)
-
-                            val itemStack = nmsItem.asBukkitMirror()
-
-                            setNewNameWithSharpening(itemStack)
-                            AttributeUtil.setNewLoreWithAttributes(itemStack)
-
-                            player.inventory.addItem(itemStack)
+                    user.armLock {
+                        if (sharpeningLevel == 10) {
+                            player.errorMessage("У вас максимальный уровень заточки!")
+                            return@armLock
                         }
-                        sharpening.setAmount(sharpening.getAmount() - 1)
-                    } else {
-                        player.errorMessage("Недостаточно средств")
+
+                        if (AttributeType.getAttributeWithNbt(tag).isEmpty()) {
+                            return@armLock
+                        }
+
+                        user.tryPurchase(price, {
+                            Anime.close(player)
+                            if (Math.random() < CraftItemStack.asNMSCopy(sharpening).tag.getDouble("sharpening_chance")) {
+                                player.errorMessage("Точильный камень был разрушен")
+                            } else {
+                                Anime.topMessage(player, "§aПредмет был заточен")
+                                Glow.animate(player, 1.0, GlowColor.GREEN)
+
+                                AttributeType.getAttributeWithNbt(tag).forEach {
+                                    tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 1.0)
+                                    tag.setInt("sharpeningLevel", sharpeningLevel + 1)
+                                }
+
+                                player.itemInHand.setAmount(0)
+
+                                val itemStack = nmsItem.asBukkitMirror()
+
+                                setNewNameWithSharpening(itemStack)
+                                AttributeUtil.setNewLoreWithAttributes(itemStack)
+
+                                player.inventory.addItem(itemStack)
+                            }
+                            sharpening.setAmount(sharpening.getAmount() - 1)
+                        }, "Недостаточно средств")
                     }
                 }
             }

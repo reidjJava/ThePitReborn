@@ -88,41 +88,35 @@ class ConsumableManager : Listener {
                 }
                 onClick { player, _, _ ->
                     val user = app.getUser(player) ?: return@onClick
+                    user.armLock {
+                        val consumableAmount = player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
+                            itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
+                        }
 
-                    if (user.armLock()) {
-                        return@onClick
-                    }
+                        if (consumableAmount.count() >= 2 || consumableAmount.any {
+                                it.asBukkitMirror().getAmount() >= 5
+                            }) {
+                            player.errorMessage("У вас максимальное количество флаконов!")
+                            return@armLock
+                        }
 
-                    val consumableAmount = player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
-                        itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
-                    }
-
-                    if (consumableAmount.count() >= 2 || consumableAmount.any {
-                            it.asBukkitMirror().getAmount() >= 5
-                        }) {
-                        player.errorMessage("У вас максимальное количество флаконов!")
-                        return@onClick
-                    }
-
-                    if (user.stat.money >= it.price) {
-                        user.giveMoney(-it.price)
-                        player.inventory.addItem(item {
-                            type(Material.CLAY_BALL)
-                            text(
-                                """
+                        user.tryPurchase(it.price, {
+                            player.inventory.addItem(item {
+                                type(Material.CLAY_BALL)
+                                text(
+                                    """
                             §6${it.title}
                             §7${it.description}
                             
                             §7§oЩёлкните ПКМ, чтобы выпить.
                             """.trimIndent()
-                            )
-                            amount(1)
-                            nbt("thepit", it.getObjectName())
-                            nbt("consumable", it.getObjectName())
-                        })
-                        generateButtons(player)
-                    } else {
-                        player.errorMessage("Недостаточно средств!")
+                                )
+                                amount(1)
+                                nbt("thepit", it.getObjectName())
+                                nbt("consumable", it.getObjectName())
+                            })
+                            generateButtons(player)
+                        }, "Недостаточно средств!")
                     }
                 }
             }
