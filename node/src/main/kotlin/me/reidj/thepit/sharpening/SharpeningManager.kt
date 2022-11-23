@@ -142,7 +142,7 @@ class SharpeningManager {
                                 player.playSound(Sound.BLOCK_ANVIL_USE)
 
                                 AttributeType.getAttributeWithNbt(tag).forEach {
-                                    tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 1.0)
+                                    tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 0.5)
                                     tag.setInt("sharpeningLevel", sharpeningLevel + 1)
                                 }
 
@@ -168,7 +168,7 @@ class SharpeningManager {
         val sharpeningLevel = tag.getInt("sharpeningLevel")
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
             meta.displayName =
-                ItemManager[tag.getString("address")]?.itemMeta?.displayName + if (sharpeningLevel == 0) "" else " +$sharpeningLevel"
+                ItemManager[tag.getString("address")].itemMeta?.displayName + if (sharpeningLevel == 0) "" else " §c+$sharpeningLevel"
         }
     }
 
