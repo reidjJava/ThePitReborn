@@ -1,7 +1,9 @@
 package me.reidj.thepit.entity
 
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
 
@@ -26,6 +28,19 @@ class EntityHandler : Listener {
         entityType.entity.getDrops().forEach { it.give(killer) }
 
         EntityUtil.removeEntity(getEntity())
+    }
+
+    @EventHandler
+    fun EntityDamageByEntityEvent.handle() {
+        if (!entity.hasMetadata("entity") && damager !is Player) {
+            return
+        }
+
+        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").toString().lowercase())
+        val ability = entityType.entity.abilities.find { !it.isOnCoolDown() } ?: return
+
+        ability.onDamage(this)
+        ability.lastUsed = System.currentTimeMillis()
     }
 
     @EventHandler

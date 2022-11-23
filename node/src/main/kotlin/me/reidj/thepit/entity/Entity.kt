@@ -1,6 +1,7 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.app
+import me.reidj.thepit.entity.ability.Ability
 import me.reidj.thepit.entity.drop.EntityDrop
 import me.reidj.thepit.item.ItemManager
 import org.bukkit.Location
@@ -43,9 +44,13 @@ abstract class Entity(val entityType: EntityType) {
 
     protected abstract var boots: ItemStack?
 
+    protected abstract var itemInHand: ItemStack?
+
     protected abstract var scale: V3
 
     protected abstract var drops: Set<Pair<Double, String>>
+
+    abstract var abilities: Set<Ability>
 
     fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }
 
@@ -64,6 +69,7 @@ abstract class Entity(val entityType: EntityType) {
         entity.equipment.chestplate = chestPlate
         entity.equipment.leggings = leggings
         entity.equipment.boots = boots
+        entity.equipment.itemInMainHand = itemInHand
         entity.removeWhenFarAway = false
         entity.canPickupItems = false
         entity.setMetadata("entity", FixedMetadataValue(app, metadata))

@@ -1,5 +1,7 @@
 package me.reidj.thepit.entity
 
+import me.reidj.thepit.entity.ability.Ability
+import me.reidj.thepit.entity.ability.Nuke
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemStack
 import ru.cristalix.core.math.V3
@@ -32,10 +34,14 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var boots: ItemStack? = null
 
+    override var itemInHand: ItemStack? = null
+
     override var scale = V3(1.0, 1.0, 1.0)
 
     override var drops = setOf(
         0.30 to "TEST2",
         0.70 to "plam"
     )
+
+    override var abilities: Set<Ability> = setOf(Nuke())
 }
