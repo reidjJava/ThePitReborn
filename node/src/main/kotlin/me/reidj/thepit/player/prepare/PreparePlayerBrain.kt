@@ -84,13 +84,7 @@ object PreparePlayerBrain : Prepare {
         if (attributes.any { it == AttributeType.HEALTH }) {
             setMaxHealth(
                 player,
-                AttributeUtil.getAttributeValue(AttributeType.HEALTH.name.lowercase(), armorContents)
-            )
-        }
-        if (attributes.any { it == AttributeType.MOVE_SPEED }) {
-            setMoveSpeed(
-                player,
-                AttributeUtil.getAttributeValue(AttributeType.MOVE_SPEED.name.lowercase(), armorContents)
+                AttributeUtil.getAttributeValue(AttributeType.HEALTH, armorContents)
             )
         }
     }

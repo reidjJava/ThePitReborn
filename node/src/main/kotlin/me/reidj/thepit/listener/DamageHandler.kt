@@ -51,15 +51,15 @@ class DamageHandler : Listener {
 
                 val armorContents = playerDamager.inventory.armorContents
 
-                damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE.name.lowercase(), armorContents)
+                damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE, armorContents)
 
                 if (Math.random() < AttributeUtil.getAttributeValue(
-                        AttributeType.CHANCE_CRITICAL_DAMAGE.name.lowercase(),
+                        AttributeType.CHANCE_CRITICAL_DAMAGE,
                         armorContents
                     )
                 ) {
                     damage += AttributeUtil.getAttributeValue(
-                        AttributeType.CRITICAL_DAMAGE_STRENGTH.name.lowercase(),
+                        AttributeType.CRITICAL_DAMAGE_STRENGTH,
                         armorContents
                     )
                 }

@@ -16,9 +16,10 @@ class PlayerRegenerationHandler : Listener {
     @EventHandler
     fun EntityRegainHealthEvent.handle() {
         if (entity is Player) {
+            val player = entity as Player
             amount += AttributeUtil.getAttributeValue(
-                AttributeType.REGENERATION.name.lowercase(),
-                (entity as Player).inventory.armorContents
+                AttributeType.REGENERATION,
+                player.inventory.armorContents.toMutableList().apply { add(player.itemInHand) }.toTypedArray()
             )
         }
     }

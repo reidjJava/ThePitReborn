@@ -24,7 +24,7 @@ object AttributeUtil {
             val pair = tag.getString(objectName).split(":")
             val minimum = pair[0].toDouble()
             val maximum = pair[1].toDouble()
-            val result = Random.nextDouble((maximum - minimum) + 1) + minimum
+            val result = if (maximum == minimum) maximum else Random.nextDouble(minimum, maximum)
             tag.setDouble(objectName, result)
             newLore.add(getTextWithAttribute(it.title, result))
         }
@@ -46,7 +46,7 @@ object AttributeUtil {
     fun setNewLoreWithAttributes(itemStack: ItemStack) {
         val tag = CraftItemStack.asNMSCopy(itemStack).tag
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
-            meta.lore = ItemManager[tag.getString("address")]?.lore.apply {
+            meta.lore = ItemManager[tag.getString("address")].lore.apply {
                 this?.add("")
                 AttributeType.getAttributeWithNbt(tag).forEach {
                     this?.add(getTextWithAttribute(it.title, tag.getDouble(it.getObjectName())))
@@ -56,14 +56,13 @@ object AttributeUtil {
     }
 
     fun updateAllAttributes(player: Player, armorContents: Array<ItemStack>) {
-        AttributeType.values().map { it.name.lowercase() }
-            .forEach { player.attributeUpdate(it, getAttributeValue(it, armorContents)) }
+        AttributeType.values().forEach { player.attributeUpdate(it.getObjectName(), getAttributeValue(it, armorContents)) }
     }
 
-    fun getAttributeValue(objectName: String, items: Array<ItemStack>) =
+    fun getAttributeValue(type: AttributeType, items: Array<ItemStack>) =
         items.map { CraftItemStack.asNMSCopy(it) }
-            .filter { it.hasTag() && it.tag.hasKeyOfType(objectName, 99) }
-            .sumOf { it.tag.getDouble(objectName) }
+            .filter { it.hasTag() && it.tag.hasKeyOfType(type.getObjectName(), 99) }
+            .sumOf { it.tag.getDouble(type.getObjectName()) }
 
-    private fun getTextWithAttribute(title: String, value: Double) = "$title§7: §9${Formatter.toFormat(value)}"
+    private fun getTextWithAttribute(title: String, value: Double) = "$title: ${Formatter.toFormat(value)}"
 }
