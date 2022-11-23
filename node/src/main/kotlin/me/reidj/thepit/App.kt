@@ -2,7 +2,6 @@ package me.reidj.thepit
 
 import dev.implario.bukkit.platform.Platforms
 import dev.implario.platform.impl.darkpaper.PlatformDarkPaper
-import kotlinx.coroutines.runBlocking
 import me.func.mod.Anime
 import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
@@ -131,10 +130,11 @@ class App : JavaPlugin() {
     }
 
     override fun onDisable() {
-        runBlocking {
-            Bukkit.getOnlinePlayers().mapNotNull { getUser(it) }.filter { it.state is Dungeon }.forEach { it.state!!.leaveState(it) }
-            client().write(playerDataManager.bulkSave(true))
-        }
+        Bukkit.getOnlinePlayers()
+            .mapNotNull { getUser(it) }
+            .filter { it.state is Dungeon }
+            .forEach { it.state!!.leaveState(it) }
+        client().write(playerDataManager.bulkSave(true))
         Thread.sleep(1000)
     }
 
