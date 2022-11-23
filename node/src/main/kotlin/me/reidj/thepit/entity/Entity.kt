@@ -12,12 +12,13 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import ru.cristalix.core.math.V3
+import java.util.*
 
 /**
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-abstract class Entity(val entityType: EntityType) {
+abstract class Entity(private val entityType: EntityType) {
 
     lateinit var current: CraftEntity
     lateinit var entity: LivingEntity
@@ -53,6 +54,10 @@ abstract class Entity(val entityType: EntityType) {
     abstract var abilities: Set<Ability>
 
     fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }
+
+    fun setTarget(uuid: UUID) {
+        EntityUtil.targetPlayer[entity.uniqueId] = uuid
+    }
 
     fun create(location: Location) {
         current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity()

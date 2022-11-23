@@ -21,15 +21,19 @@ object EntityUtil {
 
     private val viewEntities = hashMapOf<UUID, HashSet<Int>>()
 
+    val targetPlayer = hashMapOf<UUID, UUID>()
+
     fun spawn(user: User) {
         val dungeon = user.dungeon
         dungeon?.entities?.forEach {
             repeat(dungeon.mobCounts) { _ ->
                 val location = dungeon.getLocation()
+                val uuid = user.stat.uuid
 
                 it.create(location)
+                it.setTarget(uuid)
 
-                viewEntities[user.stat.uuid]?.add(it.entity.entityId)
+                viewEntities[uuid]?.add(it.entity.entityId)
                 app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
                 dungeon.removeLocation(location)

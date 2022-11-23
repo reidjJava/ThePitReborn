@@ -6,12 +6,18 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
+import org.bukkit.event.entity.EntityTargetEvent
 
 /**
  * @project : ThePitReborn
  * @author : Рейдж
  **/
 class EntityHandler : Listener {
+
+    @EventHandler
+    fun EntityTargetEvent.handle() {
+        isCancelled = EntityUtil.targetPlayer[entity.uniqueId] != target.uniqueId
+    }
 
     @EventHandler
     fun EntityDeathEvent.handle() {

@@ -40,7 +40,7 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     // Шанс дропа 10% и 1%
     override var drops = setOf(
-        0.90 to "TEST2",
+        0.98 to "TEST2",
         0.99 to "PLAM"
     )
 
