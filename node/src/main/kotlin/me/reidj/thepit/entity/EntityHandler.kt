@@ -23,7 +23,7 @@ class EntityHandler : Listener {
         }
 
         val killer = getEntity().killer
-        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").toString().lowercase())
+        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").component1().asString().uppercase())
 
         entityType.entity.getDrops().forEach { it.give(killer) }
 
@@ -36,7 +36,7 @@ class EntityHandler : Listener {
             return
         }
 
-        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").toString().lowercase())
+        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").component1().asString().uppercase())
         val ability = entityType.entity.abilities.find { !it.isOnCoolDown() } ?: return
 
         ability.onDamage(this)

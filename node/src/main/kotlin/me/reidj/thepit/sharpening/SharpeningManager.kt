@@ -14,6 +14,8 @@ import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
+import me.reidj.thepit.util.playSound
+import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -79,8 +81,10 @@ class SharpeningManager {
             val itemMeta = itemInHand.itemMeta
             if (itemInHand == null || itemMeta == null || itemMeta.displayName == null) {
                 player.errorMessage("Вы не можете заточить этот предмет!")
+                player.playSound(Sound.BLOCK_ANVIL_BREAK)
                 return@command
             } else if (findSharpeningStone(player) == null) {
+                player.playSound(Sound.BLOCK_ANVIL_BREAK)
                 player.errorMessage("У вас нету точильных камней!")
                 return@command
             }
@@ -118,6 +122,7 @@ class SharpeningManager {
                     user.armLock {
                         if (sharpeningLevel == 10) {
                             player.errorMessage("У вас максимальный уровень заточки!")
+                            player.playSound(Sound.BLOCK_ANVIL_BREAK)
                             return@armLock
                         }
 
@@ -129,9 +134,12 @@ class SharpeningManager {
                             Anime.close(player)
                             if (Math.random() < CraftItemStack.asNMSCopy(sharpening).tag.getDouble("sharpening_chance")) {
                                 player.errorMessage("Точильный камень был разрушен")
+                                player.playSound(Sound.BLOCK_ANVIL_DESTROY)
                             } else {
                                 Anime.topMessage(player, "§aПредмет был заточен")
                                 Glow.animate(player, 1.0, GlowColor.GREEN)
+
+                                player.playSound(Sound.BLOCK_ANVIL_USE)
 
                                 AttributeType.getAttributeWithNbt(tag).forEach {
                                     tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 1.0)

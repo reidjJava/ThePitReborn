@@ -9,11 +9,10 @@ import org.bukkit.inventory.ItemStack
  **/
 data class EntityDrop(private val chance: Double, private val itemStack: ItemStack) {
 
-    fun give(player: Player): Boolean {
+    fun give(player: Player) {
         if (Math.random() < chance) {
-            player.inventory.addItem(itemStack)
-            return true
+            return
         }
-        return false
+        player.inventory.addItem(itemStack)
     }
 }

@@ -6,8 +6,10 @@ import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.errorMessage
+import me.reidj.thepit.util.playSound
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PlayerConnection
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -80,6 +82,7 @@ class User(stat: Stat) {
             giveMoney(-price)
             acceptAction()
         } else {
+            player.playSound(Sound.ENTITY_VILLAGER_NO)
             player.errorMessage(errorMessage)
         }
     }

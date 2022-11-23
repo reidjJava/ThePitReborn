@@ -9,7 +9,9 @@ import me.func.protocol.ui.dialog.*
 import me.reidj.thepit.app
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
+import me.reidj.thepit.util.playSound
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -97,10 +99,12 @@ class ConsumableManager : Listener {
                                 it.asBukkitMirror().getAmount() >= 5
                             }) {
                             player.errorMessage("У вас максимальное количество флаконов!")
+                            player.playSound(Sound.BLOCK_ANVIL_BREAK)
                             return@armLock
                         }
 
                         user.tryPurchase(it.price, {
+                            player.playSound(Sound.ENTITY_PLAYER_LEVELUP)
                             player.inventory.addItem(item {
                                 type(Material.CLAY_BALL)
                                 text(

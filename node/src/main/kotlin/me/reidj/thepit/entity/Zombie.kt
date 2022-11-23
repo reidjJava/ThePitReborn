@@ -38,9 +38,10 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var scale = V3(1.0, 1.0, 1.0)
 
+    // Шанс дропа 10% и 1%
     override var drops = setOf(
-        0.30 to "TEST2",
-        0.70 to "plam"
+        0.90 to "TEST2",
+        0.99 to "PLAM"
     )
 
     override var abilities: Set<Ability> = setOf(Nuke())

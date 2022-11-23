@@ -8,6 +8,7 @@ import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.content.DailyReward
 import me.reidj.thepit.player.User
+import me.reidj.thepit.util.teleportAndPlayMusic
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
@@ -52,14 +53,14 @@ object PreparePlayerBrain : Prepare {
     fun getSpawnLocation() = app.worldMeta.label("spawn")!!
 
     fun spawnTeleport(player: Player) = after(5) {
-        player.teleport(getSpawnLocation().clone().also {
+        player.teleportAndPlayMusic(getSpawnLocation().clone().also {
             it.yaw = 0F
             it.x += 0.5
             it.z += 0.5
         })
     }
 
-    fun setMaxHealth(player: Player, maxHealth: Double) {
+    private fun setMaxHealth(player: Player, maxHealth: Double) {
         player.maxHealth = 20.0 + maxHealth
     }
 
@@ -67,7 +68,7 @@ object PreparePlayerBrain : Prepare {
         player.health = player.maxHealth.coerceAtMost(player.health + health)
     }
 
-    fun setMoveSpeed(player: Player, speed: Double) {
+    private fun setMoveSpeed(player: Player, speed: Double) {
         player.walkSpeed += speed.toFloat()
     }
 

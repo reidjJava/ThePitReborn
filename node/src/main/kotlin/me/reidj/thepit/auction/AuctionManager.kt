@@ -18,8 +18,10 @@ import me.reidj.thepit.protocol.AuctionRemoveItemPackage
 import me.reidj.thepit.protocol.MoneyDepositPackage
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.errorMessage
+import me.reidj.thepit.util.playSound
 import me.reidj.thepit.util.systemMessage
 import org.apache.commons.lang.math.NumberUtils
+import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import java.util.*
 
@@ -151,6 +153,7 @@ class AuctionManager {
                                     confirmPlayer.inventory.addItem(itemStack)
                                 } else {
                                     confirmPlayer.errorMessage("Этого лота не существует!")
+                                    player.playSound(Sound.BLOCK_ANVIL_BREAK)
                                 }
                             }, "Недостаточно средств")
                         }

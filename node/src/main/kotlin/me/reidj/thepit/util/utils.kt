@@ -6,7 +6,9 @@ import me.func.mod.Anime
 import me.func.mod.ui.Glow
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -20,12 +22,19 @@ private val barrier = ItemStack(Material.BARRIER)
 fun coroutine() = CoroutineScope(Dispatchers.IO)
 
 fun Player.errorMessage(subTitle: String) {
-    Glow.animate(player, 2.0, GlowColor.RED)
-    Anime.itemTitle(player, barrier, "Ошибка", subTitle, 2.0)
-    Anime.close(player)
+    Glow.animate(this, 2.0, GlowColor.RED)
+    Anime.itemTitle(this, barrier, "Ошибка", subTitle, 2.0)
+    Anime.close(this)
 }
 
 fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: String) {
-    Glow.animate(player, 2.0, color)
-    Anime.systemMessage(player, messageStatus, text)
+    Glow.animate(this, 2.0, color)
+    Anime.systemMessage(this, messageStatus, text)
+}
+
+fun Player.playSound(sound: Sound) = playSound(location, sound, 1F, 1F)
+
+fun Player.teleportAndPlayMusic(location: Location) {
+    teleport(location)
+    playSound(Sound.ENTITY_SHULKER_TELEPORT)
 }
