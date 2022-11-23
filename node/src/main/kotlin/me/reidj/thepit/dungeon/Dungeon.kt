@@ -29,6 +29,8 @@ class Dungeon : State, Listener {
         user.dungeon?.teleport(player)
     }
 
+    override fun playerVisible() = false
+
     override fun leaveState(user: User) {
         val player = user.player
 

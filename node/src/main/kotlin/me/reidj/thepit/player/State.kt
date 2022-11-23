@@ -1,6 +1,7 @@
 package me.reidj.thepit.player
 
 import dev.implario.bukkit.item.item
+import me.reidj.thepit.app
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -23,5 +24,9 @@ interface State {
 
     fun enterState(user: User)
 
+    fun playerVisible(): Boolean
+
     fun leaveState(user: User)
+
+    fun getUsers(): Collection<User> = app.getUsers().filter { it.state == this }
 }

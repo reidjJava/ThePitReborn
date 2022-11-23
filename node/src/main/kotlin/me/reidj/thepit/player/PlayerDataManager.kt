@@ -93,7 +93,8 @@ class PlayerDataManager : Listener {
     fun PlayerJoinEvent.handle() {
         val user = app.getUser(player) ?: return
         val stat = user.stat
-        val connection = (player as CraftPlayer).handle.playerConnection
+        val player = player as CraftPlayer
+        val connection = player.handle.playerConnection
 
         user.player = player
         user.connection = connection
@@ -161,6 +162,8 @@ class PlayerDataManager : Listener {
 
         client().write(SaveUserPackage(uuid, user.generateStat()))
     }
+
+    fun getUsers() = userMap.values
 
     fun bulkSave(remove: Boolean): BulkSaveUserPackage? = BulkSaveUserPackage(Bukkit.getOnlinePlayers().map {
         val uuid = it.uniqueId

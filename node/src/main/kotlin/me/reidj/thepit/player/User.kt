@@ -2,14 +2,18 @@ package me.reidj.thepit.player
 
 import me.func.mod.Anime
 import me.func.mod.util.after
+import me.reidj.thepit.app
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.errorMessage
 import me.reidj.thepit.util.playSound
 import net.minecraft.server.v1_12_R1.Packet
+import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo
 import net.minecraft.server.v1_12_R1.PlayerConnection
+import org.bukkit.Bukkit
 import org.bukkit.Sound
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -29,7 +33,7 @@ class User(stat: Stat) {
     var stat: Stat
 
     lateinit var killer: Player
-    lateinit var player: Player
+    lateinit var player: CraftPlayer
     lateinit var connection: PlayerConnection
 
     var state: State? = null
@@ -87,13 +91,51 @@ class User(stat: Stat) {
         }
     }
 
+    fun hideFromAll() {
+        // Отправка таба
+        val show = PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player.handle)
+        // Скрытие игроков
+        for (current in Bukkit.getOnlinePlayers()) {
+            if (current == null) continue
+            player.hidePlayer(app, current.player)
+            sendPacket(
+                PacketPlayOutPlayerInfo(
+                    PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
+                    (current as CraftPlayer).handle
+                )
+            )
+            current.hidePlayer(app, player)
+            current.handle.playerConnection.sendPacket(show)
+        }
+    }
+
+    fun showToAllState() {
+        for (current in app.getUsers()) {
+            if (current.player.hasMetadata("vanish")) {
+                continue
+            }
+            if (current.state == state || current.state!!::class.java == state!!::class.java) {
+                current.player.showPlayer(app, player)
+                player.showPlayer(app, current.player)
+            }
+        }
+    }
+
     @JvmName("updateState")
     fun setState(state: State?) {
         AsyncCatcher.catchOp("Async state change")
         if (this.state != null && this.state != state)
             state?.leaveState(this)
+        val previousState = this.state
         this.state = state
         state?.enterState(this)
+        after(1) {
+            if (state?.playerVisible() == true && previousState?.playerVisible() == false) {
+                showToAllState()
+            } else if (state?.playerVisible() == false) {
+                hideFromAll()
+            }
+        }
     }
 
     fun generateStat(): Stat {

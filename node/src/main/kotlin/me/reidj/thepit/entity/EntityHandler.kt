@@ -46,7 +46,6 @@ class EntityHandler : Listener {
 
             ability.onDamage(this)
             ability.lastUsed = System.currentTimeMillis()
-            return
         }
     }
 

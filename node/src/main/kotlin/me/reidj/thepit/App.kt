@@ -138,6 +138,8 @@ class App : JavaPlugin() {
         Thread.sleep(1000)
     }
 
+    fun getUsers() = playerDataManager.getUsers()
+
     fun getWorld() = app.worldMeta.world
 
     fun getUser(player: Player): User? = getUser(player.uniqueId)
