@@ -34,6 +34,8 @@ class AdminCommands {
         regAdminCommand("item") { _, args ->
             Bukkit.getPlayer(args[0]).inventory.addItem(AttributeUtil.generateAttribute(ItemManager[args[1]]) )
         }
+        regAdminCommand("hide") { user, _ -> user.hideFromAll() }
+        regAdminCommand("show") { user, _ -> user.showToAllState() }
     }
 
     private fun regAdminCommand(commandName: String, executor: (User, Array<out String>) -> Unit) {
