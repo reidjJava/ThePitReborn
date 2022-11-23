@@ -8,10 +8,10 @@ npc:
     command: 'consumable'
     skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'
   contracts:
-    title: 'Франк'
+    title: 'Кюри'
     command: 'contracts'
     skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'
   barter:
     title: 'Умбра'
     command: 'barter'
-    skin: 'e4115940-69a9-11ed-bcd4-1cb72cb014ae'
+    skin: '228e839b-ea88-11ec-bc0d-1cb72caa35fd'

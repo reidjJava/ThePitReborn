@@ -21,12 +21,11 @@ class AttributeManager {
     private val attributes = mutableMapOf(
         "health" to Attribute("§cЗдоровье§7:"),
         "regeneration" to Attribute("§dРегенерация§7:"),
-        "damage" to Attribute("§cУрон§7:"),
-        "chance-critical-damage" to Attribute("§3Шанс критического урона§7:"),
-        "critical-damage-strength" to Attribute("§3Сила критического урона§7:"),
-        "move-speed" to Attribute("§bСкорость перемещения§7:"),
+        "damage" to Attribute("§4Урон§7:"),
+        "chance_critical_damage" to Attribute("§eШанс критического урона§7:"),
+        "critical_damage_strength" to Attribute("§3Сила критического урона§7:"),
         "vampirism" to Attribute("§5Похищение крови§7:"),
-        "entity-protection" to Attribute("§aЗащита от сущностей§7:"),
+        "entity_protection" to Attribute("§aЗащита от сущностей§7:"),
     )
 
     private val box = rectangle {
