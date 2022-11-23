@@ -1,5 +1,6 @@
 package me.reidj.thepit.entity
 
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -38,15 +39,15 @@ class EntityHandler : Listener {
 
     @EventHandler
     fun EntityDamageByEntityEvent.handle() {
-        if (!entity.hasMetadata("entity") && damager !is Player) {
+        if (getEntity() is LivingEntity && getEntity().hasMetadata("entity") && damager is Player) {
+            val entity = getEntity() as LivingEntity
+            val entityType = EntityType.valueOf(entity.getMetadata("entity").component1().asString().uppercase())
+            val ability = entityType.entity.abilities.find { !it.isOnCoolDown() } ?: return
+
+            ability.onDamage(this)
+            ability.lastUsed = System.currentTimeMillis()
             return
         }
-
-        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").component1().asString().uppercase())
-        val ability = entityType.entity.abilities.find { !it.isOnCoolDown() } ?: return
-
-        ability.onDamage(this)
-        ability.lastUsed = System.currentTimeMillis()
     }
 
     @EventHandler
