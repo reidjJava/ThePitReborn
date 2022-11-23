@@ -18,6 +18,6 @@ class HeldItemHandler : Listener {
         val armorContents = player.inventory.armorContents.toMutableList().apply { add(player.inventory.getItem(newSlot)) }
             .toTypedArray()
         updateAllAttributes(player, armorContents)
-        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH, AttributeType.MOVE_SPEED)
+        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH)
     }
 }

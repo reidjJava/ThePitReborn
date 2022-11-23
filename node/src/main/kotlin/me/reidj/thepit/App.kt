@@ -14,6 +14,7 @@ import me.reidj.thepit.auction.AuctionManager
 import me.reidj.thepit.barter.BarterManager
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.CombatManager
+import me.reidj.thepit.clock.detail.PlayerRegeneration
 import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
@@ -117,7 +118,6 @@ class App : JavaPlugin() {
             DamageHandler(),
             ArmorChangeHandler(),
             UnusedListener(),
-            PlayerRegenerationHandler(),
             ConsumableManager(),
             SpawnHandler(),
             Dungeon(),
@@ -126,7 +126,7 @@ class App : JavaPlugin() {
             ThePitHandler()
         )
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration())), 0, 1)
     }
 
     override fun onDisable() {
