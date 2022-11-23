@@ -1,6 +1,8 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.app
+import me.reidj.thepit.entity.drop.EntityDrop
+import me.reidj.thepit.item.ItemManager
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity
@@ -42,6 +44,10 @@ abstract class Entity(val entityType: EntityType) {
     protected abstract var boots: ItemStack?
 
     protected abstract var scale: V3
+
+    protected abstract var drops: Set<Pair<Double, String>>
+
+    fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }
 
     fun create(location: Location) {
         current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity()

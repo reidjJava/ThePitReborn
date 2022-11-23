@@ -10,19 +10,19 @@ import ru.cristalix.core.math.V3
  **/
 class Zombie : Entity(EntityType.ZOMBIE) {
 
-    override var damage: Double = 5.0
+    override var damage = 5.0
 
-    override var moveSpeed: Double = 0.5
+    override var moveSpeed = 0.5
 
-    override var health: Double = 20.0
+    override var health= 20.0
 
-    override var attackRange: Double = 5.0
+    override var attackRange = 5.0
 
-    override var knockBackResistance: Double = 0.0
+    override var knockBackResistance = 0.0
 
-    override var customName: String = "Зомбяк"
+    override var customName= "Зомбяк"
 
-    override var metadata: String = "zombie"
+    override var metadata = "zombie"
 
     override var helmet: ItemStack? = null
 
@@ -32,5 +32,10 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var boots: ItemStack? = null
 
-    override var scale: V3 = V3(1.0, 1.0, 1.0)
+    override var scale = V3(1.0, 1.0, 1.0)
+
+    override var drops = setOf(
+        0.30 to "TEST2",
+        0.70 to "plam"
+    )
 }

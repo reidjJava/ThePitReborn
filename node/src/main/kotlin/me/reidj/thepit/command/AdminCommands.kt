@@ -2,6 +2,8 @@ package me.reidj.thepit.command
 
 import me.func.mod.util.command
 import me.reidj.thepit.app
+import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.player.User
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -28,6 +30,9 @@ class AdminCommands {
         }
         regAdminCommand("death") { _, args ->
             (app.getUser(Bukkit.getPlayer(args[0])) ?: return@regAdminCommand).giveDeath(args[1].toInt())
+        }
+        regAdminCommand("item") { _, args ->
+            Bukkit.getPlayer(args[0]).inventory.addItem(AttributeUtil.generateAttribute(ItemManager[args[1]]) )
         }
     }
 

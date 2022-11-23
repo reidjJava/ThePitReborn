@@ -20,7 +20,12 @@ class EntityHandler : Listener {
             return
         }
 
-        EntityUtil.removeEntity(entity)
+        val killer = getEntity().killer
+        val entityType = EntityType.valueOf(getEntity().getMetadata("entity").toString().lowercase())
+
+        entityType.entity.getDrops().forEach { it.give(killer) }
+
+        EntityUtil.removeEntity(getEntity())
     }
 
     @EventHandler

@@ -6,6 +6,5 @@ data class Contract(
     val type: ContractType,
     val condition: Int,
     var now: Int = 0,
-    val exp: Double,
     val money: Double
 )

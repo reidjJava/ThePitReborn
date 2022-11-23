@@ -6,13 +6,11 @@ import kotlinx.coroutines.runBlocking
 import me.func.mod.Anime
 import me.func.mod.Kit
 import me.func.mod.conversation.ModLoader
-import me.func.mod.util.command
 import me.func.mod.util.listener
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
-import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.auction.AuctionManager
 import me.reidj.thepit.barter.BarterManager
 import me.reidj.thepit.clock.GameTimer
@@ -130,10 +128,6 @@ class App : JavaPlugin() {
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager())), 0, 1)
-
-        command("item") { player, args ->
-            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager[args[0]]!!))
-        }
     }
 
     override fun onDisable() {

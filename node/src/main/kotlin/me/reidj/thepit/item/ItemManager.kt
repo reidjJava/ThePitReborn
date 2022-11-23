@@ -14,7 +14,7 @@ class ItemManager {
     companion object {
         private val items = hashMapOf<String, ItemStack>()
 
-        operator fun get(objectName: String) = items[objectName]
+        operator fun get(objectName: String) = items[objectName]!!
     }
 
     init {
