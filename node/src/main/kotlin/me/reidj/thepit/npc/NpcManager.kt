@@ -3,7 +3,6 @@ package me.reidj.thepit.npc
 import me.func.mod.world.Npc
 import me.func.mod.world.Npc.location
 import me.func.mod.world.Npc.onClick
-import me.func.mod.world.Npc.skin
 import me.func.protocol.world.npc.NpcBehaviour
 import me.reidj.thepit.app
 
@@ -22,7 +21,8 @@ class NpcManager {
                 behaviour = NpcBehaviour.STARE_AT_PLAYER
                 pitch = it.pitch
                 yaw = it.yaw
-                skin(skin)
+                skinUrl = "https://webdata.c7x.dev/textures/skin/$skin"
+                skinDigest = skin
                 location(it.also {
                     it.x += 0.5
                     it.z += 0.5
