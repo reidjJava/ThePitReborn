@@ -28,7 +28,6 @@ class ItemManager {
 
             configuration.getConfigurationSection("items").getKeys(false).forEach {
                 val path = "items.$it."
-                val sharpeningLevelPath = "${path}sharpeningLevel"
                 items[it] = item {
                     Equipment(this).init(it)
                     SharpeningStone(this).init(it)
@@ -44,9 +43,6 @@ class ItemManager {
                     nbt("HideFlags", 63)
                     nbt("Unbreakable", 1)
                     nbt("thepit", configuration.getString("${path}texture"))
-                    if (configuration.isInt(sharpeningLevelPath)) {
-                        nbt("sharpeningLevel", configuration.getInt(sharpeningLevelPath))
-                    }
                 }
             }
         }
