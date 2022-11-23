@@ -61,7 +61,10 @@ class Dungeon : State, Listener {
             itemInHand.setAmount(itemInHand.getAmount() - 1)
 
             user.dungeon = DungeonData(
-                label.also { it.yaw = label.tag.split(" ")[1].toFloat() },
+                label.clone().also {
+                    it.y += 1.0
+                    it.yaw = label.tag.split(" ")[1].toFloat()
+                },
                 mutableListOf(Zombie()),
                 locations.toMutableList(),
                 hashSetOf(player.uniqueId),

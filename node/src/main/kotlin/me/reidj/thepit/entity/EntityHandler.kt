@@ -16,7 +16,7 @@ class EntityHandler : Listener {
 
     @EventHandler
     fun EntityTargetEvent.handle() {
-        isCancelled = EntityUtil.targetPlayer[entity.uniqueId] != target.uniqueId
+        isCancelled = target != null && EntityUtil.targetPlayer[entity.uniqueId] != target.uniqueId
     }
 
     @EventHandler

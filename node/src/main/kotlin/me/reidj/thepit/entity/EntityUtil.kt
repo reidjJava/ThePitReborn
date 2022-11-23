@@ -64,6 +64,7 @@ object EntityUtil {
     }
 
    fun removeEntity(entity: org.bukkit.entity.Entity) {
+       targetPlayer.remove(entity.uniqueId)
        viewEntities.keys.forEach {
            viewEntities[it]?.remove(entity.entityId)
        }
