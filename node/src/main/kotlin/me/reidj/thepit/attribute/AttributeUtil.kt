@@ -64,5 +64,7 @@ object AttributeUtil {
             .filter { it.hasTag() && it.tag.hasKeyOfType(type.getObjectName(), 99) }
             .sumOf { it.tag.getDouble(type.getObjectName()) }
 
+    fun getAllItems(player: Player) = player.inventory.armorContents.toMutableList().apply { add(player.itemInHand) }.toTypedArray()
+
     private fun getTextWithAttribute(title: String, value: Double) = "$title: ${Formatter.toFormat(value)}"
 }

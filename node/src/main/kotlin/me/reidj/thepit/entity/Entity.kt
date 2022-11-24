@@ -70,6 +70,7 @@ abstract class Entity(private val entityType: EntityType) {
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).baseValue = knockBackResistance
         entity.isCustomNameVisible = true
         entity.customName = customName
+        entity.health = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue
         entity.equipment.helmet = helmet
         entity.equipment.chestplate = chestPlate
         entity.equipment.leggings = leggings

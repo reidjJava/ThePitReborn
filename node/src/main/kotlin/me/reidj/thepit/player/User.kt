@@ -98,7 +98,7 @@ class User(stat: Stat) {
         val show = PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player.handle)
         // Скрытие игроков
         for (current in Bukkit.getOnlinePlayers()) {
-            if (current == null) continue
+            if (current == null || (dungeon != null) && current.uniqueId in dungeon!!.party) continue
             player.hidePlayer(app, current.player)
             sendPacket(
                 PacketPlayOutPlayerInfo(

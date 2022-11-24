@@ -54,17 +54,19 @@ class DungeonHandler : Listener {
 
         if (nmsItem.hasTag() && tag.hasKeyOfType("dungeon", 8)) {
             val dungeonName = tag.getString("dungeon")
+            val uuid = player.uniqueId
             val label = app.worldMeta.labels("dungeon").first { it.tag.split(" ")[0] == dungeonName }
             val labelTag = label.tag.split(" ")
             val locations = app.worldMeta.labels("$dungeonName-mob")
-            val partySnapshot = IPartyService.get().getPartyByMember(player.uniqueId).get()
+            val partySnapshot = IPartyService.get().getPartyByMember(uuid).get()
             val dungeonData = DungeonData(
                 label.clone().also {
                     it.y += 1.0
                     it.yaw = labelTag[1].toFloat()
                 },
                 mutableListOf(Zombie()),
-                locations.toMutableList()
+                locations.toMutableList(),
+                uuid
             )
             if (partySnapshot.isPresent) {
                 val party = partySnapshot.get()
@@ -76,17 +78,18 @@ class DungeonHandler : Listener {
                     member.dungeon = dungeonData.apply { this.party = party.members }
                 }
             } else {
-                user.dungeon = dungeonData
+                user.dungeon = dungeonData.apply { this.party.add(uuid) }
                 dungeonTeleport(user)
             }
         }
     }
 
     private fun dungeonTeleport(user: User) {
-        //val itemInHand = owner.itemInHand
-
-        //itemInHand.setAmount(itemInHand.getAmount() - 1)
-
+        val dungeon = user.dungeon!!
+        if (user.stat.uuid == dungeon.leader) {
+            val itemInHand = Bukkit.getPlayer(dungeon.leader).itemInHand
+            itemInHand.setAmount(itemInHand.getAmount() - 1)
+        }
         user.setState(Dungeon())
     }
 }

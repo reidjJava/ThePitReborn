@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import me.func.mod.Anime
 import me.func.mod.ui.Glow
+import me.func.mod.util.after
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import org.bukkit.Location
@@ -35,6 +36,6 @@ fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: S
 fun Player.playSound(sound: Sound) = playSound(location, sound, 1F, 1F)
 
 fun Player.teleportAndPlayMusic(location: Location) {
-    teleport(location)
+    after(5) { teleport(location) }
     playSound(Sound.ENTITY_SHULKER_TELEPORT)
 }

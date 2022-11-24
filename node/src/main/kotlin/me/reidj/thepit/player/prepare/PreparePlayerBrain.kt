@@ -2,7 +2,6 @@ package me.reidj.thepit.player.prepare
 
 import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.dailyReward
-import me.func.mod.util.after
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
@@ -52,13 +51,11 @@ object PreparePlayerBrain : Prepare {
 
     fun getSpawnLocation() = app.worldMeta.label("spawn")!!
 
-    fun spawnTeleport(player: Player) = after(5) {
-        player.teleportAndPlayMusic(getSpawnLocation().clone().also {
-            it.yaw = 0F
-            it.x += 0.5
-            it.z += 0.5
-        })
-    }
+    fun spawnTeleport(player: Player) = player.teleportAndPlayMusic(getSpawnLocation().clone().also {
+        it.yaw = 0F
+        it.x += 0.5
+        it.z += 0.5
+    })
 
     private fun setMaxHealth(player: Player, maxHealth: Double) {
         player.maxHealth = 20.0 + maxHealth
@@ -66,10 +63,6 @@ object PreparePlayerBrain : Prepare {
 
     fun setHealth(player: Player, health: Double) {
         player.health = player.maxHealth.coerceAtMost(player.health + health)
-    }
-
-    private fun setMoveSpeed(player: Player, speed: Double) {
-        player.walkSpeed += speed.toFloat()
     }
 
     fun addPotionEffect(player: Player, potionEffectType: PotionEffectType, duration: Int, amplifier: Int) {

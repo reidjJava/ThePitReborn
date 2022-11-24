@@ -14,6 +14,7 @@ data class DungeonData(
     val dungeonLocation: Location,
     val entities: MutableList<Entity>,
     val entitiesLocations: MutableList<Location>,
+    val leader: UUID,
     var party: MutableSet<UUID> = mutableSetOf(),
     ) {
     fun teleport(player: Player) = player.teleportAndPlayMusic(dungeonLocation)

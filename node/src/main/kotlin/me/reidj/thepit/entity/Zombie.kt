@@ -14,11 +14,11 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var damage = 5.0
 
-    override var moveSpeed = 0.5
+    override var moveSpeed = 0.3
 
-    override var health= 20.0
+    override var health = 50.0
 
-    override var attackRange = 40.0
+    override var attackRange = 20.0
 
     override var knockBackResistance = 0.0
 
