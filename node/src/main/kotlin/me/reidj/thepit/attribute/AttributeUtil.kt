@@ -56,7 +56,8 @@ object AttributeUtil {
     }
 
     fun updateAllAttributes(player: Player, armorContents: Array<ItemStack>) {
-        AttributeType.values().forEach { player.attributeUpdate(it.getObjectName(), getAttributeValue(it, armorContents)) }
+        AttributeType.values()
+            .forEach { player.attributeUpdate(it.getObjectName(), getAttributeValue(it, armorContents)) }
     }
 
     fun getAttributeValue(type: AttributeType, items: Array<ItemStack>) =
@@ -64,7 +65,15 @@ object AttributeUtil {
             .filter { it.hasTag() && it.tag.hasKeyOfType(type.getObjectName(), 99) }
             .sumOf { it.tag.getDouble(type.getObjectName()) }
 
-    fun getAllItems(player: Player) = player.inventory.armorContents.toMutableList().apply { add(player.itemInHand) }.toTypedArray()
+    fun getAllItems(player: Player, current: ItemStack?): Array<ItemStack> {
+        val inventory = player.inventory.armorContents.toMutableList()
+        if (current != null) {
+            inventory.add(current)
+        }
+        return inventory.toTypedArray()
+    }
+
+    fun getAllItems(player: Player) = getAllItems(player, player.itemInHand)
 
     private fun getTextWithAttribute(title: String, value: Double) = "$title: ${Formatter.toFormat(value)}"
 }
