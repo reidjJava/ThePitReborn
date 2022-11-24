@@ -18,7 +18,7 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var health= 20.0
 
-    override var attackRange = 5.0
+    override var attackRange = 40.0
 
     override var knockBackResistance = 0.0
 

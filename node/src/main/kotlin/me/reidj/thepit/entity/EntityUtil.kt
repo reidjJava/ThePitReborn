@@ -26,17 +26,13 @@ object EntityUtil {
     fun spawn(user: User) {
         val dungeon = user.dungeon
         dungeon?.entities?.forEach {
-            repeat(dungeon.mobCounts) { _ ->
-                val location = dungeon.getLocation()
-                val uuid = user.stat.uuid
-
+            val uuid = user.stat.uuid
+            dungeon.entitiesLocations.forEach { location ->
                 it.create(location)
                 it.setTarget(uuid)
 
                 viewEntities[uuid]?.add(it.entity.entityId)
                 app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
-
-                dungeon.removeLocation(location)
             }
         }
     }
@@ -63,13 +59,13 @@ object EntityUtil {
         user.dungeon?.entities?.clear()
     }
 
-   fun removeEntity(entity: org.bukkit.entity.Entity) {
-       targetPlayer.remove(entity.uniqueId)
-       viewEntities.keys.forEach {
-           viewEntities[it]?.remove(entity.entityId)
-       }
-       entity.remove()
-   }
+    fun removeEntity(entity: org.bukkit.entity.Entity) {
+        targetPlayer.remove(entity.uniqueId)
+        viewEntities.keys.forEach {
+            viewEntities[it]?.remove(entity.entityId)
+        }
+        entity.remove()
+    }
 
     private inline fun <reified T : Packet<*>> packetListener(player: Player, noinline handler: T.() -> Unit) {
         (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()

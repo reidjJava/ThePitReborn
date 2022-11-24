@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger
  **/
 
 private const val COMBAT_COOL_DOWN = 20
+private const val MESSAGE = "Вы выйдите из боя через"
 
 class CombatManager : ClockInject {
 
@@ -28,7 +29,7 @@ class CombatManager : ClockInject {
 
         fun remove(player: Player) {
             combatMap.remove(player.uniqueId)
-            player.timer("Вы выйдите из боя через", 0, false)
+            player.timer(MESSAGE, 0, false)
         }
 
         fun put(player: Player) {
@@ -39,7 +40,7 @@ class CombatManager : ClockInject {
             } else {
                 combatMap[uuid] = atomicInteger
             }
-            player.timer("Вы выйдите из боя через", COMBAT_COOL_DOWN, true)
+            player.timer(MESSAGE, COMBAT_COOL_DOWN, true)
         }
     }
 
@@ -53,7 +54,7 @@ class CombatManager : ClockInject {
             val time = atomicInteger.get()
 
             atomicInteger.getAndDecrement()
-            it.timer("Вы выйдите из боя через", time, false)
+            it.timer(MESSAGE, time, false)
 
             if (time <= 0) {
                 it.systemMessage(MessageStatus.FINE, GlowColor.GREEN, "Вы вышли из боя.")

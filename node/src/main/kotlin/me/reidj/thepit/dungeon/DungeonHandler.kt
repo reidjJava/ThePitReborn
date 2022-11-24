@@ -39,8 +39,6 @@ class DungeonHandler : Listener {
             )
         )
         command("dungeonInviteAccept") { player, _ ->
-            val user = (app.getUser(player) ?: return@command)
-            println(user.dungeon)
             dungeonTeleport((app.getUser(player) ?: return@command))
         }
     }
@@ -59,16 +57,14 @@ class DungeonHandler : Listener {
             val label = app.worldMeta.labels("dungeon").first { it.tag.split(" ")[0] == dungeonName }
             val labelTag = label.tag.split(" ")
             val locations = app.worldMeta.labels("$dungeonName-mob")
-            val mobCounts = locations.size
             val partySnapshot = IPartyService.get().getPartyByMember(player.uniqueId).get()
             val dungeonData = DungeonData(
-                label.clone().also { location ->
-                    location.y += 1.0
-                    location.yaw = labelTag[1].toFloat()
+                label.clone().also {
+                    it.y += 1.0
+                    it.yaw = labelTag[1].toFloat()
                 },
                 mutableListOf(Zombie()),
-                locations.toMutableList(),
-                mobCounts
+                locations.toMutableList()
             )
             if (partySnapshot.isPresent) {
                 val party = partySnapshot.get()

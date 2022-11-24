@@ -14,12 +14,7 @@ data class DungeonData(
     val dungeonLocation: Location,
     val entities: MutableList<Entity>,
     val entitiesLocations: MutableList<Location>,
-    val mobCounts: Int,
     var party: MutableSet<UUID> = mutableSetOf(),
     ) {
     fun teleport(player: Player) = player.teleportAndPlayMusic(dungeonLocation)
-
-    fun getLocation() = entitiesLocations.random()
-
-    fun removeLocation(location: Location) = entitiesLocations.remove(location)
 }
