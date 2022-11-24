@@ -165,9 +165,9 @@ class PlayerDataManager : Listener {
 
     fun getUsers() = userMap.values
 
-    fun bulkSave(remove: Boolean): BulkSaveUserPackage? = BulkSaveUserPackage(Bukkit.getOnlinePlayers().map {
+    fun bulkSave(): BulkSaveUserPackage? = BulkSaveUserPackage(Bukkit.getOnlinePlayers().map {
         val uuid = it.uniqueId
-        val user = (if (remove) userMap.remove(uuid) else userMap[uuid]) ?: return null
+        val user = userMap[uuid] ?: return null
         SaveUserPackage(uuid, user.generateStat())
     })
 }

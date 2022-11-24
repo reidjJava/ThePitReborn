@@ -41,7 +41,7 @@ class GameTimer(private val injects: List<ClockInject>) : () -> Unit {
     private fun savePlayers() {
         if (tick % AUTO_SAVE_PERIOD == 0L) {
             tick = 1
-            client().write(app.playerDataManager.bulkSave(false))
+            client().write(app.playerDataManager.bulkSave())
         } else {
             tick++
         }

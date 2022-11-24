@@ -27,6 +27,7 @@ import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
 import me.reidj.thepit.npc.NpcManager
 import me.reidj.thepit.player.PlayerDataManager
+import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
 import me.reidj.thepit.protocol.AuctionPutLotPackage
 import me.reidj.thepit.protocol.AuctionRemoveItemPackage
@@ -142,8 +143,8 @@ class App : JavaPlugin() {
         Bukkit.getOnlinePlayers()
             .mapNotNull { getUser(it) }
             .filter { it.state is Dungeon }
-            .forEach { it.state!!.leaveState(it) }
-        client().write(playerDataManager.bulkSave(false))
+            .forEach { it.player.inventory.remove(State.backItem) }
+        client().write(playerDataManager.bulkSave())
         Thread.sleep(1000)
     }
 
