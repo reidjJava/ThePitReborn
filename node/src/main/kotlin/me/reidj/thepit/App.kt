@@ -20,6 +20,7 @@ import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
 import me.reidj.thepit.dungeon.Dungeon
+import me.reidj.thepit.dungeon.DungeonHandler
 import me.reidj.thepit.entity.EntityHandler
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.*
@@ -41,6 +42,8 @@ import ru.cristalix.core.coupons.BukkitCouponsService
 import ru.cristalix.core.coupons.ICouponsService
 import ru.cristalix.core.datasync.EntityDataParameters
 import ru.cristalix.core.network.ISocketClient
+import ru.cristalix.core.party.IPartyService
+import ru.cristalix.core.party.PartyService
 import ru.cristalix.core.realm.IRealmService
 import ru.cristalix.core.realm.RealmStatus
 import java.util.*
@@ -79,6 +82,7 @@ class App : JavaPlugin() {
 
         CoreApi.get().also {
             it.registerService(ICouponsService::class.java, BukkitCouponsService(client(), ICommandService.get()))
+            it.registerService(IPartyService::class.java, PartyService(client()))
         }
 
         Platforms.set(PlatformDarkPaper())
@@ -120,13 +124,18 @@ class App : JavaPlugin() {
             UnusedListener(),
             ConsumableManager(),
             SpawnHandler(),
-            Dungeon(),
+            DungeonHandler(),
             EntityHandler(),
             HeldItemHandler(),
             ThePitHandler()
         )
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration())), 0, 1)
+        Bukkit.getScheduler().runTaskTimerAsynchronously(
+            this,
+            GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration())),
+            0,
+            1
+        )
     }
 
     override fun onDisable() {

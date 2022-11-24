@@ -14,9 +14,9 @@ data class DungeonData(
     val dungeonLocation: Location,
     val entities: MutableList<Entity>,
     val entitiesLocations: MutableList<Location>,
-    val party: HashSet<UUID>,
-    val mobCounts: Int
-) {
+    val mobCounts: Int,
+    var party: MutableSet<UUID> = mutableSetOf(),
+    ) {
     fun teleport(player: Player) = player.teleportAndPlayMusic(dungeonLocation)
 
     fun getLocation() = entitiesLocations.random()

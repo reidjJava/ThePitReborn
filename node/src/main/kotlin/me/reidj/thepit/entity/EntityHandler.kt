@@ -1,5 +1,7 @@
 package me.reidj.thepit.entity
 
+import me.func.protocol.data.emoji.Emoji
+import me.reidj.thepit.util.worldMessage
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -31,6 +33,8 @@ class EntityHandler : Listener {
 
         val killer = getEntity().killer
         val entityType = EntityType.valueOf(getEntity().getMetadata("entity").component1().asString().uppercase())
+
+        killer.worldMessage(getEntity().location.clone().also { it.y += 2.0 }, "§l+3${Emoji.COIN}")
 
         entityType.entity.getDrops().forEach { it.give(killer) }
 

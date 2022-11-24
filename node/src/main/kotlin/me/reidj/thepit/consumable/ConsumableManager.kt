@@ -137,7 +137,7 @@ class ConsumableManager : Listener {
         val uuid = player.uniqueId
 
         if (tag.hasKeyOfType("consumable", 8)) {
-            if (DelayUtil.hasCountdown(uuid)) {
+            if (!DelayUtil.hasCountdown(uuid)) {
                 val itemInHand = player.itemInHand
                 itemInHand.setAmount(itemInHand.getAmount() - 1)
                 ConsumableType.values()
@@ -148,7 +148,7 @@ class ConsumableManager : Listener {
                 player.systemMessage(
                     MessageStatus.ERROR,
                     GlowColor.RED,
-                    "До следующего использования $seconds ${
+                    "До следующего использования ${
                         Formatting.countPluralRu(
                             seconds.toInt(),
                             "секунда",
