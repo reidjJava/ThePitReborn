@@ -109,7 +109,6 @@ class App : JavaPlugin() {
 
         ContractManager()
         ItemManager()
-        SharpeningManager()
         AuctionManager()
         LootBoxManager()
         BarterManager()
@@ -127,7 +126,8 @@ class App : JavaPlugin() {
             DungeonHandler(),
             EntityHandler(),
             HeldItemHandler(),
-            ThePitHandler()
+            ThePitHandler(),
+            SharpeningManager()
         )
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(
@@ -143,7 +143,7 @@ class App : JavaPlugin() {
             .mapNotNull { getUser(it) }
             .filter { it.state is Dungeon }
             .forEach { it.state!!.leaveState(it) }
-        client().write(playerDataManager.bulkSave(true))
+        client().write(playerDataManager.bulkSave(false))
         Thread.sleep(1000)
     }
 
