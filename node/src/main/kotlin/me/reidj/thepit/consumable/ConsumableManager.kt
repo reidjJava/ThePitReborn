@@ -4,12 +4,12 @@ import dev.implario.bukkit.item.item
 import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.selection
 import me.func.mod.util.command
+import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.emoji.Emoji
+import me.func.protocol.data.status.MessageStatus
 import me.func.protocol.ui.dialog.*
 import me.reidj.thepit.app
-import me.reidj.thepit.util.Formatter
-import me.reidj.thepit.util.errorMessage
-import me.reidj.thepit.util.playSound
+import me.reidj.thepit.util.*
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
@@ -17,6 +17,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
+import ru.cristalix.core.formatting.Formatting
 
 /**
  * @project : ThePitReborn
@@ -91,9 +92,10 @@ class ConsumableManager : Listener {
                 onClick { player, _, _ ->
                     val user = app.getUser(player) ?: return@onClick
                     user.armLock {
-                        val consumableAmount = player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
-                            itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
-                        }
+                        val consumableAmount =
+                            player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
+                                itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
+                            }
 
                         if (consumableAmount.sumOf { it.asBukkitMirror().getAmount() } == 10) {
                             player.errorMessage("У вас максимальное количество флаконов!")
@@ -132,12 +134,30 @@ class ConsumableManager : Listener {
         }
         val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag ?: return
+        val uuid = player.uniqueId
 
         if (tag.hasKeyOfType("consumable", 8)) {
-            val itemInHand = player.itemInHand
-            itemInHand.setAmount(itemInHand.getAmount() - 1)
-            ConsumableType.values()
-                .find { tag.getString("consumable") == it.getObjectName() }?.overlay?.let { it(player) }
+            if (DelayUtil.hasCountdown(uuid)) {
+                val itemInHand = player.itemInHand
+                itemInHand.setAmount(itemInHand.getAmount() - 1)
+                ConsumableType.values()
+                    .find { tag.getString("consumable") == it.getObjectName() }?.overlay?.let { it(player) }
+                DelayUtil.setCountdown(uuid, 5)
+            } else {
+                val seconds = DelayUtil.getSecondsLeft(uuid)
+                player.systemMessage(
+                    MessageStatus.ERROR,
+                    GlowColor.RED,
+                    "До следующего использования $seconds ${
+                        Formatting.countPluralRu(
+                            seconds.toInt(),
+                            "секунда",
+                            "секунды",
+                            "секунд"
+                        )
+                    }"
+                )
+            }
         }
     }
 }
