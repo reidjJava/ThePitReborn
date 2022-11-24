@@ -95,9 +95,7 @@ class ConsumableManager : Listener {
                             itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
                         }
 
-                        if (consumableAmount.count() >= 2 || consumableAmount.any {
-                                it.asBukkitMirror().getAmount() >= 5
-                            }) {
+                        if (consumableAmount.sumOf { it.asBukkitMirror().getAmount() } == 10) {
                             player.errorMessage("У вас максимальное количество флаконов!")
                             player.playSound(Sound.BLOCK_ANVIL_BREAK)
                             return@armLock

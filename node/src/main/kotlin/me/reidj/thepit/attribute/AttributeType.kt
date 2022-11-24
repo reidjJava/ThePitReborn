@@ -8,7 +8,7 @@ import net.minecraft.server.v1_12_R1.NBTTagCompound
  **/
 enum class AttributeType(val title: String) {
     HEALTH("§c♥ §7Здоровье"),
-    REGENERATION("§5⍟ §7Регенерация"),
+    REGENERATION("§5♨ §7Регенерация"),
     DAMAGE("§4⚔ §7Урон"),
     CHANCE_CRITICAL_DAMAGE("§e⚡ §7Шанс критического урона"),
     CRITICAL_DAMAGE_STRENGTH("§3✤ §7Сила критического урона"),
