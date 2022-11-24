@@ -4,6 +4,7 @@ import me.func.mod.Anime
 import me.func.mod.ui.Glow
 import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.selection
+import me.func.mod.util.after
 import me.func.mod.util.command
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.emoji.Emoji
@@ -18,13 +19,16 @@ import me.reidj.thepit.util.playSound
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
 /**
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-class SharpeningManager {
+class SharpeningManager : Listener {
 
     private val menu = selection {
         title = "Улучшение предметов"
@@ -63,11 +67,21 @@ class SharpeningManager {
 
     init {
         command("sharpening") { player, _ ->
+            val user = (app.getUser(player) ?: return@command)
+
+            if (user.isArmorEquipment) {
+                return@command
+            }
+
+            user.isArmorEquipment = true
+
             me.func.mod.ui.dialog.Dialog.dialog(
                 player,
                 guideDialog,
                 "sharpeningPageOne"
             )
+
+            after(5) { user.isArmorEquipment = false }
         }
         command("sharpeningPageTwo") { player, _ ->
             me.func.mod.ui.dialog.Dialog.dialog(
@@ -91,6 +105,11 @@ class SharpeningManager {
             generateButtons(player)
             menu.open(player)
         }
+    }
+
+    @EventHandler
+    fun PlayerInteractEvent.handle() {
+        isCancelled = (app.getUser(player) ?: return).isArmorEquipment
     }
 
     private fun generateButtons(player: Player) {
@@ -142,7 +161,7 @@ class SharpeningManager {
                                 player.playSound(Sound.BLOCK_ANVIL_USE)
 
                                 AttributeType.getAttributeWithNbt(tag).forEach {
-                                    tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 0.5)
+                                    tag.setDouble(it.getObjectName(), tag.getDouble(it.getObjectName()) + 0.2)
                                     tag.setInt("sharpeningLevel", sharpeningLevel + 1)
                                 }
 
