@@ -3,7 +3,7 @@ package me.reidj.thepit.listener
 import me.func.mod.Anime
 import me.func.mod.util.after
 import me.reidj.thepit.app
-import me.reidj.thepit.attribute.AttributeType
+import me.reidj.thepit.attribute.AttributeType.*
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.dungeon.Dungeon
@@ -49,18 +49,16 @@ class DamageHandler : Listener {
                 playerDamager.closeInventory()
                 entity.closeInventory()
 
-                val armorContents = playerDamager.inventory.armorContents
+                val armorContents = AttributeUtil.getAllItems(playerDamager)
 
-                damage += AttributeUtil.getAttributeValue(AttributeType.DAMAGE, armorContents)
+                damage += AttributeUtil.getAttributeValue(DAMAGE, armorContents)
 
-                if (Math.random() < AttributeUtil.getAttributeValue(
-                        AttributeType.CHANCE_CRITICAL_DAMAGE,
-                        armorContents
-                    )
-                ) {
-                    damage += AttributeUtil.getAttributeValue(
-                        AttributeType.CRITICAL_DAMAGE_STRENGTH,
-                        armorContents
+                if (Math.random() < AttributeUtil.getAttributeValue(CHANCE_CRITICAL_DAMAGE, armorContents)) {
+                    damage += AttributeUtil.getAttributeValue(CRITICAL_DAMAGE_STRENGTH, armorContents) * 0.3
+                } else if (Math.random() > 0.1) {
+                    PreparePlayerBrain.setHealth(
+                        playerDamager,
+                        AttributeUtil.getAttributeValue(VAMPIRISM, armorContents)
                     )
                 }
 

@@ -15,8 +15,7 @@ class ArmorChangeHandler : Listener {
 
     @EventHandler
     fun PlayerArmorChangeEvent.handle() {
-        val armorContents =
-            player.inventory.armorContents.toMutableList().apply { add(player.itemInHand) }.toTypedArray()
+        val armorContents = AttributeUtil.getAllItems(player)
         AttributeUtil.updateAllAttributes(player, armorContents)
         PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH)
     }
