@@ -70,6 +70,16 @@ enum class ConsumableType(
                 PreparePlayerBrain.addPotionEffect(nearby, PotionEffectType.BLINDNESS, 5, 0)
             }
         }
+    ),
+    FLAMING_SPHERE(
+        "Пылающая сфера",
+        "Все враги в радиусе 3 блоков поджигаются в течении 3 секунд.",
+        700.0,
+        {
+            PreparePlayerBrain.getNearbyPlayers(it, 3.0).forEach { nearby ->
+                nearby.fireTicks = 3 * 20
+            }
+        }
     )
     ;
 

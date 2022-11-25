@@ -112,7 +112,7 @@ class ConsumableManager : Listener {
                             §6${it.title}
                             §7${it.description}
                             
-                            §7§oЩёлкните ПКМ, чтобы выпить.
+                            §7§oЩёлкните ПКМ, чтобы использовать.
                             """.trimIndent()
                                 )
                                 amount(1)
