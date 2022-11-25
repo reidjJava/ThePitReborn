@@ -39,7 +39,10 @@ class DungeonHandler : Listener {
             )
         )
         command("dungeonInviteAccept") { player, _ ->
-            dungeonTeleport((app.getUser(player) ?: return@command))
+            val user = app.getUser(player) ?: return@command
+            if (user.dungeon != null) {
+                dungeonTeleport(user)
+            }
         }
     }
 
@@ -51,6 +54,10 @@ class DungeonHandler : Listener {
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag
+
+        if (user.state is Dungeon) {
+            return
+        }
 
         if (nmsItem.hasTag() && tag.hasKeyOfType("dungeon", 8)) {
             val dungeonName = tag.getString("dungeon")
@@ -71,11 +78,16 @@ class DungeonHandler : Listener {
             if (partySnapshot.isPresent) {
                 val party = partySnapshot.get()
                 party.members.mapNotNull { Bukkit.getPlayer(it) }.forEach {
-                    val member = app.getUser(it) ?: return@forEach
-                    Alert.find("dungeon")
-                        .replace("%nick%", player.name)
-                        .send(it)
-                    member.dungeon = dungeonData.apply { this.party = party.members }
+                    val member = app.getUser(it)
+                    dungeonData.party = party.members
+                    member?.dungeon = dungeonData
+                    if (member != user) {
+                        Alert.find("dungeon")
+                            .replace("%nick%", player.name)
+                            .send(it)
+                    } else {
+                        dungeonTeleport(member)
+                    }
                 }
             } else {
                 user.dungeon = dungeonData.apply { this.party.add(uuid) }

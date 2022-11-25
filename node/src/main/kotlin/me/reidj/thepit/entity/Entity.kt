@@ -59,6 +59,15 @@ abstract class Entity(private val entityType: EntityType) {
         EntityUtil.targetPlayer[entity.uniqueId] = uuid
     }
 
+    fun changeDamage(damage: Double) {
+        entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = this.damage + damage
+    }
+
+    fun changeHealth(health: Double) {
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = this.health + health
+        entity.health = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue
+    }
+
     fun create(location: Location) {
         current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity()
         entity = current as LivingEntity

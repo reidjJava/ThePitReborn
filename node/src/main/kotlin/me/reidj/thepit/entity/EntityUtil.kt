@@ -25,11 +25,15 @@ object EntityUtil {
 
     fun spawn(user: User) {
         val dungeon = user.dungeon!!
+        val partySize = dungeon.party.size
         dungeon.entities.forEach {
             val uuid = user.stat.uuid
             dungeon.entitiesLocations.forEach { location ->
                 it.create(location)
                 it.setTarget(uuid)
+
+                it.changeDamage(partySize + 3.0)
+                it.changeHealth(partySize + 12.0)
 
                 dungeon.party.forEach { memberUuid -> viewEntities[memberUuid]?.add(it.entity.entityId) }
                 app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
