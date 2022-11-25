@@ -7,7 +7,7 @@ import me.reidj.thepit.player.User
  * @author : Рейдж
  **/
 enum class RankType(val title: String, val points: IntRange, val reward: (User) -> Unit) {
-    NONE("§8Без ранга",0..499, {
+    NONE("§7Без ранга",0..499, {
         it.giveMoney(50.0)
     }),
     BRONZE("§6Бронза",500..999, {

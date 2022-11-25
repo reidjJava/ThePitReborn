@@ -60,12 +60,22 @@ class PlayerDataManager : Listener {
     private var prepares: MutableSet<Prepare> by notNull()
     private val group = TokenGroup(
         Token.builder()
-            .title("Монеты")
-            .content { player -> Emoji.COIN + "§6 " + Formatter.toFormat(app.getUser(player)!!.stat.money) }
+            .title("Ранг")
+            .content { player -> "\uE018 " + RankUtil.getRank(app.getUser(player)!!.stat.rankingPoints).title }
             .build(),
         Token.builder()
             .title("Рейтинг")
             .content { player -> Emoji.DONATE_WHITE + " " + app.getUser(player)!!.stat.rankingPoints }
+            .build(),
+        Token.builder()
+            .title("Монеты")
+            .content { player -> "\uE109§6 " + Formatter.toFormat(app.getUser(player)!!.stat.money) }
+            .build(),
+        Token.builder()
+            .title("K/D")
+            .content { player ->
+                val stat = app.getUser(player)!!.stat
+                "§c⚔ " + stat.kills / stat.deaths }
             .build()
     )
 
