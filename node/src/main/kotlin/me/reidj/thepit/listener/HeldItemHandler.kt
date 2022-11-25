@@ -2,7 +2,6 @@ package me.reidj.thepit.listener
 
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
-import me.reidj.thepit.attribute.AttributeUtil.updateAllAttributes
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -19,18 +18,12 @@ class HeldItemHandler : Listener {
     @EventHandler
     fun PlayerItemHeldEvent.handle() {
         val armorContents = AttributeUtil.getAllItems(player, player.inventory.getItem(newSlot))
-        updateAllAttributes(player, armorContents)
         PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH)
     }
 
     @EventHandler
     fun InventoryClickEvent.handle() {
-        if (inventory == null || clickedInventory == null) {
-            return
-        }
         val player = whoClicked as Player
-        val armorContents = AttributeUtil.getAllItems(player, player.inventory.getItem(whichSlot))
-        updateAllAttributes(player, armorContents)
-        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH)
+        PreparePlayerBrain.applyAttributes(player, AttributeUtil.getAllItems(player), AttributeType.HEALTH)
     }
 }

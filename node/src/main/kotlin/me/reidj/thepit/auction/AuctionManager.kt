@@ -81,7 +81,7 @@ class AuctionManager {
         command("ah") { player, _ -> mainGui.open(player) }
         command("sell") { player, args ->
             val user = app.getUser(player) ?: return@command
-            val itemInHand = player.itemInHand
+            val itemInHand = player.inventory.itemInMainHand
             val nmsItem = CraftItemStack.asNMSCopy(itemInHand)
             val tag = nmsItem.tag
 
@@ -114,7 +114,7 @@ class AuctionManager {
 
             client().write(AuctionPutLotPackage(auctionData))
 
-            player.itemInHand = null
+            itemInHand.setAmount(0)
             player.systemMessage(MessageStatus.FINE, GlowColor.GREEN, "Лот был создан.")
         }
     }

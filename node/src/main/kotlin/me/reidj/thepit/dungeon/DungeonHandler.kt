@@ -87,7 +87,7 @@ class DungeonHandler : Listener {
     private fun dungeonTeleport(user: User) {
         val dungeon = user.dungeon!!
         if (user.stat.uuid == dungeon.leader) {
-            val itemInHand = Bukkit.getPlayer(dungeon.leader).itemInHand
+            val itemInHand = Bukkit.getPlayer(dungeon.leader).inventory.itemInMainHand
             itemInHand.setAmount(itemInHand.getAmount() - 1)
         }
         user.setState(Dungeon())

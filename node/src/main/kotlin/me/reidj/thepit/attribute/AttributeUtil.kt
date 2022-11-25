@@ -75,7 +75,7 @@ object AttributeUtil {
         return inventory.toTypedArray()
     }
 
-    fun getAllItems(player: Player) = getAllItems(player, player.itemInHand)
+    fun getAllItems(player: Player) = getAllItems(player, player.inventory.itemInMainHand)
 
     private fun getTextWithAttribute(title: String, value: Double) = "$title: ${Formatter.toFormat(value)}"
 }

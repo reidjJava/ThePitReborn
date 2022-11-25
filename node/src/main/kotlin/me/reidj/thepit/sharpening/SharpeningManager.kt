@@ -91,7 +91,7 @@ class SharpeningManager : Listener {
             )
         }
         command("sharpeningMenu") { player, _ ->
-            val itemInHand = player.itemInHand
+            val itemInHand = player.inventory.itemInMainHand
             val itemMeta = itemInHand.itemMeta
             if (itemInHand == null || itemMeta == null || itemMeta.displayName == null) {
                 player.errorMessage("Вы не можете заточить этот предмет!")
@@ -113,7 +113,7 @@ class SharpeningManager : Listener {
     }
 
     private fun generateButtons(player: Player) {
-        val itemInHand = player.itemInHand
+        val itemInHand = player.inventory.itemInMainHand
         val itemMeta = itemInHand.itemMeta
         val sharpening = findSharpeningStone(player)!!
         val sharpeningTag = CraftItemStack.asNMSCopy(sharpening).tag
@@ -134,7 +134,7 @@ class SharpeningManager : Listener {
                         """.trimIndent()
                 onClick { player, _, _ ->
                     val user = app.getUser(player) ?: return@onClick
-                    val nmsItem = CraftItemStack.asNMSCopy(player.itemInHand)
+                    val nmsItem = CraftItemStack.asNMSCopy(player.inventory.itemInMainHand)
                     val tag = nmsItem.tag
                     val sharpeningLevel = tag.getInt("sharpeningLevel")
 
@@ -165,7 +165,7 @@ class SharpeningManager : Listener {
                                     tag.setInt("sharpeningLevel", sharpeningLevel + 1)
                                 }
 
-                                player.itemInHand.setAmount(0)
+                                player.inventory.itemInMainHand.setAmount(0)
 
                                 val itemStack = nmsItem.asBukkitMirror()
 
