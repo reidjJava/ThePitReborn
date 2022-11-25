@@ -151,7 +151,7 @@ class SharpeningManager : Listener {
 
                         user.tryPurchase(price, {
                             Anime.close(player)
-                            if (Math.random() < CraftItemStack.asNMSCopy(sharpening).tag.getDouble("sharpening_chance")) {
+                            if (Math.random() < chance && chance < 1.0) {
                                 player.errorMessage("Точильный камень был разрушен")
                                 player.playSound(Sound.BLOCK_ANVIL_DESTROY)
                             } else {

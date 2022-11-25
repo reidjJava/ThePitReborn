@@ -25,6 +25,9 @@ class HeldItemHandler : Listener {
 
     @EventHandler
     fun InventoryClickEvent.handle() {
+        if (inventory == null || clickedInventory == null) {
+            return
+        }
         val player = whoClicked as Player
         val armorContents = AttributeUtil.getAllItems(player, player.inventory.getItem(whichSlot))
         updateAllAttributes(player, armorContents)

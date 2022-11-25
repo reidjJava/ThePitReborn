@@ -33,7 +33,9 @@ object AttributeUtil {
 
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
             meta.lore = meta.lore.apply {
-                add("")
+                if (!tag.hasKeyOfType("sharpening_chance", 99)) {
+                    add("")
+                }
                 addAll(newLore)
             }
         }
