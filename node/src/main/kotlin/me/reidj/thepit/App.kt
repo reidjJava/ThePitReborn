@@ -1,5 +1,6 @@
 package me.reidj.thepit
 
+import clepto.bukkit.B
 import dev.implario.bukkit.platform.Platforms
 import dev.implario.platform.impl.darkpaper.PlatformDarkPaper
 import me.func.mod.Anime
@@ -63,6 +64,7 @@ class App : JavaPlugin() {
 
     override fun onEnable() {
         app = this
+        B.plugin = this
 
         client().addListener(AuctionPutLotPackage::class.java) { _, pckg -> AuctionManager[pckg.auctionData] }
         client().addListener(MoneyDepositPackage::class.java) { _, pckg ->

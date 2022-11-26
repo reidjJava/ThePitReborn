@@ -7,6 +7,7 @@ import me.func.mod.ui.Glow
 import me.func.mod.util.after
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
+import me.func.world.Label
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -38,4 +39,12 @@ fun Player.playSound(sound: Sound) = playSound(location, sound, 1F, 1F)
 fun Player.teleportAndPlayMusic(location: Location) {
     after(5) { teleport(location) }
     playSound(Sound.ENTITY_SHULKER_TELEPORT)
+}
+
+fun resetLabelRotation(input: Label, characterOffset: Int): Label {
+    var offSet = characterOffset
+    val ss = input.tag.split(" ")
+    input.setYaw(ss[characterOffset].toFloat())
+    input.setPitch(ss[++offSet].toFloat())
+    return input
 }

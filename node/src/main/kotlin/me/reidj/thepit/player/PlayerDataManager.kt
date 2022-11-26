@@ -15,6 +15,7 @@ import me.reidj.thepit.client
 import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.entity.EntityUtil
 import me.reidj.thepit.player.prepare.Prepare
+import me.reidj.thepit.player.prepare.PrepareGuide
 import me.reidj.thepit.player.prepare.PrepareMods
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.protocol.BulkSaveUserPackage
@@ -80,7 +81,7 @@ class PlayerDataManager : Listener {
     )
 
     init {
-        prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain)
+        prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain, PrepareGuide())
     }
 
     @EventHandler

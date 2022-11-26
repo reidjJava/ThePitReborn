@@ -21,4 +21,5 @@ data class Stat(
     val auctionData: HashSet<AuctionData>,
     var playerInventory: String,
     var playerEnderChest: String,
+    var isTutorialCompleted: Boolean,
 )

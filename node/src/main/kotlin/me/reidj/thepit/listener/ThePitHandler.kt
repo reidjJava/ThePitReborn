@@ -5,6 +5,7 @@ import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.app
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.dungeon.Dungeon
+import me.reidj.thepit.player.prepare.PrepareGuide
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.event.EventHandler
@@ -34,6 +35,7 @@ class ThePitHandler : Listener {
             player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы в ПВП")
             cancel = true
         }
+        cancel = (app.getUser(player) ?: return).state is PrepareGuide
     }
 
     @EventHandler

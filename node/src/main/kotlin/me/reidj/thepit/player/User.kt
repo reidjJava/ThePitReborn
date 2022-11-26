@@ -126,16 +126,25 @@ class User(stat: Stat) {
     @JvmName("updateState")
     fun setState(state: State?) {
         AsyncCatcher.catchOp("Async state change")
-        if (this.state != null && this.state != state)
-            state?.leaveState(this)
         val previousState = this.state
+        if (this.state != null && this.state != state) {
+            if (state == null) {
+                previousState?.leaveState(this)
+            } else {
+                state.leaveState(this)
+            }
+        }
         this.state = state
         state?.enterState(this)
         after(1) {
-            if (state?.playerVisible() == true && previousState?.playerVisible() == false) {
+            if (state == null) {
                 showToAllState()
-            } else if (state?.playerVisible() == false) {
-                hideFromAll()
+            } else {
+                if (state.playerVisible() && previousState?.playerVisible() == false) {
+                    showToAllState()
+                } else if (!state.playerVisible()) {
+                    hideFromAll()
+                }
             }
         }
     }
