@@ -47,11 +47,11 @@ abstract class Entity(private val entityType: EntityType) {
 
     protected abstract var itemInHand: ItemStack?
 
-    protected abstract var scale: V3
-
     protected abstract var drops: Set<Pair<Double, String>>
 
     abstract var abilities: Set<Ability>
+
+    abstract var scale: V3
 
     fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }
 

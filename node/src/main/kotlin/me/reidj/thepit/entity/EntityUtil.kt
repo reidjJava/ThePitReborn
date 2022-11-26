@@ -11,6 +11,7 @@ import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
+import ru.cristalix.core.util.UtilEntity
 import java.util.*
 
 /**
@@ -37,6 +38,8 @@ object EntityUtil {
 
                 dungeon.party.forEach { memberUuid -> viewEntities[memberUuid]?.add(it.entity.entityId) }
                 app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
+
+                UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
             }
         }
     }

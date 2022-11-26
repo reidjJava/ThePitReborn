@@ -20,7 +20,7 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var attackRange = 20.0
 
-    override var knockBackResistance = 0.0
+    override var knockBackResistance = 5.0
 
     override var customName= "Зомбяк"
 

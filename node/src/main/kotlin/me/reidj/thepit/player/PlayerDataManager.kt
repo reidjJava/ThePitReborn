@@ -69,7 +69,7 @@ class PlayerDataManager : Listener {
             .build(),
         Token.builder()
             .title("Монеты")
-            .content { player -> "\uE109§6 " + Formatter.toFormat(app.getUser(player)!!.stat.money) }
+            .content { player -> "${Emoji.COIN}§6 " + Formatter.toFormat(app.getUser(player)!!.stat.money) }
             .build(),
         Token.builder()
             .title("K/D")
