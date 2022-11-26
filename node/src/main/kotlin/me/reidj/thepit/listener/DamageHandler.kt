@@ -36,34 +36,35 @@ class DamageHandler : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun EntityDamageByEntityEvent.handle() {
-        if ((damager is Player || damager is Arrow) && entity is Player) {
+        if ((damager is Player || damager is Arrow)) {
             val playerDamager =
                 if (damager is Projectile) ((damager as Projectile).shooter as Player) else damager as Player
-            val entity = getEntity() as Player
-            if (playerDamager.location.y >= minY || entity == playerDamager || entity.location.y >= minY) {
-                cancelled = true
-            } else {
-                CombatManager.put(playerDamager)
-                CombatManager.put(entity)
+            if (getEntity() is Player) {
+                val entity = getEntity() as Player
+                if (playerDamager.location.y >= minY || entity == playerDamager || entity.location.y >= minY) {
+                    isCancelled = true
+                } else {
+                    CombatManager.put(playerDamager)
+                    CombatManager.put(entity)
 
-                playerDamager.closeInventory()
-                entity.closeInventory()
-
-                val armorContents = AttributeUtil.getAllItems(playerDamager)
-
-                damage += AttributeUtil.getAttributeValue(DAMAGE, armorContents)
-
-                if (Math.random() < AttributeUtil.getAttributeValue(CHANCE_CRITICAL_DAMAGE, armorContents)) {
-                    damage += AttributeUtil.getAttributeValue(CRITICAL_DAMAGE_STRENGTH, armorContents) * 0.3
-                } else if (Math.random() > 0.1) {
-                    PreparePlayerBrain.setHealth(
-                        playerDamager,
-                        AttributeUtil.getAttributeValue(VAMPIRISM, armorContents)
-                    )
+                    playerDamager.closeInventory()
+                    entity.closeInventory()
                 }
-
-                (app.getUser(entity.uniqueId) ?: return).killer = playerDamager
             }
+            val armorContents = AttributeUtil.getAllItems(playerDamager)
+
+            damage += AttributeUtil.getAttributeValue(DAMAGE, armorContents)
+
+            if (Math.random() < AttributeUtil.getAttributeValue(CHANCE_CRITICAL_DAMAGE, armorContents)) {
+                damage += AttributeUtil.getAttributeValue(CRITICAL_DAMAGE_STRENGTH, armorContents) * 0.3
+            } else if (Math.random() > 0.1) {
+                PreparePlayerBrain.setHealth(
+                    playerDamager,
+                    AttributeUtil.getAttributeValue(VAMPIRISM, armorContents)
+                )
+            }
+
+            (app.getUser(entity.uniqueId) ?: return).killer = playerDamager
         }
     }
 

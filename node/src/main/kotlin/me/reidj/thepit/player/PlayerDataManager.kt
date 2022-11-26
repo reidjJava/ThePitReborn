@@ -75,8 +75,8 @@ class PlayerDataManager : Listener {
             .title("K/D")
             .content { player ->
                 val stat = app.getUser(player)!!.stat
-                "§c⚔ " + stat.kills / stat.deaths }
-            .build()
+                "§c⚔ " + if (stat.deaths == 0) stat.kills else Formatter.toFormat(stat.kills.toDouble() / stat.deaths.toDouble())
+            }.build()
     )
 
     init {

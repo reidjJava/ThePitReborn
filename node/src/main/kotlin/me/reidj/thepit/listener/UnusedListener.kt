@@ -69,10 +69,10 @@ class UnusedListener : Listener {
         cancel = true
     }
 
-    @EventHandler
+    /*@EventHandler
     fun BlockPlaceEvent.handle() {
         cancel = !player.isOp
-    }
+    }*/
 
     @EventHandler
     fun BlockGrowEvent.handle() {
@@ -84,10 +84,10 @@ class UnusedListener : Listener {
         cancel = true
     }
 
-    @EventHandler
+    /*@EventHandler
     fun BlockBreakEvent.handle() {
         cancel = true
-    }
+    }*/
 
     @EventHandler
     fun EntityCombustEvent.handle() {
