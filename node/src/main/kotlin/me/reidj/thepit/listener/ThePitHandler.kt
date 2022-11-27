@@ -5,6 +5,7 @@ import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.app
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.dungeon.Dungeon
+import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.prepare.PrepareGuide
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
@@ -48,8 +49,7 @@ class ThePitHandler : Listener {
         if (nmsItem.hasTag() && tag.hasKeyOfType("click", 8)) {
             val user = app.getUser(player) ?: return
             if (user.state is Dungeon) {
-                user.state!!.leaveState(user)
-                user.setState(null)
+                user.setState(DefaultState())
             }
         }
     }

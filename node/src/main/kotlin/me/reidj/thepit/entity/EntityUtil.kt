@@ -21,12 +21,17 @@ import java.util.*
 object EntityUtil {
 
     private val viewEntities = hashMapOf<UUID, HashSet<Int>>()
+    private val enemies = hashMapOf<Player, ArrayList<org.bukkit.entity.Entity>>()
 
     val targetPlayer = hashMapOf<UUID, UUID>()
 
     fun spawn(user: User) {
         val dungeon = user.dungeon!!
         val partySize = dungeon.party.size
+        val player = user.player
+
+        enemies[player] = arrayListOf()
+
         dungeon.entities.forEach {
             val uuid = user.stat.uuid
             dungeon.entitiesLocations.forEach { location ->
@@ -36,7 +41,13 @@ object EntityUtil {
                 it.changeDamage(partySize + 3.0)
                 it.changeHealth(partySize + 12.0)
 
-                dungeon.party.forEach { memberUuid -> viewEntities[memberUuid]?.add(it.entity.entityId) }
+                dungeon.party
+                    .mapNotNull { app.getUser(it) }
+                    .filter { it.dungeon?.uuid == dungeon.uuid }
+                    .forEach { member -> viewEntities[member.stat.uuid]?.add(it.entity.entityId) }
+
+                enemies[player]?.add(it.entity)
+
                 app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
                 UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
@@ -62,14 +73,14 @@ object EntityUtil {
     }
 
     fun clearEntities(user: User) {
-        user.dungeon?.entities?.forEach { removeEntity(it.entity) }
-        user.dungeon?.entities?.clear()
+        enemies[user.player]?.forEach { removeEntity(it) }
+        enemies[user.player]?.clear()
     }
 
     fun removeEntity(entity: org.bukkit.entity.Entity) {
         targetPlayer.remove(entity.uniqueId)
         viewEntities.keys.forEach {
-            viewEntities[it]?.remove(entity.entityId)
+            viewEntities[it]!!.remove(entity.entityId)
         }
         entity.remove()
     }

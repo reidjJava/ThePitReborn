@@ -37,7 +37,8 @@ class User(stat: Stat) {
     lateinit var player: CraftPlayer
     lateinit var connection: PlayerConnection
 
-    var state: State? = null
+    var state: State = DefaultState()
+
     var dungeon: DungeonData? = null
 
     var isArmLock = false
@@ -116,7 +117,7 @@ class User(stat: Stat) {
             if (current.player.hasMetadata("vanish")) {
                 continue
             }
-            if (current.state == state || current.state!!::class.java == state!!::class.java) {
+            if (current.state == state || current.state::class.java == state::class.java) {
                 current.player.showPlayer(app, player)
                 player.showPlayer(app, current.player)
             }
@@ -124,27 +125,19 @@ class User(stat: Stat) {
     }
 
     @JvmName("updateState")
-    fun setState(state: State?) {
+    fun setState(state: State) {
         AsyncCatcher.catchOp("Async state change")
-        val previousState = this.state
-        if (this.state != null && this.state != state) {
-            if (state == null) {
-                previousState?.leaveState(this)
-            } else {
-                state.leaveState(this)
-            }
+        if (this.state != state) {
+            this.state.leaveState(this)
         }
+        val previousState = this.state
         this.state = state
-        state?.enterState(this)
+        state.enterState(this)
         after(1) {
-            if (state == null) {
+            if (state.playerVisible() && !previousState.playerVisible()) {
                 showToAllState()
-            } else {
-                if (state.playerVisible() && previousState?.playerVisible() == false) {
-                    showToAllState()
-                } else if (!state.playerVisible()) {
-                    hideFromAll()
-                }
+            } else if (!state.playerVisible()) {
+                hideFromAll()
             }
         }
     }

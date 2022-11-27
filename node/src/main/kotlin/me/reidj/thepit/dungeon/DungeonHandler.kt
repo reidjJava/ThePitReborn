@@ -5,16 +5,19 @@ import me.func.mod.ui.Alert.replace
 import me.func.mod.ui.Alert.send
 import me.func.mod.util.command
 import me.func.protocol.data.color.GlowColor
+import me.func.protocol.data.status.MessageStatus
 import me.func.protocol.ui.alert.NotificationData
 import me.reidj.thepit.app
 import me.reidj.thepit.entity.Zombie
 import me.reidj.thepit.player.User
+import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 import ru.cristalix.core.party.IPartyService
+import java.util.*
 
 /**
  * @project : ThePitReborn
@@ -67,6 +70,7 @@ class DungeonHandler : Listener {
             val locations = app.worldMeta.labels("$dungeonName-mob")
             val partySnapshot = IPartyService.get().getPartyByMember(uuid).get()
             val dungeonData = DungeonData(
+                UUID.randomUUID(),
                 label.clone().also {
                     it.y += 1.0
                     it.yaw = labelTag[1].toFloat()
@@ -77,10 +81,22 @@ class DungeonHandler : Listener {
             )
             if (partySnapshot.isPresent) {
                 val party = partySnapshot.get()
+
+                if (party.members.size >= 3) {
+                    player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Недопустимое количество участников пати!")
+                    return
+                }
+
                 party.members.mapNotNull { Bukkit.getPlayer(it) }.forEach {
                     val member = app.getUser(it)
+
+                    if (member?.dungeon != null) {
+                        return@forEach
+                    }
+
                     dungeonData.party = party.members
                     member?.dungeon = dungeonData
+
                     if (member != user) {
                         Alert.find("dungeon")
                             .replace("%nick%", player.name)

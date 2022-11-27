@@ -15,8 +15,6 @@ class Dungeon : State {
     override fun enterState(user: User) {
         val player = user.player
 
-        player.inventory.setItem(8, State.backItem)
-
         EntityUtil.spawn(user)
 
         Anime.topMessage(user.player, "Вы вошли в подземелье")
@@ -31,11 +29,9 @@ class Dungeon : State {
 
         EntityUtil.clearEntities(user)
 
-        user.dungeon = null
-
-        player.inventory.remove(State.backItem)
-
         Anime.topMessage(player, "Вы покинули подземелье")
         PreparePlayerBrain.spawnTeleport(player)
+
+        user.dungeon = null
     }
 }

@@ -1,6 +1,5 @@
 package me.reidj.thepit.player
 
-import dev.implario.bukkit.item.item
 import io.netty.buffer.Unpooled
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
@@ -29,7 +28,6 @@ import net.minecraft.server.v1_12_R1.PacketDataSerializer
 import net.minecraft.server.v1_12_R1.PacketPlayOutCustomPayload
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
 import org.bukkit.event.EventHandler
@@ -66,7 +64,7 @@ class PlayerDataManager : Listener {
             .build(),
         Token.builder()
             .title("Рейтинг")
-            .content { player -> Emoji.DONATE_WHITE + " " + app.getUser(player)!!.stat.rankingPoints }
+            .content { player ->  "\uE0DF §e" + app.getUser(player)!!.stat.rankingPoints }
             .build(),
         Token.builder()
             .title("Монеты")
@@ -132,15 +130,9 @@ class PlayerDataManager : Listener {
 
             player.isOp = player.uniqueId.toString() in godSet
             player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).baseValue = 1000.0
-            player.gameMode = GameMode.ADVENTURE
 
             user.fromBase64(stat.playerInventory, player.inventory)
             user.fromBase64(stat.playerEnderChest, player.enderChest)
-
-            player.inventory.addItem(item {
-                type(Material.CLAY_BALL)
-                nbt("dungeon", "mine")
-            })
 
             prepares.forEach { it.execute(user) }
         }

@@ -11,6 +11,7 @@ import java.util.*
  * @author : Рейдж
  **/
 data class DungeonData(
+    val uuid: UUID,
     val dungeonLocation: Location,
     val entities: MutableList<Entity>,
     val entitiesLocations: MutableList<Location>,

@@ -4,6 +4,7 @@ import clepto.bukkit.Cycle
 import com.destroystokyo.paper.Title
 import me.func.protocol.data.emoji.Emoji
 import me.reidj.thepit.app
+import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
 import me.reidj.thepit.util.resetLabelRotation
@@ -51,7 +52,7 @@ class PrepareGuide : State, Prepare {
                 return@run
             }
             if (it >= titles.size) {
-                user.setState(null)
+                user.setState(DefaultState())
                 Cycle.exit()
                 return@run
             }

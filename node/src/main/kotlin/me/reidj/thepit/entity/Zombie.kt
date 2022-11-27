@@ -20,7 +20,7 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var attackRange = 20.0
 
-    override var knockBackResistance = 5.0
+    override var knockBackResistance = 2.0
 
     override var customName= "Зомбяк"
 
@@ -38,10 +38,9 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var scale = V3(1.0, 1.0, 1.0)
 
-    // Шанс дропа 10% и 1%
+    // Шанс дропа 2%
     override var drops = setOf(
-        0.98 to "TEST2",
-        0.99 to "PLAM"
+        0.98 to "TEST2"
     )
 
     override var abilities: Set<Ability> = setOf(Nuke())
