@@ -30,8 +30,10 @@ class PlayerManager {
         mod.registerHandler<RenderTickPre> {
             val player = UIEngine.clientApi.minecraft().player
 
-            (healthPanel.children[3] as TextElement).content = "§c❤ §f${toFormat(player.health.toDouble())} из ${toFormat(player.maxHealth.toDouble())}"
-            (protectionPanel.children[3] as TextElement).content = "㱈 ${toFormat(player.totalArmorValue * 1.0 / 20 * 100)}%"
+            (healthPanel.children[3] as TextElement).content =
+                "§c❤ §f${toFormat(player.health.toDouble())} из ${toFormat(player.maxHealth.toDouble())}"
+            (protectionPanel.children[3] as TextElement).content =
+                "㱈 ${toFormat(player.totalArmorValue * 1.0 / 20 * 100)}%"
         }
     }
 

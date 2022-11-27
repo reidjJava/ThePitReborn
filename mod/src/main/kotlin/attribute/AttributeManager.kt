@@ -1,6 +1,7 @@
 package attribute
 
-import dev.xdark.clientapi.event.gui.ScreenDisplay
+import dev.xdark.clientapi.event.render.GuiOverlayRender
+import dev.xdark.clientapi.event.render.ItemTooltipRender
 import dev.xdark.clientapi.gui.ingame.InventorySurvivalScreen
 import ru.cristalix.clientapi.KotlinModHolder.mod
 import ru.cristalix.clientapi.readUtf8
@@ -47,8 +48,12 @@ class AttributeManager {
 
         UIEngine.postOverlayContext + box
 
-        mod.registerHandler<ScreenDisplay> {
-            box.enabled = screen is InventorySurvivalScreen
+        mod.registerHandler<ItemTooltipRender> {
+            box.enabled = false
+        }
+
+        mod.registerHandler<GuiOverlayRender> {
+            box.enabled = UIEngine.clientApi.minecraft().currentScreen() is InventorySurvivalScreen
         }
 
         mod.registerChannel("thepit:change-attribute") {
