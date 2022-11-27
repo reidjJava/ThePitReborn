@@ -3,6 +3,7 @@ package me.reidj.thepit.item
 import dev.implario.bukkit.item.item
 import me.func.atlas.Atlas
 import org.bukkit.Material
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -31,6 +32,7 @@ class ItemManager {
                 items[it] = item {
                     Equipment(this).init(it)
                     SharpeningStone(this).init(it)
+                    Cards(this).init(it)
                     type(Material.valueOf(configuration.getString("${path}material")))
                     text(
                         """

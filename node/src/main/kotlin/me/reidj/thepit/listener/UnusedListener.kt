@@ -7,6 +7,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.*
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
+import org.bukkit.event.inventory.InventoryOpenEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBedEnterEvent
@@ -69,10 +71,16 @@ class UnusedListener : Listener {
         cancel = true
     }
 
-    /*@EventHandler
+    @EventHandler
     fun BlockPlaceEvent.handle() {
         cancel = !player.isOp
-    }*/
+    }
+
+    @EventHandler
+    fun InventoryOpenEvent.handle() {
+        val type = inventory.type
+        isCancelled = type != InventoryType.PLAYER && type != InventoryType.ENDER_CHEST
+    }
 
     @EventHandler
     fun BlockGrowEvent.handle() {
@@ -84,10 +92,10 @@ class UnusedListener : Listener {
         cancel = true
     }
 
-    /*@EventHandler
+    @EventHandler
     fun BlockBreakEvent.handle() {
         cancel = true
-    }*/
+    }
 
     @EventHandler
     fun EntityCombustEvent.handle() {

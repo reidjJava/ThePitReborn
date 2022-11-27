@@ -16,7 +16,7 @@ class Equipment(override val itemBuilder: ItemBuilder) : Item() {
                 val attribute = attributes.toString().split(":")
                 itemBuilder.nbt(attribute[0], attribute[1] + ":" + attribute[2])
             }
-            itemBuilder.nbt("sharpeningLevel", 0)
         }
+        itemBuilder.nbt("sharpeningLevel", 0)
     }
 }
