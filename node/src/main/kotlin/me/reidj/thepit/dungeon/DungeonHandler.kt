@@ -82,7 +82,7 @@ class DungeonHandler : Listener {
             if (partySnapshot.isPresent) {
                 val party = partySnapshot.get()
 
-                if (party.members.size >= 3) {
+                if (party.members.size > 4) {
                     player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Недопустимое количество участников пати!")
                     return
                 }
