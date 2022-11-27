@@ -38,7 +38,7 @@ class EntityHandler : Listener {
 
         entityType.entity.getDrops().forEach { it.give(killer) }
 
-        EntityUtil.removeEntity(getEntity())
+        EntityUtil.removeEntity(getEntity(), true)
     }
 
     @EventHandler

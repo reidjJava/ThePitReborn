@@ -106,7 +106,7 @@ class DungeonHandler : Listener {
                     }
                 }
             } else {
-                user.dungeon = dungeonData.apply { this.party.add(uuid) }
+                user.dungeon = dungeonData
                 dungeonTeleport(user)
             }
         }

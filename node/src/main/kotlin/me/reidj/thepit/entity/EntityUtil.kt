@@ -73,18 +73,20 @@ object EntityUtil {
         }
     }
 
-    fun clearEntities(user: User) {
+    fun clearEntities(user: User, isKillEntity: Boolean) {
         val uuid = user.stat.uuid
-        enemies[uuid]?.forEach { removeEntity(it) }
+        enemies[uuid]?.forEach { removeEntity(it, isKillEntity) }
         enemies[uuid]?.clear()
     }
 
-    fun removeEntity(entity: org.bukkit.entity.Entity) {
+    fun removeEntity(entity: org.bukkit.entity.Entity, isKillEntity: Boolean) {
         targetPlayer.remove(entity.uniqueId)
         viewEntities.keys.forEach {
             viewEntities[it]!!.remove(entity.entityId)
         }
-        entity.remove()
+        if (isKillEntity) {
+            entity.remove()
+        }
     }
 
     private inline fun <reified T : Packet<*>> packetListener(player: Player, noinline handler: T.() -> Unit) {

@@ -1,6 +1,7 @@
 package me.reidj.thepit.dungeon
 
 import me.func.mod.Anime
+import me.reidj.thepit.app
 import me.reidj.thepit.entity.EntityUtil
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
@@ -26,8 +27,16 @@ class Dungeon : State {
 
     override fun leaveState(user: User) {
         val player = user.player
+        val dungeon = user.dungeon!!
 
-        EntityUtil.clearEntities(user)
+        if (dungeon.party.isEmpty() || dungeon.party.size == 1) {
+            EntityUtil.clearEntities(user, true)
+        } else {
+            dungeon.party
+                .mapNotNull { app.getUser(it) }
+                .forEach { it.dungeon?.party?.remove(player.uniqueId) }
+            EntityUtil.clearEntities(user, dungeon.party.isEmpty())
+        }
 
         Anime.topMessage(player, "Вы покинули подземелье")
         PreparePlayerBrain.spawnTeleport(player)

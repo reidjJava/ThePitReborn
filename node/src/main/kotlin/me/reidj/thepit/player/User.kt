@@ -9,7 +9,6 @@ import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.errorMessage
 import me.reidj.thepit.util.playSound
 import net.minecraft.server.v1_12_R1.Packet
-import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo
 import net.minecraft.server.v1_12_R1.PlayerConnection
 import org.bukkit.Bukkit
 import org.bukkit.Sound
@@ -95,20 +94,13 @@ class User(stat: Stat) {
     }
 
     fun hideFromAll() {
-        // Отправка таба
-        val show = PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player.handle)
         // Скрытие игроков
         for (current in Bukkit.getOnlinePlayers()) {
-            if (current == null || (dungeon != null) && current.uniqueId in dungeon!!.party) continue
+            if (current == null || (app.getUser(current)
+                    ?: return).dungeon?.party?.contains(stat.uuid) == true
+            ) continue
             player.hidePlayer(app, current.player)
-            sendPacket(
-                PacketPlayOutPlayerInfo(
-                    PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
-                    (current as CraftPlayer).handle
-                )
-            )
             current.hidePlayer(app, player)
-            current.handle.playerConnection.sendPacket(show)
         }
     }
 

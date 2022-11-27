@@ -27,7 +27,6 @@ import me.reidj.thepit.util.coroutine
 import net.minecraft.server.v1_12_R1.PacketDataSerializer
 import net.minecraft.server.v1_12_R1.PacketPlayOutCustomPayload
 import org.bukkit.Bukkit
-import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
 import org.bukkit.event.EventHandler
@@ -160,7 +159,7 @@ class PlayerDataManager : Listener {
         val user = userMap.remove(uuid) ?: return
 
         if (user.state is Dungeon) {
-            user.state!!.leaveState(user)
+            user.state.leaveState(user)
         }
 
         client().write(SaveUserPackage(uuid, user.generateStat()))
