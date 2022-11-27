@@ -1,4 +1,7 @@
 package overlay
+
+import dev.xdark.clientapi.event.lifecycle.GameLoop
+import org.lwjgl.input.Keyboard
 import ru.cristalix.clientapi.KotlinModHolder.mod
 import ru.cristalix.clientapi.readUtf8
 import ru.cristalix.uiengine.UIEngine
@@ -37,7 +40,7 @@ class TimerBar {
         mod.registerChannel("thepit:bar") {
             val time = readInt()
             val text = readUtf8() + " " + (time / 60).toString()
-              .padStart(2, '0') + ":" + (time % 60).toString().padStart(2, '0') + " ⏳"
+                .padStart(2, '0') + ":" + (time % 60).toString().padStart(2, '0') + " ⏳"
             val isResetLine = readBoolean()
 
             UIEngine.runningAnimations.clear()
@@ -58,6 +61,10 @@ class TimerBar {
             UIEngine.overlayContext + coolDown.also { it.addChild(line) }
 
             line.animate(time - 0.1) { size.x = 0.0 }
+        }
+
+        mod.registerHandler<GameLoop> {
+            coolDown.enabled = !Keyboard.isKeyDown(Keyboard.KEY_TAB)
         }
     }
 }

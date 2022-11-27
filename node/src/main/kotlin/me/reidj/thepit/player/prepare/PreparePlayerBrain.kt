@@ -65,6 +65,10 @@ object PreparePlayerBrain : Prepare {
         player.health = player.maxHealth.coerceAtMost(player.health + health)
     }
 
+    fun setMoveSpeed(player: Player, speed: Double) {
+        player.walkSpeed = getPercentage(speed).toFloat()
+    }
+
     fun addPotionEffect(player: Player, potionEffectType: PotionEffectType, duration: Int, amplifier: Int) {
         player.removePotionEffect(potionEffectType)
         player.addPotionEffect(PotionEffect(potionEffectType, duration * 20, amplifier))
@@ -80,5 +84,13 @@ object PreparePlayerBrain : Prepare {
                 AttributeUtil.getAttributeValue(AttributeType.HEALTH, armorContents)
             )
         }
+        if (attributes.any { it == AttributeType.MOVE_SPEED }) {
+            setMoveSpeed(
+                player,
+                AttributeUtil.getAttributeValue(AttributeType.MOVE_SPEED, armorContents)
+            )
+        }
     }
+
+    private fun getPercentage(attribute: Double, value: Double = 0.20000000298023224) = value + value * attribute / 100.0
 }

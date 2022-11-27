@@ -6,7 +6,7 @@ import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
 /**
@@ -18,12 +18,17 @@ class HeldItemHandler : Listener {
     @EventHandler
     fun PlayerItemHeldEvent.handle() {
         val armorContents = AttributeUtil.getAllItems(player, player.inventory.getItem(newSlot))
-        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH)
+        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH, AttributeType.MOVE_SPEED)
     }
 
     @EventHandler
-    fun InventoryClickEvent.handle() {
-        val player = whoClicked as Player
-        PreparePlayerBrain.applyAttributes(player, AttributeUtil.getAllItems(player), AttributeType.HEALTH)
+    fun InventoryCloseEvent.handle() {
+        val player = player as Player
+        PreparePlayerBrain.applyAttributes(
+            player,
+            AttributeUtil.getAllItems(player),
+            AttributeType.HEALTH,
+            AttributeType.MOVE_SPEED
+        )
     }
 }

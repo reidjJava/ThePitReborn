@@ -12,6 +12,7 @@ enum class AttributeType(val title: String) {
     DAMAGE("§4⚔ §7Урон"),
     CHANCE_CRITICAL_DAMAGE("§e⚡ §7Шанс крит.урона"),
     CRITICAL_DAMAGE_STRENGTH("§3✤ §7Сила крит.урона"),
+    MOVE_SPEED("§b❖ §7Скорость передвижения"),
     VAMPIRISM("§c☩ §7Похищение крови"),
     ENTITY_PROTECTION("§a⚝ §7Защита от сущностей"),
     ;

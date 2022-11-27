@@ -25,6 +25,7 @@ class AttributeManager {
         "damage" to Attribute("§4Урон§7:"),
         "chance_critical_damage" to Attribute("§eШанс критического урона§7:"),
         "critical_damage_strength" to Attribute("§3Сила критического урона§7:"),
+        "move_speed" to Attribute("§bСкорость перемещения§7:"),
         "vampirism" to Attribute("§5Похищение крови§7:"),
         "entity_protection" to Attribute("§aЗащита от сущностей§7:"),
     )

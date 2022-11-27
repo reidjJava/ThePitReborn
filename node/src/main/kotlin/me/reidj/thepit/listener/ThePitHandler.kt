@@ -32,7 +32,7 @@ class ThePitHandler : Listener {
 
     @EventHandler
     fun PlayerCommandPreprocessEvent.handle() {
-        if (CombatManager.containKey(player.uniqueId)) {
+        if (CombatManager.containKey(player.uniqueId) && !player.isOp) {
             player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы в ПВП")
             cancel = true
         }
