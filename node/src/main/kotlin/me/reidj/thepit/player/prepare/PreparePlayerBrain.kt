@@ -90,6 +90,7 @@ object PreparePlayerBrain : Prepare {
                 AttributeUtil.getAttributeValue(AttributeType.MOVE_SPEED, armorContents)
             )
         }
+        AttributeUtil.updateAllAttributes(player, armorContents)
     }
 
     private fun getPercentage(attribute: Double, value: Double = 0.20000000298023224) = value + value * attribute / 100.0

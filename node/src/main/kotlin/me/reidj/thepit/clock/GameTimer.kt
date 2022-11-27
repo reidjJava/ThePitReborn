@@ -6,9 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.reidj.thepit.app
-import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.client
-import org.bukkit.Bukkit
 
 /**
  * @project : tower-simulator
@@ -46,11 +44,6 @@ class GameTimer(private val injects: List<ClockInject>) : () -> Unit {
             client().write(app.playerDataManager.bulkSave())
         } else {
             tick++
-            if (tick % 20 == 0) {
-                Bukkit.getOnlinePlayers().forEach {
-                    AttributeUtil.updateAllAttributes(it, AttributeUtil.getAllItems(it))
-                }
-            }
         }
     }
 }

@@ -17,8 +17,12 @@ class HeldItemHandler : Listener {
 
     @EventHandler
     fun PlayerItemHeldEvent.handle() {
-        val armorContents = AttributeUtil.getAllItems(player, player.inventory.getItem(newSlot))
-        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH, AttributeType.MOVE_SPEED)
+        PreparePlayerBrain.applyAttributes(
+            player,
+            AttributeUtil.getAllItems(player, player.inventory.getItem(newSlot)),
+            AttributeType.HEALTH,
+            AttributeType.MOVE_SPEED
+        )
     }
 
     @EventHandler

@@ -15,7 +15,11 @@ class ArmorChangeHandler : Listener {
 
     @EventHandler
     fun PlayerArmorChangeEvent.handle() {
-        val armorContents = AttributeUtil.getAllItems(player)
-        PreparePlayerBrain.applyAttributes(player, armorContents, AttributeType.HEALTH, AttributeType.MOVE_SPEED)
+        PreparePlayerBrain.applyAttributes(
+            player,
+            AttributeUtil.getAllItems(player),
+            AttributeType.HEALTH,
+            AttributeType.MOVE_SPEED
+        )
     }
 }
