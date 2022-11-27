@@ -21,36 +21,37 @@ import java.util.*
 object EntityUtil {
 
     private val viewEntities = hashMapOf<UUID, HashSet<Int>>()
-    private val enemies = hashMapOf<Player, ArrayList<org.bukkit.entity.Entity>>()
+    private val enemies = hashMapOf<UUID, ArrayList<org.bukkit.entity.Entity>>()
 
     val targetPlayer = hashMapOf<UUID, UUID>()
 
     fun spawn(user: User) {
         val dungeon = user.dungeon!!
         val partySize = dungeon.party.size
-        val player = user.player
+        val uuid = user.stat.uuid
 
-        enemies[player] = arrayListOf()
+        enemies[uuid] = arrayListOf()
 
         dungeon.entities.forEach {
-            val uuid = user.stat.uuid
             dungeon.entitiesLocations.forEach { location ->
-                it.create(location)
-                it.setTarget(uuid)
+                if (dungeon.leader == uuid) {
+                    it.create(location)
+                    it.setTarget(uuid)
+                    it.changeDamage(partySize + 3.0)
+                    it.changeHealth(partySize + 12.0)
 
-                it.changeDamage(partySize + 3.0)
-                it.changeHealth(partySize + 12.0)
+                    app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-                dungeon.party
-                    .mapNotNull { app.getUser(it) }
-                    .filter { it.dungeon?.uuid == dungeon.uuid }
-                    .forEach { member -> viewEntities[member.stat.uuid]?.add(it.entity.entityId) }
+                    UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
 
-                enemies[player]?.add(it.entity)
-
-                app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
-
-                UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
+                    enemies[uuid]?.add(it.entity)
+                    viewEntities[uuid]?.add(it.entity.entityId)
+                } else {
+                    enemies[dungeon.leader]?.forEach {
+                        viewEntities[uuid]?.add(it.entityId)
+                        enemies[uuid]?.add(it)
+                    }
+                }
             }
         }
     }
@@ -73,8 +74,9 @@ object EntityUtil {
     }
 
     fun clearEntities(user: User) {
-        enemies[user.player]?.forEach { removeEntity(it) }
-        enemies[user.player]?.clear()
+        val uuid = user.stat.uuid
+        enemies[uuid]?.forEach { removeEntity(it) }
+        enemies[uuid]?.clear()
     }
 
     fun removeEntity(entity: org.bukkit.entity.Entity) {
