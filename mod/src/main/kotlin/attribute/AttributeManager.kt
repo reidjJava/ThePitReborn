@@ -20,14 +20,14 @@ import util.Formatter
 class AttributeManager {
 
     private val attributes = mutableMapOf(
-        "health" to Attribute("§cЗдоровье§7:"),
-        "regeneration" to Attribute("§dРегенерация§7:"),
-        "damage" to Attribute("§4Урон§7:"),
-        "chance_critical_damage" to Attribute("§eШанс критического урона§7:"),
-        "critical_damage_strength" to Attribute("§3Сила критического урона§7:"),
-        "move_speed" to Attribute("§bСкорость перемещения§7:"),
-        "vampirism" to Attribute("§5Похищение крови§7:"),
-        "entity_protection" to Attribute("§aЗащита от сущностей§7:"),
+        "health" to Attribute(false,"§cЗдоровье§7"),
+        "regeneration" to Attribute(false,"§dРегенерация§7"),
+        "damage" to Attribute(false,"§4Урон§7"),
+        "chance_critical_damage" to Attribute(true,"§eШанс критического урона§7"),
+        "critical_damage_strength" to Attribute(true,"§3Сила критического урона§7"),
+        "move_speed" to Attribute(true,"§bСкорость перемещения§7"),
+        "vampirism" to Attribute(true,"§5Похищение крови§7"),
+        "entity_protection" to Attribute(true, "§aЗащита от сущностей§7"),
     )
 
     private val box = rectangle {

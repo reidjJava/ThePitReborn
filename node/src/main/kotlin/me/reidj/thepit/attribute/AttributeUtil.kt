@@ -26,14 +26,14 @@ object AttributeUtil {
             val maximum = pair[1].toDouble()
             val result = if (maximum == minimum) maximum else Random.nextDouble(minimum, maximum)
             tag.setDouble(objectName, result)
-            newLore.add(getTextWithAttribute(it.title, result))
+            newLore.add(getTextWithAttribute(it.title, result, it.isPercentage))
         }
 
         val itemStack = nmsItem.asBukkitMirror()
 
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
             meta.lore = meta.lore.apply {
-                if (!tag.hasKeyOfType("sharpening_chance", 99)) {
+                if (tag.hasKeyOfType("sharpeningLevel", 99)) {
                     add("")
                 }
                 addAll(newLore)
@@ -51,7 +51,7 @@ object AttributeUtil {
             meta.lore = ItemManager[tag.getString("address")].lore.apply {
                 this?.add("")
                 AttributeType.getAttributeWithNbt(tag).forEach {
-                    this?.add(getTextWithAttribute(it.title, tag.getDouble(it.getObjectName())))
+                    this?.add(getTextWithAttribute(it.title, tag.getDouble(it.getObjectName()), it.isPercentage))
                 }
             }
         }
@@ -77,5 +77,6 @@ object AttributeUtil {
 
     fun getAllItems(player: Player) = getAllItems(player, player.inventory.itemInMainHand)
 
-    private fun getTextWithAttribute(title: String, value: Double) = "$title: ${Formatter.toFormat(value)}"
+    private fun getTextWithAttribute(title: String, value: Double, isPercentage: Boolean) =
+        "$title: ${Formatter.toFormat(value)}${if (isPercentage) "%" else ""}"
 }

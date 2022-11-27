@@ -11,8 +11,9 @@ import util.Formatter
  * @author : Рейдж
  **/
 data class Attribute(
+    val isPercentage: Boolean = false,
     val title: String, var value: Double = 0.0, val text: TextElement = text {
-        content = "$title §9${Formatter.toFormat(value)}"
+        content = "$title: §9${Formatter.toFormat(value) + if (isPercentage) "%" else ""}"
         shadow = true
         origin = LEFT
         align = LEFT
@@ -22,6 +23,6 @@ data class Attribute(
 ) {
 
     fun updateContent(content: String) {
-        text.content = text.content.replaceAfter("§9", content)
+        text.content = text.content.replaceAfter("§9", content) + if (isPercentage) "%" else ""
     }
 }
