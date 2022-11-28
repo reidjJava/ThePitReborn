@@ -2,6 +2,7 @@ package me.reidj.thepit.entity
 
 import me.func.protocol.data.emoji.Emoji
 import me.reidj.thepit.util.worldMessage
+import org.bukkit.entity.Creature
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -44,6 +45,8 @@ class EntityHandler : Listener {
     @EventHandler
     fun EntityDamageByEntityEvent.handle() {
         if (getEntity() is LivingEntity && getEntity().hasMetadata("entity") && damager is Player) {
+            (entity as Creature).target = damager as Player
+
             val entity = getEntity() as LivingEntity
             val entityType = EntityType.valueOf(entity.getMetadata("entity").component1().asString().uppercase())
             val ability = entityType.entity.abilities.find { !it.isOnCoolDown() } ?: return

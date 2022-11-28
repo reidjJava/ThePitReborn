@@ -3,6 +3,7 @@ package me.reidj.thepit.entity
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
+import me.func.mod.util.after
 import me.reidj.thepit.app
 import me.reidj.thepit.player.User
 import net.minecraft.server.v1_12_R1.Packet
@@ -30,26 +31,28 @@ object EntityUtil {
         val partySize = dungeon.party.size
         val uuid = user.stat.uuid
 
-        enemies[uuid] = arrayListOf()
+        after(3) {
+            enemies[uuid] = arrayListOf()
 
-        dungeon.entities.forEach {
-            dungeon.entitiesLocations.forEach { location ->
-                if (dungeon.leader == uuid) {
-                    it.create(location)
-                    it.setTarget(uuid)
-                    it.changeDamage(partySize + 3.0)
-                    it.changeHealth(partySize + 12.0)
+            dungeon.entities.forEach {
+                dungeon.entitiesLocations.forEach { location ->
+                    if (dungeon.leader == uuid) {
+                        it.create(location)
+                        it.setTarget(uuid)
+                        it.changeDamage(partySize + 3.0)
+                        it.changeHealth(partySize + 12.0)
 
-                    app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
+                        app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-                    UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
+                        UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
 
-                    enemies[uuid]?.add(it.entity)
-                    viewEntities[uuid]?.add(it.entity.entityId)
-                } else {
-                    enemies[dungeon.leader]?.forEach {
-                        viewEntities[uuid]?.add(it.entityId)
-                        enemies[uuid]?.add(it)
+                        enemies[uuid]?.add(it.entity)
+                        viewEntities[uuid]?.add(it.entity.entityId)
+                    } else {
+                        enemies[dungeon.leader]?.forEach {
+                            viewEntities[uuid]?.add(it.entityId)
+                            enemies[uuid]?.add(it)
+                        }
                     }
                 }
             }

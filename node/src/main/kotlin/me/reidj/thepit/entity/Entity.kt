@@ -72,6 +72,7 @@ abstract class Entity(private val entityType: EntityType) {
         current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity()
         entity = current as LivingEntity
 
+
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).baseValue = moveSpeed
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = health
