@@ -36,12 +36,12 @@ class ContractManager {
     init {
         command("contracts") { player, _ ->
             val stat = (app.getUser(player) ?: return@command).stat
-            val now = System.currentTimeMillis() / 10000
+            val now = System.currentTimeMillis()
 
             // Если прошло 24 часа, то обновляем контракты
             if (now - stat.contractLastUpdate * 10000 > UPDATE_TIME * 60 * 60 * 1000) {
                 stat.contractsTypes = ContractGenerator.generate()
-                stat.contractLastUpdate = now
+                stat.contractLastUpdate = now / 10000
             }
             menu.storage = stat.contractsTypes.filter { it.now < it.condition }.map { contract ->
                 button {
