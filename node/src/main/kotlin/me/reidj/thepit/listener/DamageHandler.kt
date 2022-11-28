@@ -60,7 +60,8 @@ class DamageHandler : Listener {
 
             if (Math.random() < AttributeUtil.getAttributeValue(CHANCE_CRITICAL_DAMAGE, armorContents)) {
                 damage += AttributeUtil.getAttributeValue(CRITICAL_DAMAGE_STRENGTH, armorContents) * 0.3
-            } else if (Math.random() > 0.90) {
+            }
+            if (Math.random() > 0.90) {
                 PreparePlayerBrain.setHealth(
                     playerDamager,
                     AttributeUtil.getAttributeValue(VAMPIRISM, armorContents)
