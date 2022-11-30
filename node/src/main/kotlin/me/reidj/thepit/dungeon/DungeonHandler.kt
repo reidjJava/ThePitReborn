@@ -8,7 +8,9 @@ import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.func.protocol.ui.alert.NotificationData
 import me.reidj.thepit.app
-import me.reidj.thepit.entity.Zombie
+import me.reidj.thepit.entity.CaveTroll
+import me.reidj.thepit.entity.Orc
+import me.reidj.thepit.entity.Urukhai
 import me.reidj.thepit.player.User
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
@@ -75,7 +77,7 @@ class DungeonHandler : Listener {
                     it.y += 1.0
                     it.yaw = labelTag[1].toFloat()
                 },
-                mutableListOf(Zombie()),
+                mutableListOf(Orc(), CaveTroll(), Orc(), Urukhai()),
                 locations.toMutableList(),
                 uuid
             )
