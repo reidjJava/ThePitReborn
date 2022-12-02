@@ -24,8 +24,6 @@ import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.dungeon.DungeonHandler
 import me.reidj.thepit.entity.EntityHandler
 import me.reidj.thepit.event.EventManager
-import me.reidj.thepit.event.Test
-import me.reidj.thepit.event.Test2
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
@@ -64,6 +62,7 @@ class App : JavaPlugin() {
 
     lateinit var playerDataManager: PlayerDataManager
     lateinit var worldMeta: WorldMeta
+    lateinit var eventManager: EventManager
 
     override fun onEnable() {
         app = this
@@ -136,9 +135,11 @@ class App : JavaPlugin() {
             SharpeningManager()
         )
 
+        eventManager = EventManager()
+
         Bukkit.getScheduler().runTaskTimerAsynchronously(
             this,
-            GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration(), EventManager(setOf(Test(), Test2())))),
+            GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration(), eventManager)),
             0,
             1
         )

@@ -3,6 +3,7 @@ package me.reidj.thepit.attribute
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.attributeUpdate
+import me.reidj.thepit.util.itemInMainHand
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -75,7 +76,7 @@ object AttributeUtil {
         return inventory.toTypedArray()
     }
 
-    fun getAllItems(player: Player) = getAllItems(player, player.inventory.itemInMainHand)
+    fun getAllItems(player: Player) = getAllItems(player, player.itemInMainHand())
 
     private fun getTextWithAttribute(title: String, value: Double, isPercentage: Boolean) =
         "$title: ${Formatter.toFormat(value)}${if (isPercentage) "%" else ""}"

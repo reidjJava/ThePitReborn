@@ -138,7 +138,7 @@ class ConsumableManager : Listener {
 
         if (tag.hasKeyOfType("consumable", 8)) {
             if (!DelayUtil.hasCountdown(uuid)) {
-                val itemInHand = player.inventory.itemInMainHand
+                val itemInHand = player.itemInMainHand()
                 itemInHand.setAmount(itemInHand.getAmount() - 1)
                 ConsumableType.values()
                     .find { tag.getString("consumable") == it.getObjectName() }?.overlay?.let { it(player) }

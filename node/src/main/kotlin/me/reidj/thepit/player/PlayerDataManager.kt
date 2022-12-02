@@ -63,7 +63,7 @@ class PlayerDataManager : Listener {
             .build(),
         Token.builder()
             .title("Рейтинг")
-            .content { player ->  "\uE0DF §e" + app.getUser(player)!!.stat.rankingPoints }
+            .content { player ->  "\uE0D2 §e" + app.getUser(player)!!.stat.rankingPoints }
             .build(),
         Token.builder()
             .title("Монеты")

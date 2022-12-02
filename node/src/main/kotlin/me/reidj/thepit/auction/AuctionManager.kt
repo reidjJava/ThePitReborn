@@ -16,10 +16,8 @@ import me.reidj.thepit.player.User
 import me.reidj.thepit.protocol.AuctionPutLotPackage
 import me.reidj.thepit.protocol.AuctionRemoveItemPackage
 import me.reidj.thepit.protocol.MoneyDepositPackage
+import me.reidj.thepit.util.*
 import me.reidj.thepit.util.Formatter
-import me.reidj.thepit.util.errorMessage
-import me.reidj.thepit.util.playSound
-import me.reidj.thepit.util.systemMessage
 import org.apache.commons.lang.math.NumberUtils
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
@@ -81,7 +79,7 @@ class AuctionManager {
         command("ah") { player, _ -> mainGui.open(player) }
         command("sell") { player, args ->
             val user = app.getUser(player) ?: return@command
-            val itemInHand = player.inventory.itemInMainHand
+            val itemInHand = player.itemInMainHand()
             val nmsItem = CraftItemStack.asNMSCopy(itemInHand)
             val tag = nmsItem.tag
 

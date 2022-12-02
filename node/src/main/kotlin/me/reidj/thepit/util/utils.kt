@@ -12,6 +12,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -35,6 +36,12 @@ fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: S
 }
 
 fun Player.playSound(sound: Sound) = playSound(location, sound, 1F, 1F)
+
+fun Player.topInventory(): Inventory = openInventory.topInventory
+
+fun Player.itemInMainHand(): ItemStack = inventory.itemInMainHand
+
+fun Player.itemInOffHand(): ItemStack = inventory.itemInOffHand
 
 fun Player.teleportAndPlayMusic(location: Location) {
     after(5) { teleport(location) }

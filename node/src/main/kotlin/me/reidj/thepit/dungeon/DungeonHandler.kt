@@ -12,6 +12,7 @@ import me.reidj.thepit.entity.CaveTroll
 import me.reidj.thepit.entity.Orc
 import me.reidj.thepit.entity.Urukhai
 import me.reidj.thepit.player.User
+import me.reidj.thepit.util.itemInMainHand
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
@@ -117,7 +118,7 @@ class DungeonHandler : Listener {
     private fun dungeonTeleport(user: User) {
         val dungeon = user.dungeon!!
         if (user.stat.uuid == dungeon.leader) {
-            val itemInHand = Bukkit.getPlayer(dungeon.leader).inventory.itemInMainHand
+            val itemInHand = Bukkit.getPlayer(dungeon.leader).itemInMainHand()
             itemInHand.setAmount(itemInHand.getAmount() - 1)
         }
         user.setState(Dungeon())
