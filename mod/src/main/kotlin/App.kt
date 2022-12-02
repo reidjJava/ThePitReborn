@@ -1,5 +1,6 @@
 
 import attribute.AttributeManager
+import mob.SkinManager
 import overlay.TimerBar
 import player.KillBoard
 import player.PlayerManager
@@ -24,5 +25,6 @@ class App : KotlinMod() {
         Rank()
         AttributeManager()
         KillBoard()
+        SkinManager()
     }
 }
