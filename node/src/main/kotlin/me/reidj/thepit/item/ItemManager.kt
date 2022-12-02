@@ -3,7 +3,6 @@ package me.reidj.thepit.item
 import dev.implario.bukkit.item.item
 import me.func.atlas.Atlas
 import org.bukkit.Material
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -26,7 +25,6 @@ class ItemManager {
 
             val configuration = file.configuration
 
-
             configuration.getConfigurationSection("items").getKeys(false).forEach {
                 val path = "items.$it."
                 items[it] = item {
@@ -38,7 +36,6 @@ class ItemManager {
                         """
                         ${configuration.getString("${path}title")}
                         ${configuration.getList("${path}lore").joinToString("\n")}
-                        
                     """.trimIndent()
                     )
                     amount(1)

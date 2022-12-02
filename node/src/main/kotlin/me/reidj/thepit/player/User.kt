@@ -59,6 +59,27 @@ class User(stat: Stat) {
         return Base64Coder.encodeLines(outputStream.toByteArray())
     }
 
+    fun toBase64ItemStack(itemStack: ItemStack): String {
+        val outputStream = ByteArrayOutputStream()
+        val dataOutput = BukkitObjectOutputStream(outputStream)
+
+        dataOutput.writeObject(itemStack)
+        dataOutput.close()
+
+        return Base64Coder.encodeLines(outputStream.toByteArray())
+    }
+
+    fun toFromBase64ItemStack(data: String): ItemStack? {
+        try {
+            val inputStream = ByteArrayInputStream(Base64Coder.decodeLines(data))
+            val dataInput = BukkitObjectInputStream(inputStream)
+            val readObject = dataInput.readObject() ?: return null
+            return readObject as ItemStack
+        } catch (_: Throwable) {
+        }
+        return null
+    }
+
     fun fromBase64(data: String, inventory: Inventory) {
         try {
             val inputStream = ByteArrayInputStream(Base64Coder.decodeLines(data))

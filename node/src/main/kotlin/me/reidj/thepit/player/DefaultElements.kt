@@ -20,7 +20,6 @@ object DefaultElements {
         -1L,
         -1L,
         setOf(),
-        hashSetOf(),
         "",
         "",
         false

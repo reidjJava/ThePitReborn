@@ -1,5 +1,7 @@
 package me.reidj.thepit.auction
 
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 import me.func.mod.Anime
 import me.func.mod.ui.menu.button
 import me.func.mod.ui.menu.confirmation.Confirmation
@@ -11,11 +13,8 @@ import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.app
 import me.reidj.thepit.client
 import me.reidj.thepit.data.AuctionData
-import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.player.User
-import me.reidj.thepit.protocol.AuctionPutLotPackage
-import me.reidj.thepit.protocol.AuctionRemoveItemPackage
-import me.reidj.thepit.protocol.MoneyDepositPackage
+import me.reidj.thepit.protocol.*
 import me.reidj.thepit.util.*
 import me.reidj.thepit.util.Formatter
 import org.apache.commons.lang.math.NumberUtils
@@ -28,14 +27,6 @@ import java.util.*
  * @author : Рейдж
  **/
 class AuctionManager {
-
-    companion object {
-        private val auctionData = hashSetOf<AuctionData>()
-
-        operator fun get(data: AuctionData) = auctionData.add(data)
-
-        fun remove(uuid: UUID) = auctionData.removeIf { it.uuid == uuid }
-    }
 
     private val auction = selection {
         title = "Аукцион"
@@ -61,16 +52,12 @@ class AuctionManager {
                 title = "Торговать"
                 onClick { player, _, _ ->
                     generateAuctionButtons(app.getUser(player) ?: return@onClick)
-                    auction.open(player)
                 }
             },
             button {
                 title = "Мои предметы"
                 texture = "minecraft:textures/items/minecart_chest.png"
-                onClick { player, _, _ ->
-                    generateMyItemsButtons(app.getUser(player) ?: return@onClick)
-                    myItems.open(player)
-                }
+                onClick { player, _, _ -> generateMyItemsButtons(app.getUser(player) ?: return@onClick) }
             }
         )
     }
@@ -86,7 +73,7 @@ class AuctionManager {
             if (args.isEmpty()) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Использование §b/sell §6[Цена].")
                 return@command
-            } else if (!nmsItem.hasTag() || !tag.hasKeyOfType("isTrade", 99) || !tag.hasKeyOfType("address", 99)) {
+            } else if (!nmsItem.hasTag() || !tag.hasKeyOfType("address", 8)) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы не можете продать этот предмет!")
                 return@command
             } else if (!NumberUtils.isNumber(args[0])) {
@@ -95,6 +82,7 @@ class AuctionManager {
             }
 
             val price = args[0].toInt()
+            val now = System.currentTimeMillis() / 10000
 
             if (price < 10 || price > 300000000) {
                 player.systemMessage(
@@ -106,9 +94,14 @@ class AuctionManager {
             }
 
             val auctionData =
-                AuctionData(UUID.randomUUID(), tag.getString("address"), player.displayName, player.uniqueId, price)
-
-            user.stat.auctionData.add(auctionData)
+                AuctionData(
+                    UUID.randomUUID(),
+                    player.uniqueId,
+                    user.toBase64ItemStack(itemInHand),
+                    player.displayName,
+                    price,
+                    now
+                )
 
             client().write(AuctionPutLotPackage(auctionData))
 
@@ -119,70 +112,88 @@ class AuctionManager {
 
     private fun generateAuctionButtons(user: User) {
         auction.money = Formatter.toMoneyFormat(user.stat.money)
-        auction.storage = auctionData.filter { user.stat.uuid != it.seller }.map {
-            val itemStack = ItemManager[it.objectName] ?: return
-            val displayName = itemStack.i18NDisplayName
-            button {
-                title = displayName
-                description = "Продавец §b${it.sellerName}"
-                price = it.price.toLong()
-                item = itemStack
-                hover(itemStack.itemMeta.lore)
-                onClick { player, _, _ ->
-                    Confirmation("Купить", displayName, "за ${it.price} ${Emoji.COIN}") { confirmPlayer ->
-                        val confirmUser = app.getUser(confirmPlayer) ?: return@Confirmation
-                        confirmUser.armLock {
-                            confirmUser.tryPurchase(it.price.toDouble(), {
-                                if (it in auctionData) {
-                                    client().write(
-                                        MoneyDepositPackage(
-                                            it.seller,
-                                            it.uuid,
-                                            confirmPlayer.displayName,
-                                            displayName,
-                                            it.price
+        coroutine().launch {
+            val auctionData =
+                client().writeAndAwaitResponse<AuctionGetLotsPackage>(AuctionGetLotsPackage()).await().auctionData
+            auction.storage = auctionData.filter { user.stat.uuid != it.seller }.map {
+                val itemStack = user.toFromBase64ItemStack(it.item) ?: return@launch
+                val displayName = itemStack.i18NDisplayName
+                button {
+                    title = displayName
+                    description = "Продавец §b${it.sellerName}"
+                    price = it.price.toLong()
+                    item = itemStack
+                    hover(itemStack.itemMeta.lore)
+                    onClick { player, _, _ ->
+                        Confirmation("Купить", displayName, "за ${it.price} ${Emoji.COIN}") { confirmPlayer ->
+                            val confirmUser = app.getUser(confirmPlayer) ?: return@Confirmation
+                            confirmUser.armLock {
+                                confirmUser.tryPurchase(it.price.toDouble(), {
+                                    coroutine().launch click@{
+                                        val response = client().writeAndAwaitResponse<AuctionItemPurchasedPackage>(
+                                            AuctionItemPurchasedPackage(it.uuid)
+                                        ).await()
+                                        if (response.isBought) {
+                                            Anime.close(confirmPlayer)
+                                            confirmPlayer.errorMessage("Этого лота не существует!")
+                                            confirmPlayer.playSound(Sound.BLOCK_ANVIL_BREAK)
+                                            return@click
+                                        }
+                                        client().write(
+                                            AuctionMoneyDepositPackage(
+                                                it.seller,
+                                                it.uuid,
+                                                confirmPlayer.displayName,
+                                                displayName,
+                                                it.price
+                                            )
                                         )
-                                    )
+                                        client().write(AuctionRemoveItemPackage(it.uuid))
 
-                                    auctionData.remove(it)
+                                        confirmUser.giveMoney(-it.price.toDouble())
 
-                                    confirmUser.giveMoney(-it.price.toDouble())
-
-                                    confirmPlayer.inventory.addItem(itemStack)
-                                } else {
-                                    confirmPlayer.errorMessage("Этого лота не существует!")
-                                    player.playSound(Sound.BLOCK_ANVIL_BREAK)
-                                }
-                            }, "Недостаточно средств")
-                        }
-                    }.open(player)
+                                        confirmPlayer.inventory.addItem(itemStack)
+                                    }
+                                }, "Недостаточно средств")
+                            }
+                        }.open(player)
+                    }
                 }
-            }
-        }.toMutableList()
+            }.toMutableList()
+            auction.open(user.player)
+        }
     }
 
     private fun generateMyItemsButtons(user: User) {
-        myItems.storage = user.stat.auctionData.map {
-            val itemStack = ItemManager[it.objectName] ?: return
-            button {
-                title = itemStack.i18NDisplayName
-                item = itemStack
-                price = it.price.toLong()
-                hover(itemStack.itemMeta.lore)
-                onClick { player, _, _ ->
-                    val clickUser = app.getUser(player) ?: return@onClick
-                    clickUser.armLock {
-                        if (it !in clickUser.stat.auctionData) {
-                            Anime.close(player)
-                            return@armLock
+        coroutine().launch {
+            val auctionData =
+                client().writeAndAwaitResponse<AuctionGetLotsPackage>(AuctionGetLotsPackage()).await().auctionData
+            myItems.storage = auctionData.filter { it.seller == user.stat.uuid }.map {
+                val itemStack = user.toFromBase64ItemStack(it.item) ?: return@launch
+                button {
+                    title = itemStack.i18NDisplayName
+                    item = itemStack
+                    price = it.price.toLong()
+                    hover(itemStack.itemMeta.lore)
+                    onClick { player, _, _ ->
+                        val clickUser = app.getUser(player) ?: return@onClick
+                        clickUser.armLock {
+                            coroutine().launch click@{
+                                val response = client().writeAndAwaitResponse<AuctionItemPurchasedPackage>(
+                                    AuctionItemPurchasedPackage(it.uuid)
+                                ).await()
+                                if (response.isBought) {
+                                    Anime.close(player)
+                                    return@click
+                                }
+                                Anime.close(player)
+                                player.inventory.addItem(itemStack)
+                            }
                         }
-                        client().write(AuctionRemoveItemPackage(it.uuid))
-                        clickUser.stat.auctionData.remove(it)
-                        player.inventory.addItem(itemStack)
-                        Anime.close(player)
                     }
                 }
-            }
-        }.toMutableList()
+            }.toMutableList()
+            myItems.open(user.player)
+        }
     }
 }

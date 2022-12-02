@@ -7,10 +7,10 @@ import java.util.*
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-data class MoneyDepositPackage(
+data class AuctionMoneyDepositPackage(
     val seller: UUID,
     val data: UUID,
-    val customer: String,
-    val displayName: String,
+    val customerName: String,
+    val itemName: String,
     val money: Int
-    ): CorePackage()
+) : CorePackage()

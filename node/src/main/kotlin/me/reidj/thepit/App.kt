@@ -31,9 +31,7 @@ import me.reidj.thepit.npc.NpcManager
 import me.reidj.thepit.player.PlayerDataManager
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
-import me.reidj.thepit.protocol.AuctionPutLotPackage
-import me.reidj.thepit.protocol.AuctionRemoveItemPackage
-import me.reidj.thepit.protocol.MoneyDepositPackage
+import me.reidj.thepit.protocol.AuctionMoneyDepositPackage
 import me.reidj.thepit.sharpening.SharpeningManager
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
@@ -44,6 +42,7 @@ import ru.cristalix.core.command.ICommandService
 import ru.cristalix.core.coupons.BukkitCouponsService
 import ru.cristalix.core.coupons.ICouponsService
 import ru.cristalix.core.datasync.EntityDataParameters
+import ru.cristalix.core.network.Capability
 import ru.cristalix.core.network.ISocketClient
 import ru.cristalix.core.party.IPartyService
 import ru.cristalix.core.party.PartyService
@@ -68,22 +67,24 @@ class App : JavaPlugin() {
         app = this
         B.plugin = this
 
-        client().addListener(AuctionPutLotPackage::class.java) { _, pckg -> AuctionManager[pckg.auctionData] }
-        client().addListener(MoneyDepositPackage::class.java) { _, pckg ->
-            AuctionManager.remove(pckg.data)
+        client().registerCapability(
+            Capability.builder()
+                .className(AuctionMoneyDepositPackage::class.java.name)
+                .notification(true)
+                .build()
+        )
 
+        client().addListener(AuctionMoneyDepositPackage::class.java) { _, pckg ->
             val user = getUser(pckg.seller) ?: return@addListener
 
             user.player.systemMessage(
                 MessageStatus.FINE,
                 GlowColor.GREEN,
-                "Ваш лот: ${pckg.displayName} §fбыл куплен игроком §b${pckg.customer}§f."
+                "Ваш лот: ${pckg.itemName} §fбыл куплен игроком §b${pckg.customerName}§f."
             )
 
-            user.stat.auctionData.removeIf { it.uuid == pckg.data }
             user.giveMoney(pckg.money.toDouble())
         }
-        client().addListener(AuctionRemoveItemPackage::class.java) { _, pckg -> AuctionManager.remove(pckg.uuid) }
 
         CoreApi.get().also {
             it.registerService(ICouponsService::class.java, BukkitCouponsService(client(), ICommandService.get()))

@@ -1,6 +1,8 @@
 package me.reidj.reborn
 
 import kotlinx.coroutines.runBlocking
+import me.reidj.thepit.data.AuctionData
+import me.reidj.thepit.data.Stat
 import me.reidj.thepit.protocol.*
 import ru.cristalix.core.CoreApi
 import ru.cristalix.core.microservice.MicroServicePlatform
@@ -13,7 +15,8 @@ import java.util.*
 fun main() {
     MicroserviceBootstrap.bootstrap(MicroServicePlatform(4))
 
-    val mongoAdapter = MongoAdapter(System.getenv("db_url"), System.getenv("db_data"), "test")
+    val mongoAdapter = UserAdapter(System.getenv("db_url"), System.getenv("db_data"), "test")
+    val auctionAdapter = AuctionAdapter(System.getenv("db_url"), System.getenv("db_data"), "auction")
 
     ISocketClient.get().run {
         capabilities(
@@ -22,15 +25,16 @@ fun main() {
             SaveUserPackage::class,
             TopPackage::class,
             AuctionPutLotPackage::class,
-            MoneyDepositPackage::class,
-            AuctionRemoveItemPackage::class
+            AuctionMoneyDepositPackage::class,
+            AuctionGetLotsPackage::class,
+            AuctionItemPurchasedPackage::class
         )
 
         CoreApi.get().registerService(IPermissionService::class.java, PermissionService(this))
 
         addListener(LoadUserPackage::class.java) { realmId, pckg ->
-            mongoAdapter.find(pckg.uuid).get().run {
-                pckg.stat = this
+            mongoAdapter.find<Stat>(pckg.uuid).get().also {
+                pckg.stat = it
                 forward(realmId, pckg)
                 println("Loaded on ${realmId.realmName}! Player: ${pckg.uuid}")
             }
@@ -50,9 +54,24 @@ fun main() {
             forward(realmId, pckg)
             println("Top generated for ${realmId.realmName}")
         }
-        addListener(AuctionPutLotPackage::class.java) { _, pckg -> write(pckg) }
-        addListener(MoneyDepositPackage::class.java) { _, pckg -> write(pckg) }
-        addListener(AuctionRemoveItemPackage::class.java) { _, pckg -> write(pckg) }
+        addListener(AuctionPutLotPackage::class.java) { _, pckg -> auctionAdapter.save(pckg.auctionData) }
+        addListener(AuctionGetLotsPackage::class.java) { realmId, pckg ->
+            auctionAdapter.findAll<AuctionData>().get().also {
+                pckg.auctionData = it.values.toList()
+                forward(realmId, pckg)
+            }
+        }
+        addListener(AuctionItemPurchasedPackage::class.java) { realmId, pckg ->
+            auctionAdapter.find<AuctionData>(pckg.uuid).get().also {
+                pckg.isBought = it == null
+                auctionAdapter.clear(pckg.uuid)
+                forward(realmId, pckg)
+            }
+        }
+        addListener(AuctionRemoveItemPackage::class.java) { _, pckg ->
+            auctionAdapter.clear(pckg.uuid)
+        }
+        addListener(AuctionMoneyDepositPackage::class.java) { _, pckg -> write(pckg) }
     }
 
     runBlocking {
