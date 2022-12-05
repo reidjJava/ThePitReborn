@@ -150,10 +150,6 @@ class App : JavaPlugin() {
     }
 
     override fun onDisable() {
-        Bukkit.getOnlinePlayers()
-            .mapNotNull { getUser(it) }
-            .filter { it.state is Dungeon }
-            .forEach { it.player.inventory.remove(State.backItem) }
         client().write(playerDataManager.bulkSave())
         Thread.sleep(1000)
     }
