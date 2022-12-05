@@ -1,9 +1,7 @@
 package me.reidj.thepit.player
 
-import dev.implario.bukkit.item.item
 import me.reidj.thepit.app
-import org.bukkit.Material
-import org.bukkit.inventory.ItemStack
+import me.reidj.thepit.item.ItemManager
 
 /**
  * @project : ThePitReborn
@@ -12,14 +10,7 @@ import org.bukkit.inventory.ItemStack
 interface State {
 
     companion object {
-        val backItem: ItemStack by lazy {
-            item {
-                type(Material.CLAY_BALL)
-                text("§cВернуться")
-                nbt("other", "cancel")
-                nbt("click", "exit")
-            }
-        }
+        val backItem = ItemManager["RUNE"]
     }
 
     fun enterState(user: User)

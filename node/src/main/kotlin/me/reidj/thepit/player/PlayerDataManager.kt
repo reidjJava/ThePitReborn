@@ -3,6 +3,7 @@ package me.reidj.thepit.player
 import io.netty.buffer.Unpooled
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import me.func.Lock
 import me.func.mod.Anime
 import me.func.mod.ui.token.Token
 import me.func.mod.ui.token.TokenGroup
@@ -36,6 +37,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates.notNull
 
 /**
@@ -82,18 +84,30 @@ class PlayerDataManager : Listener {
     }
 
     @EventHandler
-    fun AsyncPlayerPreLoginEvent.handle() = registerIntent(app).apply {
-        coroutine().launch {
-            if (uniqueId.toString() !in godSet) {
-                result = AsyncPlayerPreLoginEvent.Result.KICK_OTHER
-                disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Сейчас нельзя зайти на этот сервер")
-                return@launch
+    fun AsyncPlayerPreLoginEvent.handle() {
+        val lockKey = "thepit-$uniqueId"
+        val lock = Lock.getLock(lockKey, TimeUnit.SECONDS)
+        if (lock > 0) {
+            disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Ваши данные сохраняются...")
+            if (lock > 5) {
+                Lock.lock(lockKey, 3, TimeUnit.SECONDS)
             }
-            val statPackage = client().writeAndAwaitResponse<LoadUserPackage>(LoadUserPackage(uniqueId)).await()
-            var stat = statPackage.stat
-            if (stat == null) stat = DefaultElements.createNewUser(uniqueId)
-            userMap[uniqueId] = User(stat)
-            completeIntent(app)
+        } else {
+            Lock.lock(lockKey, 5, TimeUnit.HOURS)
+        }
+        registerIntent(app).apply {
+            coroutine().launch {
+                if (uniqueId.toString() !in godSet) {
+                    result = AsyncPlayerPreLoginEvent.Result.KICK_OTHER
+                    disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Сейчас нельзя зайти на этот сервер")
+                    return@launch
+                }
+                val statPackage = client().writeAndAwaitResponse<LoadUserPackage>(LoadUserPackage(uniqueId)).await()
+                var stat = statPackage.stat
+                if (stat == null) stat = DefaultElements.createNewUser(uniqueId)
+                userMap[uniqueId] = User(stat)
+                completeIntent(app)
+            }
         }
     }
 
@@ -155,6 +169,8 @@ class PlayerDataManager : Listener {
         val uuid = player.uniqueId
 
         RankUtil.remove(uuid)
+
+        Lock.lock("thepit-" + player.uniqueId, 10, TimeUnit.SECONDS)
 
         val user = userMap.remove(uuid) ?: return
 

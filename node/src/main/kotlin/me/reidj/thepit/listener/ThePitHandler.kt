@@ -7,8 +7,10 @@ import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.prepare.PrepareGuide
+import me.reidj.thepit.util.itemInOffHand
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCloseEvent
@@ -23,9 +25,10 @@ class ThePitHandler : Listener {
 
     @EventHandler
     fun InventoryCloseEvent.handle() {
+        val player = player as Player
         val inventory = player.inventory
         if (inventory.itemInOffHand != null) {
-            player.inventory.addItem(inventory.itemInOffHand)
+            player.inventory.addItem(player.itemInOffHand())
             inventory.itemInOffHand = null
         }
     }

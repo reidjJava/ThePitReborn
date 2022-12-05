@@ -3,8 +3,9 @@ package me.reidj.thepit
 import clepto.bukkit.B
 import dev.implario.bukkit.platform.Platforms
 import dev.implario.platform.impl.darkpaper.PlatformDarkPaper
+import me.func.Lock
 import me.func.mod.Anime
-import me.func.mod.Kit
+import me.func.mod.Kit.*
 import me.func.mod.conversation.ModLoader
 import me.func.mod.util.listener
 import me.func.protocol.data.color.GlowColor
@@ -93,9 +94,11 @@ class App : JavaPlugin() {
 
         Platforms.set(PlatformDarkPaper())
 
-        Anime.include(Kit.NPC, Kit.EXPERIMENTAL, Kit.STANDARD, Kit.HEALTH_BAR, Kit.LOOTBOX)
+        Anime.include(NPC, EXPERIMENTAL, DIALOG, STANDARD, HEALTH_BAR, LOOTBOX)
 
         ModLoader.loadAll("mods")
+
+        Lock.realms("TEST")
 
         IRealmService.get().currentRealmInfo.run {
             status = RealmStatus.WAITING_FOR_PLAYERS
