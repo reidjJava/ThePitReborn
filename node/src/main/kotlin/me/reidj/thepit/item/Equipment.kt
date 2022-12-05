@@ -17,6 +17,8 @@ class Equipment(override val itemBuilder: ItemBuilder) : Item() {
                 itemBuilder.nbt(attribute[0], attribute[1] + ":" + attribute[2])
             }
         }
-        itemBuilder.nbt("sharpeningLevel", 0)
+        if (configuration.isInt("${path}$objectName.sharpeningLevel")) {
+            itemBuilder.nbt("sharpeningLevel", 0)
+        }
     }
 }
