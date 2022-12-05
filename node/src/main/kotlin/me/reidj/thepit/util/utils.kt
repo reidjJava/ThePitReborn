@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack
  * @author : Рейдж
  **/
 
-private val barrier = ItemStack(Material.BARRIER)
+private val barrier: ItemStack by lazy { ItemStack(Material.BARRIER) }
 
 fun coroutine() = CoroutineScope(Dispatchers.IO)
 

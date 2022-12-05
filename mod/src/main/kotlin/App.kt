@@ -1,5 +1,6 @@
 
 import attribute.AttributeManager
+import key_press.KeyManager
 import mob.SkinManager
 import overlay.TimerBar
 import player.KillBoard
@@ -26,5 +27,6 @@ class App : KotlinMod() {
         AttributeManager()
         KillBoard()
         SkinManager()
+        KeyManager()
     }
 }

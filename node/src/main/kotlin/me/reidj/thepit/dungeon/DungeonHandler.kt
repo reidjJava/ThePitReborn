@@ -1,8 +1,10 @@
 package me.reidj.thepit.dungeon
 
+import me.func.mod.Anime
 import me.func.mod.ui.Alert
 import me.func.mod.ui.Alert.replace
 import me.func.mod.ui.Alert.send
+import me.func.mod.ui.menu.confirmation.Confirmation
 import me.func.mod.util.command
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
@@ -11,6 +13,7 @@ import me.reidj.thepit.app
 import me.reidj.thepit.entity.CaveTroll
 import me.reidj.thepit.entity.Orc
 import me.reidj.thepit.entity.Urukhai
+import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.User
 import me.reidj.thepit.util.itemInMainHand
 import me.reidj.thepit.util.systemMessage
@@ -49,6 +52,12 @@ class DungeonHandler : Listener {
             if (user.dungeon != null) {
                 dungeonTeleport(user)
             }
+        }
+        Anime.createReader("thepit:key-press") { player, _ ->
+            if ((app.getUser(player) ?: return@createReader).state is Dungeon)
+                Confirmation("Вы действительно хотите", "покинуть подземелье?") {
+                    (app.getUser(it) ?: return@Confirmation).setState(DefaultState())
+                }.open(player)
         }
     }
 

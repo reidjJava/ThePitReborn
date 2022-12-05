@@ -73,7 +73,7 @@ object PreparePlayerBrain : Prepare {
         player.health = getMaxHealth(player).baseValue.coerceAtMost(player.health + health)
     }
 
-    fun setMoveSpeed(player: Player, speed: Double) {
+    private fun setMoveSpeed(player: Player, speed: Double) {
         player.walkSpeed = getPercentage(speed).toFloat()
     }
 
