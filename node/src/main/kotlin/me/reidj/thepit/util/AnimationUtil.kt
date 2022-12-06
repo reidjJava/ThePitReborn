@@ -15,10 +15,12 @@ import org.bukkit.entity.Player
 
 private val color = GlowColor.RED
 
-fun Player.killBoardMessage(message: String) = ModTransfer(message).send("thepit:killboard", player)
+fun Player.killBoardMessage(message: String) = ModTransfer(message).send("thepit:killboard", this)
 
 fun Player.attributeUpdate(name: String, value: Double) =
-    ModTransfer(name, value).send("thepit:change-attribute", player)
+    ModTransfer(name, value).send("thepit:change-attribute", this)
+
+fun Player.setSkin(id: Int, skinName: String) = ModTransfer(id, skinName).send("thepit:mob-skin", this)
 
 fun sendRank(player: Player, image: String, players: Player) =
     ModTransfer()
@@ -36,7 +38,7 @@ fun Player.timer(text: String, duration: Int, isResetLine: Boolean) = ModTransfe
     .integer(color.red)
     .integer(color.blue)
     .integer(color.green)
-    .send("thepit:bar", player)
+    .send("thepit:bar", this)
 
 fun Player.worldMessage(location: Location, content: String) {
     val banner = Banner.builder()

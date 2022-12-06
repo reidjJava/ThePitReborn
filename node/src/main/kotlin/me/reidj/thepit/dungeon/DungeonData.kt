@@ -13,8 +13,8 @@ import java.util.*
 data class DungeonData(
     val uuid: UUID,
     val dungeonLocation: Location,
-    val entities: MutableList<Entity>,
-    val entitiesLocations: MutableList<Location>,
+    val entities: List<Entity>,
+    val entitiesLocations: List<Location>,
     val leader: UUID,
     var party: MutableSet<UUID> = mutableSetOf(),
     ) {

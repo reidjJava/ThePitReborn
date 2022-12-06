@@ -5,6 +5,10 @@ package me.reidj.thepit.entity
  * @author : Рейдж
  **/
 enum class EntityType(val entity: Entity) {
-    ZOMBIE(Zombie()),
+    BALROG(Balrog()),
+    CAVE_TROLL(CaveTroll()),
+    ORC(Orc()),
+    URUKHAI(Urukhai()),
+    KOBOLD(Kobold()),
     ;
 }

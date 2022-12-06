@@ -7,6 +7,8 @@ import me.func.Lock
 import me.func.mod.Anime
 import me.func.mod.Kit.*
 import me.func.mod.conversation.ModLoader
+import me.func.mod.conversation.ModTransfer
+import me.func.mod.util.command
 import me.func.mod.util.listener
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
@@ -21,7 +23,6 @@ import me.reidj.thepit.clock.detail.TopManager
 import me.reidj.thepit.command.AdminCommands
 import me.reidj.thepit.consumable.ConsumableManager
 import me.reidj.thepit.contract.ContractManager
-import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.dungeon.DungeonHandler
 import me.reidj.thepit.entity.EntityHandler
 import me.reidj.thepit.event.EventManager
@@ -30,12 +31,12 @@ import me.reidj.thepit.listener.*
 import me.reidj.thepit.lootbox.LootBoxManager
 import me.reidj.thepit.npc.NpcManager
 import me.reidj.thepit.player.PlayerDataManager
-import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
 import me.reidj.thepit.protocol.AuctionMoneyDepositPackage
 import me.reidj.thepit.sharpening.SharpeningManager
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.cristalix.core.CoreApi
@@ -138,6 +139,11 @@ class App : JavaPlugin() {
             ThePitHandler(),
             SharpeningManager()
         )
+
+        command("test") { player, _ ->
+            val pig = player.world.spawnEntity(player.location, EntityType.PIG)
+            ModTransfer(pig.entityId, "hog").send("thepit:mob-skin", player)
+        }
 
         eventManager = EventManager()
 

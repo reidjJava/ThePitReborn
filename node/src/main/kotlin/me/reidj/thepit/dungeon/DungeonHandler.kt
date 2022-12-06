@@ -10,9 +10,6 @@ import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.func.protocol.ui.alert.NotificationData
 import me.reidj.thepit.app
-import me.reidj.thepit.entity.CaveTroll
-import me.reidj.thepit.entity.Orc
-import me.reidj.thepit.entity.Urukhai
 import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.User
 import me.reidj.thepit.util.itemInMainHand
@@ -37,7 +34,7 @@ class DungeonHandler : Listener {
             NotificationData(
                 null,
                 "notify",
-                "%nick% предложил войти в подземелье.",
+                "%nick% предложил войти в подземелье\n%dungeonName%.",
                 GlowColor.GREEN.toRGB(),
                 GlowColor.GREEN_DARK.toRGB(),
                 30000,
@@ -47,12 +44,14 @@ class DungeonHandler : Listener {
                 null
             )
         )
+
         command("dungeonInviteAccept") { player, _ ->
             val user = app.getUser(player) ?: return@command
             if (user.dungeon != null) {
                 dungeonTeleport(user)
             }
         }
+
         Anime.createReader("thepit:key-press") { player, _ ->
             if ((app.getUser(player) ?: return@createReader).state is Dungeon)
                 Confirmation("Вы действительно хотите", "покинуть подземелье?") {
@@ -77,20 +76,17 @@ class DungeonHandler : Listener {
         if (nmsItem.hasTag() && tag.hasKeyOfType("dungeon", 8)) {
             val dungeonName = tag.getString("dungeon")
             val uuid = player.uniqueId
-            val label = app.worldMeta.labels("dungeon").first { it.tag.split(" ")[0] == dungeonName }
-            val labelTag = label.tag.split(" ")
-            val locations = app.worldMeta.labels("$dungeonName-mob")
-            val partySnapshot = IPartyService.get().getPartyByMember(uuid).get()
+            val dungeon = DungeonType.values().find { dungeonName == it.tag } ?: return
+            val mobLocations = app.worldMeta.labels("$dungeonName-mob")
             val dungeonData = DungeonData(
                 UUID.randomUUID(),
-                label.clone().also {
-                    it.y += 1.0
-                    it.yaw = labelTag[1].toFloat()
-                },
-                mutableListOf(Orc(), CaveTroll(), Orc(), Urukhai()),
-                locations.toMutableList(),
+                dungeon.location,
+                dungeon.entities,
+                mobLocations,
                 uuid
             )
+            val partySnapshot = IPartyService.get().getPartyByMember(uuid).get()
+
             if (partySnapshot.isPresent) {
                 val party = partySnapshot.get()
 
@@ -112,6 +108,7 @@ class DungeonHandler : Listener {
                     if (member != user) {
                         Alert.find("dungeon")
                             .replace("%nick%", player.name)
+                            .replace("%dungeonName%", dungeon.title)
                             .send(it)
                     } else {
                         dungeonTeleport(member)

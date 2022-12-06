@@ -1,7 +1,6 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.entity.ability.Ability
-import me.reidj.thepit.entity.ability.Nuke
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemStack
 import ru.cristalix.core.math.V3
@@ -10,7 +9,7 @@ import ru.cristalix.core.math.V3
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-class Zombie : Entity(EntityType.ZOMBIE) {
+class Kobold : Entity(EntityType.ZOMBIE) {
 
     override var damage = 5.0
 
@@ -22,9 +21,9 @@ class Zombie : Entity(EntityType.ZOMBIE) {
 
     override var knockBackResistance = 2.0
 
-    override var customName= "Зомбяк"
+    override var customName= "Кобольд"
 
-    override var metadata = "zombie"
+    override var metadata = "kobold"
 
     override var helmet: ItemStack? = null
 
@@ -43,5 +42,5 @@ class Zombie : Entity(EntityType.ZOMBIE) {
         0.98 to "TEST2"
     )
 
-    override var abilities: Set<Ability> = setOf(Nuke())
+    override var abilities: Set<Ability> = setOf()
 }

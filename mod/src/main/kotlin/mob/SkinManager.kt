@@ -1,7 +1,6 @@
 package mob
 
 import dev.xdark.clientapi.entity.EntityPlayer
-import dev.xdark.clientapi.event.entity.EntityDespawn
 import dev.xdark.clientapi.event.entity.EntitySpawn
 import dev.xdark.clientapi.resource.ResourceLocation
 import ru.cristalix.clientapi.KotlinModHolder.mod
@@ -29,9 +28,12 @@ class SkinManager {
             }
         }
 
-        mod.registerHandler<EntityDespawn> {
+        /*mod.registerHandler<EntityDespawn> {
             if (entity is EntityPlayer) return@registerHandler
-            entitySkins.remove(entity.entityId)
-        }
+            if (!entity.isEntityAlive) {
+                println(123)
+                entitySkins.remove(entity.entityId)
+            }
+        }*/
     }
 }

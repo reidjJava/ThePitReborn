@@ -37,7 +37,7 @@ object EntityUtil {
             dungeon.entities.forEach {
                 dungeon.entitiesLocations.forEach { location ->
                     if (dungeon.leader == uuid) {
-                        it.create(location)
+                        it.create(user.player, location)
                         it.setTarget(uuid)
                         it.changeDamage(partySize + 3.0)
                         it.changeHealth(partySize + 12.0)

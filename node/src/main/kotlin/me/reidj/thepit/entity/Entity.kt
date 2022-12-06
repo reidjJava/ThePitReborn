@@ -4,11 +4,13 @@ import me.reidj.thepit.app
 import me.reidj.thepit.entity.ability.Ability
 import me.reidj.thepit.entity.drop.EntityDrop
 import me.reidj.thepit.item.ItemManager
+import me.reidj.thepit.util.setSkin
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import ru.cristalix.core.math.V3
@@ -68,8 +70,12 @@ abstract class Entity(private val entityType: EntityType) {
         entity.health = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue
     }
 
-    fun create(location: Location) {
-        current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity()
+    fun create(player: Player, location: Location) {
+        current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity().also {
+            val id = (Math.random() * Int.MAX_VALUE).toInt()
+            it.handle.id = id
+            player.setSkin(id, "hog")
+        }
         entity = current as LivingEntity
 
 
