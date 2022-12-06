@@ -4,7 +4,6 @@ import me.reidj.thepit.app
 import me.reidj.thepit.entity.ability.Ability
 import me.reidj.thepit.entity.drop.EntityDrop
 import me.reidj.thepit.item.ItemManager
-import me.reidj.thepit.util.setSkin
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity
@@ -74,7 +73,7 @@ abstract class Entity(private val entityType: EntityType) {
         current = app.getWorld().createEntity(location, entityType.clazz).getBukkitEntity().also {
             val id = (Math.random() * Int.MAX_VALUE).toInt()
             it.handle.id = id
-            player.setSkin(id, "hog")
+            //player.setSkin(id, "hog")
         }
         entity = current as LivingEntity
 

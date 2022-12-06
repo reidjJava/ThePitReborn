@@ -18,6 +18,7 @@ data class Stat(
     var lastEnter: Long,
     var dailyClaimTimestamp: Long,
     var contractsTypes: Set<Contract>,
+    val donates: Set<String>,
     var playerInventory: String,
     var playerEnderChest: String,
     var isTutorialCompleted: Boolean,
