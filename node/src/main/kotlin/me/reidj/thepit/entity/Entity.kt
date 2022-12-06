@@ -48,13 +48,14 @@ abstract class Entity(private val entityType: EntityType) {
 
     protected abstract var itemInHand: ItemStack?
 
-    protected abstract var drops: Set<Pair<Double, String>>
+    protected abstract var drops: MutableSet<Pair<Double, String>>
 
-    abstract var abilities: Set<Ability>
+    abstract var abilities: MutableSet<Ability>
 
     abstract var scale: V3
 
-    fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }
+    @JvmName("getDrops1")
+    fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }.toMutableSet()
 
     fun setTarget(uuid: UUID) {
         EntityUtil.targetPlayer[entity.uniqueId] = uuid

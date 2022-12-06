@@ -21,12 +21,12 @@ class ContractManager {
     }
 
     companion object {
-        fun update(user: User, value: Int, type: ContractType): Set<String>? {
+        fun update(user: User, value: Int, type: ContractType): Array<String>? {
             user.stat.contractsTypes.filter { it.type == type }.forEach {
                 it.now += value
                 if (it.now == it.condition) {
                     user.giveMoney(it.money)
-                    return setOf("Контракт выполнен!", "Награда: §6${it.money} §fмонет")
+                    return arrayOf("Контракт выполнен!", "Награда: §6${it.money} §fмонет")
                 }
             }
             return null

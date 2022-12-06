@@ -57,7 +57,7 @@ class PlayerDataManager : Listener {
         "e83dff51-e312-11eb-acca-1cb72caa35fd", // 3BeZDYuK_NDO
     )
 
-    private var prepares: MutableSet<Prepare> by notNull()
+    private var prepares: Set<Prepare> by notNull()
     private val group = TokenGroup(
         Token.builder()
             .title("Ранг")
@@ -80,7 +80,7 @@ class PlayerDataManager : Listener {
     )
 
     init {
-        prepares = mutableSetOf(PrepareMods(), PreparePlayerBrain, PrepareGuide())
+        prepares = setOf(PrepareMods(), PreparePlayerBrain, PrepareGuide())
     }
 
     @EventHandler

@@ -38,9 +38,9 @@ class Balrog : Entity(EntityType.ZOMBIE) {
     override var scale = V3(1.0, 1.0, 1.0)
 
     // Шанс дропа 2%
-    override var drops = setOf(
+    override var drops = mutableSetOf(
         0.98 to "TEST2"
     )
 
-    override var abilities: Set<Ability> = setOf()
+    override var abilities: MutableSet<Ability> = mutableSetOf()
 }

@@ -37,7 +37,11 @@ class EntityHandler : Listener {
 
         killer.worldMessage(getEntity().location.clone().also { it.y += 2.0 }, "§l+3${Emoji.COIN}")
 
-        entityType.entity.getDrops().forEach { it.give(killer) }
+        entityType.entity.run {
+            getDrops().forEach { it.give(killer) }
+            abilities.clear()
+            getDrops()
+        }
 
         EntityUtil.removeEntity(getEntity(), true)
     }
