@@ -23,7 +23,7 @@ class CaveTroll : Entity(EntityType.ZOMBIE) {
 
     override var customName= "Пещерный тролль"
 
-    override var metadata = "cave-troll"
+    override var metadata = "cave_troll"
 
     override var helmet: ItemStack? = null
 

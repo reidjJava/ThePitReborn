@@ -34,25 +34,24 @@ object EntityUtil {
         after(3) {
             enemies[uuid] = arrayListOf()
 
-            dungeon.entities.forEach {
-                dungeon.entitiesLocations.forEach { location ->
-                    if (dungeon.leader == uuid) {
-                        it.create(user.player, location)
-                        it.setTarget(uuid)
-                        it.changeDamage(partySize + 3.0)
-                        it.changeHealth(partySize + 12.0)
+            dungeon.entitiesLocations.forEach { location ->
+                val mob = dungeon.entities.random()
+                if (dungeon.leader == uuid) {
+                    mob.create(user.player, location)
+                    mob.setTarget(uuid)
+                    mob.changeDamage(partySize + 3.0)
+                    mob.changeHealth(partySize + 12.0)
 
-                        app.getWorld().handle.addEntity(it.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
+                    app.getWorld().handle.addEntity(mob.current.entity, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-                        UtilEntity.setScale(it.entity, it.scale.x, it.scale.y, it.scale.z)
+                    UtilEntity.setScale(mob.entity, mob.scale.x, mob.scale.y, mob.scale.z)
 
-                        enemies[uuid]?.add(it.entity)
-                        viewEntities[uuid]?.add(it.entity.entityId)
-                    } else {
-                        enemies[dungeon.leader]?.forEach {
-                            viewEntities[uuid]?.add(it.entityId)
-                            enemies[uuid]?.add(it)
-                        }
+                    enemies[uuid]?.add(mob.entity)
+                    viewEntities[uuid]?.add(mob.entity.entityId)
+                } else {
+                    enemies[dungeon.leader]?.forEach {
+                        viewEntities[uuid]?.add(it.entityId)
+                        enemies[uuid]?.add(it)
                     }
                 }
             }
