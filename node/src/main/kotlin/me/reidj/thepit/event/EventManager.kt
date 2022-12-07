@@ -9,8 +9,7 @@ import me.reidj.thepit.clock.ClockInject
 class EventManager : ClockInject {
 
     val events: Map<String, Event> = mapOf(
-        "test" to Test(),
-        "test2" to Test2()
+        "golden_fever" to GoldenFever(),
     )
 
     override fun run(tick: Int) {
