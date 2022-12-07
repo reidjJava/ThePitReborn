@@ -8,6 +8,7 @@ import org.bukkit.event.Event
  **/
 abstract class Event(
     val title: String,
+    val description: String,
     val duration: Int,
     val waitSecond: Int,
     val atStart: (() -> Unit)?,

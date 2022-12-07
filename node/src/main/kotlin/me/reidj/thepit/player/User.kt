@@ -40,8 +40,8 @@ class User(stat: Stat) {
 
     var dungeon: DungeonData? = null
 
+    var numberOfBlocksPassed = 0
     var isArmLock = false
-    var isArmorEquipment = false
     var isActive = false
 
     init {

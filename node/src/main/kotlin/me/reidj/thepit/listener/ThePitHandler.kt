@@ -13,6 +13,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerMoveEvent
 
 /**
  * @project : ThePitReborn
@@ -28,6 +29,11 @@ class ThePitHandler : Listener {
             player.inventory.addItem(player.itemInOffHand())
             inventory.itemInOffHand = null
         }
+    }
+
+    @EventHandler
+    fun PlayerMoveEvent.handle() {
+        app.eventManager.events["run"]?.on(PlayerMoveEvent::class.java, this)
     }
 
     @EventHandler

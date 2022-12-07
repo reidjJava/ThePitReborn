@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 
 private val eggs = app.worldMeta.labels("egg")
 
-class DragonEgg : Event("Яйцо дракона", 300, 1800, {
+class DragonEgg : Event("Яйцо дракона", "",300, 1800, {
     eggs.forEach {
         it.getBlockAt().type = Material.DRAGON_EGG
     }
@@ -28,6 +28,7 @@ class DragonEgg : Event("Яйцо дракона", 300, 1800, {
     val user = app.getUser(event.player) ?: return@event
 
     if (action == Action.RIGHT_CLICK_BLOCK && blockClicked.type == Material.DRAGON_EGG) {
+        event.isCancelled = true
         blockClicked.type = Material.AIR
         user.giveMoney(150.0)
     }
