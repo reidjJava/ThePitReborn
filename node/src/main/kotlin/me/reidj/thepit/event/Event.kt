@@ -10,6 +10,8 @@ abstract class Event(
     val title: String,
     val duration: Int,
     val waitSecond: Int,
+    val atStart: (() -> Unit)?,
+    val atEnd: (() -> Unit)?,
     private val handler: Map<Class<out Event>, (Event) -> Unit>
 ) {
     // Сколько продлится ивент

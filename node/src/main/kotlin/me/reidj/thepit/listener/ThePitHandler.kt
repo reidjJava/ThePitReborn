@@ -4,12 +4,9 @@ import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.app
 import me.reidj.thepit.clock.detail.CombatManager
-import me.reidj.thepit.dungeon.Dungeon
-import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.prepare.PrepareGuide
 import me.reidj.thepit.util.itemInOffHand
 import me.reidj.thepit.util.systemMessage
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -44,7 +41,7 @@ class ThePitHandler : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.handle() {
-        if (item == null) {
+        /*if (item == null) {
             return
         }
         val nmsItem = CraftItemStack.asNMSCopy(item)
@@ -54,6 +51,7 @@ class ThePitHandler : Listener {
             if (user.state is Dungeon) {
                 user.setState(DefaultState())
             }
-        }
+        }*/
+        app.eventManager.events["dragon_egg"]?.on(PlayerInteractEvent::class.java, this)
     }
 }

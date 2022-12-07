@@ -7,7 +7,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-class GoldenFever : Event("Золотая лихорадка", 120, 3600, mapOf(
+class GoldenFever : Event("Золотая лихорадка", 120, 3600, null, null, mapOf(
     PlayerDeathEvent::class.java to event@{
         val event = it as PlayerDeathEvent
         val user = app.getUser(event.getEntity()) ?: return@event

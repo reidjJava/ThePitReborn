@@ -80,6 +80,8 @@ class DamageHandler : Listener {
             PreparePlayerBrain.spawnTeleport(getEntity())
             Anime.title(getEntity(), "§cВЫ ПОГИБЛИ!")
 
+            app.eventManager.events["golden_fever"]?.on(PlayerDeathEvent::class.java, this)
+
             CombatManager.remove(getEntity())
 
             val user = app.getUser(getEntity()) ?: return@after

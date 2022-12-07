@@ -10,6 +10,7 @@ class EventManager : ClockInject {
 
     val events: Map<String, Event> = mapOf(
         "golden_fever" to GoldenFever(),
+        "dragon_egg" to DragonEgg(),
     )
 
     override fun run(tick: Int) {
@@ -19,10 +20,12 @@ class EventManager : ClockInject {
         events.values.forEach {
             if (it.beforeStart == 0) {
                 if (it.secondsLeft == it.duration) {
+                    it.atStart?.invoke()
                     println("начался ивент ${it.title}")
                 } else {
                     if (it.secondsLeft == 0) {
                         println("ивент закончился ${it.title}")
+                        it.atEnd?.invoke()
                         it.beforeStart = it.waitSecond
                         it.secondsLeft = it.duration
                         return

@@ -8,6 +8,7 @@ import me.func.mod.util.after
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.func.world.Label
+import me.reidj.thepit.app
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -29,6 +30,11 @@ fun Player.errorMessage(subTitle: String) {
     Anime.itemTitle(this, barrier, "Ошибка", subTitle, 2.0)
     Anime.close(this)
 }
+
+fun Location.getBlockAt() = app.getWorld().getBlockAt(this.clone().also {
+    it.x += 0.5
+    it.z += 0.5
+})
 
 fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: String) {
     Glow.animate(this, 2.0, color)
