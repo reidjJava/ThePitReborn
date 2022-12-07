@@ -11,10 +11,13 @@ import me.reidj.thepit.player.prepare.PrepareGuide
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.itemInOffHand
 import me.reidj.thepit.util.systemMessage
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -51,6 +54,19 @@ class ThePitHandler : Listener {
     }
 
     @EventHandler
+    fun InventoryClickEvent.handle() {
+        val player = whoClicked as Player
+        if (player.openInventory.type == InventoryType.ENDER_CHEST) {
+            val nmsItem = CraftItemStack.asNMSCopy(currentItem)
+            val tag = nmsItem.tag
+            if (nmsItem.hasTag() && tag.hasKeyOfType("consumable", 8)) {
+                isCancelled = true
+                player.updateInventory()
+            }
+        }
+    }
+
+    @EventHandler
     fun PlayerCommandPreprocessEvent.handle() {
         if (CombatManager.containKey(player.uniqueId) && !player.isOp) {
             player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы в ПВП")
@@ -61,17 +77,6 @@ class ThePitHandler : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.handle() {
-        /*if (item == null) {
-            return
-        }
-        val nmsItem = CraftItemStack.asNMSCopy(item)
-        val tag = nmsItem.tag ?: return
-        if (nmsItem.hasTag() && tag.hasKeyOfType("click", 8)) {
-            val user = app.getUser(player) ?: return
-            if (user.state is Dungeon) {
-                user.setState(DefaultState())
-            }
-        }*/
         app.eventManager.events["dragon_egg"]?.on(PlayerInteractEvent::class.java, this)
     }
 }
