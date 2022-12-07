@@ -61,7 +61,7 @@ class PlayerDataManager : Listener {
     private val group = TokenGroup(
         Token.builder()
             .title("Ранг")
-            .content { player -> "\uE018 " + RankUtil.getRank(app.getUser(player)!!.stat.rankingPoints).title }
+            .content { player -> "\uE018 " + app.getUser(player)!!.getRank().title}
             .build(),
         Token.builder()
             .title("Рейтинг")

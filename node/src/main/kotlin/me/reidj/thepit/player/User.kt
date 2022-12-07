@@ -95,6 +95,8 @@ class User(stat: Stat) {
         }
     }
 
+    fun getRank() = RankUtil.getRank(stat.rankingPoints)
+
     fun armLock(handler: () -> Unit) {
         if (isArmLock) {
             return

@@ -15,21 +15,21 @@ import java.util.*
 object RankUtil {
 
     fun createRank(user: User) {
-        val rank = getRank(user.stat.rankingPoints)
+        val rank = user.getRank()
         if (rank == RankType.NONE) return
         Bukkit.getOnlinePlayers().forEach { sendRank(user.player, rank.name, it) }
     }
 
     fun showAll(user: User) {
-        Bukkit.getOnlinePlayers().mapNotNull { app.getUser(it) }.forEach {
-            val rank = getRank(it.stat.rankingPoints)
+        app.getUsers().forEach {
+            val rank = it.getRank()
             if (rank == RankType.NONE) return
             after(5) { sendRank(it.player, rank.name, user.player) }
         }
     }
 
     fun updateRank(user: User) {
-        val rank = getRank(user.stat.rankingPoints)
+        val rank = user.getRank()
         if (rank == RankType.NONE) return
         Bukkit.getOnlinePlayers().forEach {
             remove(user.stat.uuid)

@@ -102,6 +102,18 @@ class DamageHandler : Listener {
 
             killer.giveMoneyWithBooster(3.0)
             killer.giveKill(1)
+
+            val userRankOrdinal = user.getRank().ordinal + 1
+            val killerRankOrdinal = killer.getRank().ordinal + 1
+
+            killer.giveRankingPoints(
+                if (killerRankOrdinal > userRankOrdinal)
+                    killerRankOrdinal * (userRankOrdinal * 0.1).toInt()
+                else if (userRankOrdinal == killerRankOrdinal)
+                    3
+                else
+                    2 * userRankOrdinal
+            )
         }
     }
 }
