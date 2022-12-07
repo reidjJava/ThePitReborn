@@ -1,10 +1,14 @@
 package me.reidj.thepit.listener
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
 import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.reidj.thepit.app
+import me.reidj.thepit.attribute.AttributeType
+import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.player.prepare.PrepareGuide
+import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.itemInOffHand
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.entity.Player
@@ -34,6 +38,16 @@ class ThePitHandler : Listener {
     @EventHandler
     fun PlayerMoveEvent.handle() {
         app.eventManager.events["run"]?.on(PlayerMoveEvent::class.java, this)
+    }
+
+    @EventHandler
+    fun PlayerArmorChangeEvent.handle() {
+        PreparePlayerBrain.applyAttributes(
+            player,
+            AttributeUtil.getAllItems(player),
+            AttributeType.HEALTH,
+            AttributeType.MOVE_SPEED
+        )
     }
 
     @EventHandler

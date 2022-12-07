@@ -125,7 +125,6 @@ class App : JavaPlugin() {
         listener(
             playerDataManager,
             DamageHandler(),
-            ArmorChangeHandler(),
             UnusedListener(),
             ConsumableManager(),
             SpawnHandler(),
