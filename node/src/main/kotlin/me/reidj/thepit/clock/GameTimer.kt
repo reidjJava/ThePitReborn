@@ -7,6 +7,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.reidj.thepit.app
 import me.reidj.thepit.client
+import org.bukkit.scheduler.BukkitRunnable
 
 /**
  * @project : tower-simulator
@@ -21,7 +22,7 @@ interface ClockInject {
 // Осторожно, если оно будет маленьким, счетчик не дойдет до Incomeble
 private const val AUTO_SAVE_PERIOD = 20 * 60L * 10
 
-class GameTimer(private val injects: List<ClockInject>) : () -> Unit {
+class GameTimer(private val injects: List<ClockInject>) : () -> Unit, BukkitRunnable() {
 
     private var tick = 0
 
@@ -45,5 +46,9 @@ class GameTimer(private val injects: List<ClockInject>) : () -> Unit {
         } else {
             tick++
         }
+    }
+
+    override fun run() {
+        invoke()
     }
 }

@@ -33,7 +33,6 @@ import me.reidj.thepit.player.User
 import me.reidj.thepit.protocol.AuctionMoneyDepositPackage
 import me.reidj.thepit.sharpening.SharpeningManager
 import me.reidj.thepit.util.systemMessage
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.cristalix.core.CoreApi
@@ -139,9 +138,8 @@ class App : JavaPlugin() {
 
         eventManager = EventManager()
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(
-            this,
-            GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration(), eventManager)),
+        GameTimer(listOf(TopManager(), CombatManager(), PlayerRegeneration(), eventManager)).runTaskTimerAsynchronously(
+            app,
             0,
             1
         )
