@@ -14,6 +14,7 @@ data class Stat(
     var deaths: Int,
     var rankingPoints: Int,
     var rewardStreak: Int,
+    var numberVisitsToDungeon: Int,
     var contractLastUpdate: Long,
     var lastEnter: Long,
     var dailyClaimTimestamp: Long,

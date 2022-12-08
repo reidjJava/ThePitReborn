@@ -27,19 +27,24 @@ class SharpeningManager : Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     fun InventoryClickEvent.handle() {
-        if (whoClicked is Player && action == InventoryAction.SWAP_WITH_CURSOR) {
+        if (action == InventoryAction.SWAP_WITH_CURSOR) {
             val player = whoClicked as Player
             val user = app.getUser(player) ?: return
             val sharpeningStone = CraftItemStack.asNMSCopy(cursor) ?: return
-            val sharpeningTag = sharpeningStone.tag
+            val sharpeningTag = sharpeningStone.tag ?: return
             val sharpenedItem = CraftItemStack.asNMSCopy(currentItem) ?: return
-            val sharpenedTag = sharpenedItem.tag
+            val sharpenedTag = sharpenedItem.tag ?: return
             val chance = sharpeningTag.getDouble("sharpening_chance")
             val price = sharpeningTag.getDouble("sharpening_price")
             val sharpeningLevel = sharpenedTag.getInt("sharpeningLevel")
 
             if (sharpenedItem.hasTag() && sharpenedTag.hasKeyOfType("sharpeningLevel", 99)) {
                 isCancelled = true
+            }
+
+            if (AttributeType.getAttributeWithNbt(sharpenedTag).isEmpty()) {
+                isCancelled = true
+                return
             }
 
             if (sharpeningStone.hasTag() && sharpeningTag.hasKeyOfType("sharpening_chance", 99)) {
@@ -49,12 +54,6 @@ class SharpeningManager : Listener {
                     isCancelled = true
                     return
                 }
-
-                if (AttributeType.getAttributeWithNbt(sharpenedTag).isEmpty()) {
-                    isCancelled = true
-                    return
-                }
-
                 user.tryPurchase(price, {
                     if (Math.random() < chance && chance < 1.0) {
                         player.errorMessage("Точильный камень был разрушен")

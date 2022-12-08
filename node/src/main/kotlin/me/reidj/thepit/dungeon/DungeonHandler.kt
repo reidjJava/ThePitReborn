@@ -47,7 +47,7 @@ class DungeonHandler : Listener {
 
         command("dungeonInviteAccept") { player, _ ->
             val user = app.getUser(player) ?: return@command
-            if (user.dungeon != null) {
+            if (user.dungeon != null && !checkNumberVisits(user)) {
                 dungeonTeleport(user)
             }
         }
@@ -62,9 +62,6 @@ class DungeonHandler : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.handle() {
-        if (item == null) {
-            return
-        }
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag
@@ -91,16 +88,18 @@ class DungeonHandler : Listener {
                 val party = partySnapshot.get()
 
                 if (party.members.size > 4) {
-                    player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Недопустимое количество участников пати!")
+                    player.systemMessage(
+                        MessageStatus.ERROR,
+                        GlowColor.RED,
+                        "Недопустимое количество участников пати!"
+                    )
+                    return
+                } else if (checkNumberVisits(user)) {
                     return
                 }
 
                 party.members.mapNotNull { Bukkit.getPlayer(it) }.forEach {
                     val member = app.getUser(it)
-
-                    if (member?.dungeon != null) {
-                        return@forEach
-                    }
 
                     dungeonData.party = party.members
                     member?.dungeon = dungeonData
@@ -115,10 +114,22 @@ class DungeonHandler : Listener {
                     }
                 }
             } else {
-                user.dungeon = dungeonData
+                user.dungeon = dungeonData.also { it.party.add(uuid) }
                 dungeonTeleport(user)
             }
         }
+    }
+
+    private fun checkNumberVisits(user: User): Boolean {
+        if (user.stat.numberVisitsToDungeon == 5) {
+            user.player.systemMessage(
+                MessageStatus.ERROR,
+                GlowColor.RED,
+                "У вас максимальное количество входов в подземелье!"
+            )
+            return true
+        }
+        return false
     }
 
     private fun dungeonTeleport(user: User) {

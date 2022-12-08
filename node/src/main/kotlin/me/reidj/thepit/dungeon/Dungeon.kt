@@ -23,6 +23,7 @@ class Dungeon : State {
         Anime.topMessage(user.player, "Вы вошли в подземелье")
 
         user.dungeon?.teleport(player)
+        user.stat.numberVisitsToDungeon++
     }
 
     override fun playerVisible() = false

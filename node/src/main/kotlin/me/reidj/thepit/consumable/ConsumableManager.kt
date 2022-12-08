@@ -131,9 +131,6 @@ class ConsumableManager : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.handle() {
-        if (item == null) {
-            return
-        }
         val nmsItem = CraftItemStack.asNMSCopy(item)
         val tag = nmsItem.tag ?: return
         val uuid = player.uniqueId
