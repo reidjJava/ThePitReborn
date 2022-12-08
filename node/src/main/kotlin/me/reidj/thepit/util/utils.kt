@@ -9,9 +9,13 @@ import me.func.protocol.data.color.GlowColor
 import me.func.protocol.data.status.MessageStatus
 import me.func.world.Label
 import me.reidj.thepit.app
+import me.reidj.thepit.player.User
+import net.minecraft.server.v1_12_R1.PacketPlayOutCustomSoundEffect
+import net.minecraft.server.v1_12_R1.SoundCategory
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.craftbukkit.v1_12_R1.CraftSound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -52,6 +56,20 @@ fun Player.itemInOffHand(): ItemStack = inventory.itemInOffHand
 fun Player.teleportAndPlayMusic(location: Location) {
     after(5) { teleport(location) }
     playSound(Sound.ENTITY_SHULKER_TELEPORT)
+}
+
+fun User.playSound(sound: Sound, x: Double, y: Double, z: Double) {
+    sendPacket(
+        PacketPlayOutCustomSoundEffect(
+            CraftSound.getSound(sound),
+            SoundCategory.MASTER,
+            x,
+            y,
+            z,
+            1f,
+            1f
+        )
+    )
 }
 
 fun resetLabelRotation(input: Label, characterOffset: Int): Label {
