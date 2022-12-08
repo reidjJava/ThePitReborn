@@ -1,5 +1,6 @@
-package me.reidj.thepit.entity
+package me.reidj.thepit.entity.successor
 
+import me.reidj.thepit.entity.Entity
 import me.reidj.thepit.entity.ability.Ability
 import org.bukkit.Sound
 import org.bukkit.entity.EntityType
@@ -10,7 +11,7 @@ import ru.cristalix.core.math.V3
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-class Urukhai : Entity(EntityType.ZOMBIE) {
+class Kobold : Entity(EntityType.ZOMBIE) {
 
     override var damage = 5.0
 
@@ -20,11 +21,11 @@ class Urukhai : Entity(EntityType.ZOMBIE) {
 
     override var attackRange = 20.0
 
-    override var knockBackResistance = 2.0
+    override var knockBackResistance = 1.0
 
-    override var customName= "Урукхай"
+    override var customName= "Кобольд"
 
-    override var metadata = "urukhai"
+    override var metadata = "kobold"
 
     override var helmet: ItemStack? = null
 
@@ -45,7 +46,7 @@ class Urukhai : Entity(EntityType.ZOMBIE) {
 
     override var abilities: MutableSet<Ability> = mutableSetOf()
 
-    override var level = 4
+    override var level = 5
 
     override var sound = Sound.ENTITY_ZOMBIE_HURT
 }

@@ -1,5 +1,7 @@
 package me.reidj.thepit.entity
 
+import me.reidj.thepit.entity.successor.*
+
 /**
  * @project : ThePitReborn
  * @author : Рейдж

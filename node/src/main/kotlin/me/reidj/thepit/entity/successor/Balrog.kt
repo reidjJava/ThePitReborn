@@ -1,5 +1,6 @@
-package me.reidj.thepit.entity
+package me.reidj.thepit.entity.successor
 
+import me.reidj.thepit.entity.Entity
 import me.reidj.thepit.entity.ability.Ability
 import org.bukkit.Sound
 import org.bukkit.entity.EntityType
@@ -20,7 +21,7 @@ class Balrog : Entity(EntityType.ZOMBIE) {
 
     override var attackRange = 20.0
 
-    override var knockBackResistance = 2.0
+    override var knockBackResistance = 1.0
 
     override var customName= "Балрог"
 

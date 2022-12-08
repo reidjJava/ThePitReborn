@@ -1,5 +1,6 @@
-package me.reidj.thepit.entity
+package me.reidj.thepit.entity.successor
 
+import me.reidj.thepit.entity.Entity
 import me.reidj.thepit.entity.ability.Ability
 import org.bukkit.Sound
 import org.bukkit.entity.EntityType
@@ -10,7 +11,7 @@ import ru.cristalix.core.math.V3
  * @project : ThePitReborn
  * @author : Рейдж
  **/
-class CaveTroll : Entity(EntityType.ZOMBIE) {
+class Orc : Entity(EntityType.ZOMBIE) {
 
     override var damage = 5.0
 
@@ -20,11 +21,11 @@ class CaveTroll : Entity(EntityType.ZOMBIE) {
 
     override var attackRange = 20.0
 
-    override var knockBackResistance = 2.0
+    override var knockBackResistance = 1.0
 
-    override var customName= "Пещерный тролль"
+    override var customName= "Орк Мглистой горы"
 
-    override var metadata = "cave_troll"
+    override var metadata = "orc"
 
     override var helmet: ItemStack? = null
 

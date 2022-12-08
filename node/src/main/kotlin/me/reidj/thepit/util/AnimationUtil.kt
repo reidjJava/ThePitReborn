@@ -40,11 +40,11 @@ fun Player.timer(text: String, duration: Int, isResetLine: Boolean) = ModTransfe
     .integer(color.green)
     .send("thepit:bar", this)
 
-fun Player.worldMessage(location: Location, content: String) {
+fun Player.worldMessage(location: Location, content: String, seconds: Long) {
     val banner = Banner.builder()
         .content(content)
         .opacity(0.0)
-        .resizeLine(0, 0.25)
+        .resizeLine(0, 0.5)
         .watchingOnPlayer(true)
         .x(location.x)
         .y(location.y)
@@ -53,7 +53,7 @@ fun Player.worldMessage(location: Location, content: String) {
 
     Banners.show(this, banner)
 
-    after(3 * 20) {
+    after(seconds * 20) {
         Banners.hide(this, banner)
         Banners.remove(banner.uuid)
     }

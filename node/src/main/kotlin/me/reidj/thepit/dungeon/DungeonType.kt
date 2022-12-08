@@ -2,6 +2,10 @@ package me.reidj.thepit.dungeon
 
 import me.reidj.thepit.app
 import me.reidj.thepit.entity.*
+import me.reidj.thepit.entity.successor.CaveTroll
+import me.reidj.thepit.entity.successor.Kobold
+import me.reidj.thepit.entity.successor.Orc
+import me.reidj.thepit.entity.successor.Urukhai
 import org.bukkit.Location
 
 /**
