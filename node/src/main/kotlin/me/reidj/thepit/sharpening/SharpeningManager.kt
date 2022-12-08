@@ -38,10 +38,6 @@ class SharpeningManager : Listener {
             val price = sharpeningTag.getDouble("sharpening_price")
             val sharpeningLevel = sharpenedTag.getInt("sharpeningLevel")
 
-            if (sharpenedItem.hasTag() && sharpenedTag.hasKeyOfType("sharpeningLevel", 99)) {
-                isCancelled = true
-            }
-
             if (AttributeType.getAttributeWithNbt(sharpenedTag).isEmpty()) {
                 isCancelled = true
                 return
@@ -55,7 +51,7 @@ class SharpeningManager : Listener {
                     return
                 }
                 user.tryPurchase(price, {
-                    if (Math.random() < chance && chance < 1.0) {
+                    if (Math.random() < chance && chance < 100.0) {
                         player.errorMessage("Точильный камень был разрушен")
                         player.playSound(Sound.BLOCK_ANVIL_DESTROY)
                     } else {
