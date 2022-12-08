@@ -5,6 +5,7 @@ import me.reidj.thepit.entity.ability.Ability
 import me.reidj.thepit.entity.drop.EntityDrop
 import me.reidj.thepit.item.ItemManager
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity
 import org.bukkit.entity.EntityType
@@ -54,6 +55,10 @@ abstract class Entity(private val entityType: EntityType) {
 
     abstract var scale: V3
 
+    protected abstract var level: Int
+
+    abstract var sound: Sound
+
     @JvmName("getDrops1")
     fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }.toMutableSet()
 
@@ -78,15 +83,15 @@ abstract class Entity(private val entityType: EntityType) {
         }
         entity = current as LivingEntity
 
-
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).baseValue = damage
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).baseValue = moveSpeed
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = health
         entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).baseValue = attackRange
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).baseValue = knockBackResistance
         entity.isCustomNameVisible = true
-        entity.customName = customName
+        entity.customName = "§c$customName §6[Lv. $level]"
         entity.health = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue
+        entity.isSilent = true
         entity.equipment.helmet = helmet
         entity.equipment.chestplate = chestPlate
         entity.equipment.leggings = leggings

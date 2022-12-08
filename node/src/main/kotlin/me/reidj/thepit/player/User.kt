@@ -188,6 +188,7 @@ class User(stat: Stat) {
         val rank = RankUtil.getRank(stat.rankingPoints)
 
         if (rank.ordinal > prevRank.ordinal) {
+            player.playSound(Sound.ENTITY_PLAYER_LEVELUP)
             rank.reward(this)
             RankUtil.updateRank(this)
             Anime.alert(player, "Поздравляем!", "Ваш ранг был повышен\n${prevRank.title} §f➠§l ${rank.title}")

@@ -16,6 +16,8 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
 import ru.cristalix.core.formatting.Formatting
 
@@ -157,6 +159,19 @@ class ConsumableManager : Listener {
                         )
                     }"
                 )
+            }
+        }
+    }
+
+    @EventHandler
+    fun InventoryClickEvent.handle() {
+        val player = whoClicked as Player
+        if (player.openInventory.type == InventoryType.ENDER_CHEST) {
+            val nmsItem = CraftItemStack.asNMSCopy(currentItem)
+            val tag = nmsItem.tag
+            if (nmsItem.hasTag() && tag.hasKeyOfType("consumable", 8)) {
+                isCancelled = true
+                player.updateInventory()
             }
         }
     }

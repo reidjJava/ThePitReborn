@@ -1,6 +1,7 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.entity.ability.Ability
+import org.bukkit.Sound
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemStack
 import ru.cristalix.core.math.V3
@@ -43,4 +44,8 @@ class Urukhai : Entity(EntityType.ZOMBIE) {
     )
 
     override var abilities: MutableSet<Ability> = mutableSetOf()
+
+    override var level = 4
+
+    override var sound = Sound.ENTITY_ZOMBIE_HURT
 }

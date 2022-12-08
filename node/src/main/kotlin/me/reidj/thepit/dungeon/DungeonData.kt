@@ -1,5 +1,6 @@
 package me.reidj.thepit.dungeon
 
+import me.reidj.thepit.app
 import me.reidj.thepit.entity.Entity
 import me.reidj.thepit.util.teleportAndPlayMusic
 import org.bukkit.Location
@@ -19,4 +20,6 @@ data class DungeonData(
     var party: MutableSet<UUID> = mutableSetOf(),
     ) {
     fun teleport(player: Player) = player.teleportAndPlayMusic(dungeonLocation)
+
+    fun getPartyMemberWithUser() = party.mapNotNull { app.getUser(it) }
 }
