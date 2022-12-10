@@ -48,5 +48,5 @@ class Orc : Entity(EntityType.ZOMBIE) {
 
     override var level = 8
 
-    override var sound = Sound.ENTITY_ZOMBIE_HURT
+    override var sound = Sound.ENTITY_ZOMBIE_DEATH
 }

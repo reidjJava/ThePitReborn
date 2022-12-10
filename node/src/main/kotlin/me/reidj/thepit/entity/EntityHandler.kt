@@ -8,7 +8,6 @@ import me.reidj.thepit.util.playSound
 import me.reidj.thepit.util.worldMessage
 import net.minecraft.server.v1_12_R1.EnumParticle
 import net.minecraft.server.v1_12_R1.PacketPlayOutWorldParticles
-import org.bukkit.Location
 import org.bukkit.Sound
 import org.bukkit.entity.Creature
 import org.bukkit.entity.LivingEntity
@@ -42,6 +41,7 @@ class EntityHandler : Listener {
 
         val killer = getEntity().killer
         val entityType = EntityType.valueOf(getEntity().getMetadata("entity").component1().asString().uppercase())
+        val location = killer.location
 
         killer.worldMessage(getEntity().location.clone().also { it.y += 2.0 }, "§l+3${Emoji.COIN}", 3)
 
@@ -53,7 +53,7 @@ class EntityHandler : Listener {
 
         EntityUtil.removeEntity(getEntity(), true)
 
-        playKillSound(killer, killer.location)
+        playKillSound(killer, entityType.entity.sound, location.x, location.y, location.z)
     }
 
     @EventHandler
@@ -68,7 +68,6 @@ class EntityHandler : Listener {
 
             playDamageEffect(
                 app.getUser(damager) ?: return,
-                entityType.entity.sound,
                 location.x,
                 location.y,
                 location.z
@@ -91,20 +90,26 @@ class EntityHandler : Listener {
         cancelled = entity.hasMetadata("boss") || cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK
     }
 
-    private fun playKillSound(killer: Player, location: Location) {
+    private fun playKillSound(killer: Player, sound: Sound, x: Double, y: Double, z: Double) {
         (app.getUser(killer) ?: return).dungeon?.getPartyMemberWithUser()?.forEach {
             it.playSound(
                 Sound.ENTITY_EXPERIENCE_ORB_PICKUP,
-                location.x,
-                location.y,
-                location.z
+                x,
+                y,
+                z
+            )
+            it.playSound(
+                sound,
+                x,
+                y,
+                z
             )
         }
     }
 
-    private fun playDamageEffect(user: User, sound: Sound, x: Double, y: Double, z: Double) {
+    private fun playDamageEffect(user: User, x: Double, y: Double, z: Double) {
         user.dungeon?.getPartyMemberWithUser()?.forEach {
-            it.playSound(sound, x, y, z)
+            it.playSound(Sound.ENTITY_PLAYER_HURT, x, y, z)
             it.sendPacket(
                 PacketPlayOutWorldParticles(
                     EnumParticle.BLOCK_CRACK,

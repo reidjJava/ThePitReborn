@@ -48,5 +48,5 @@ class Urukhai : Entity(EntityType.ZOMBIE) {
 
     override var level = 4
 
-    override var sound = Sound.ENTITY_ZOMBIE_HURT
+    override var sound = Sound.ENTITY_ZOMBIE_DEATH
 }

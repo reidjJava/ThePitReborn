@@ -48,5 +48,5 @@ class Kobold : Entity(EntityType.ZOMBIE) {
 
     override var level = 5
 
-    override var sound = Sound.ENTITY_ZOMBIE_HURT
+    override var sound = Sound.ENTITY_ZOMBIE_DEATH
 }
