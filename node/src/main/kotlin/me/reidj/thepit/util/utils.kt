@@ -72,6 +72,17 @@ fun User.playSound(sound: Sound, x: Double, y: Double, z: Double) {
     )
 }
 
+fun ItemStack.isWeapon(): Boolean {
+    if (this == null) {
+        return false
+    }
+    val name = getType().name
+    if (name.endsWith("AXE") || name.endsWith("SWORD")) {
+        return true
+    }
+    return false
+}
+
 fun resetLabelRotation(input: Label, characterOffset: Int): Label {
     var offSet = characterOffset
     val ss = input.tag.split(" ")

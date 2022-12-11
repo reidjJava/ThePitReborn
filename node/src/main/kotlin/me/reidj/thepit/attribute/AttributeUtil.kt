@@ -3,6 +3,7 @@ package me.reidj.thepit.attribute
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.attributeUpdate
+import me.reidj.thepit.util.isWeapon
 import me.reidj.thepit.util.itemInMainHand
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
@@ -70,7 +71,7 @@ object AttributeUtil {
 
     fun getAllItems(player: Player, current: ItemStack?): Array<ItemStack> {
         val inventory = player.inventory.armorContents.toMutableList()
-        if (current != null) {
+        if (current != null && current.isWeapon()) {
             inventory.add(current)
         }
         return inventory.toTypedArray()
