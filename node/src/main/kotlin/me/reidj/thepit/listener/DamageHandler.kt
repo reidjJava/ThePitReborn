@@ -48,6 +48,10 @@ class DamageHandler : Listener {
                     CombatManager.put(playerDamager)
                     CombatManager.put(entity)
 
+                    val armorContents = AttributeUtil.getAllItems(entity)
+
+                    damage -= PreparePlayerBrain.getPercentage(AttributeUtil.getAttributeValue(PROTECTION, armorContents), 0.5)
+
                     playerDamager.closeInventory()
                     entity.closeInventory()
 

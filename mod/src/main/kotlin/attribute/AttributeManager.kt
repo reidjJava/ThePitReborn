@@ -23,6 +23,7 @@ class AttributeManager {
         "health" to Attribute(false,"§cЗдоровье§7"),
         "regeneration" to Attribute(false,"§dРегенерация§7"),
         "damage" to Attribute(false,"§4Урон§7"),
+        "protection" to Attribute(true, "§5Защита"),
         "chance_critical_damage" to Attribute(true,"§eШанс критического урона§7"),
         "critical_damage_strength" to Attribute(true,"§3Сила критического урона§7"),
         "move_speed" to Attribute(true,"§bСкорость перемещения§7"),
@@ -36,7 +37,7 @@ class AttributeManager {
         origin = CENTER
         align = CENTER
         color = TRANSPARENT
-        offset = V3(120.0, -65.0)
+        offset = V3(120.0, -70.0)
     }
 
     private val margin = 25.0

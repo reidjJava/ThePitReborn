@@ -14,6 +14,7 @@ enum class AttributeType(val title: String, val isPercentage: Boolean) {
     CRITICAL_DAMAGE_STRENGTH("§3✤ §7Сила крит.урона", true),
     MOVE_SPEED("§b❖ §7Скорость передвижения", true),
     VAMPIRISM("§c☩ §7Похищение крови", true),
+    PROTECTION("§5✇ Защита", true),
     ENTITY_PROTECTION("§a⚝ §7Защита от сущностей", true),
     ;
 

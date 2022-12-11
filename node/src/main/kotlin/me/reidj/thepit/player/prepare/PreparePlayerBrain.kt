@@ -101,5 +101,5 @@ object PreparePlayerBrain : Prepare {
         AttributeUtil.updateAllAttributes(player, armorContents)
     }
 
-    private fun getPercentage(attribute: Double, value: Double = 0.20000000298023224) = value + value * attribute / 100.0
+    fun getPercentage(attribute: Double, value: Double = 0.20000000298023224) = value + value * attribute / 100.0
 }
