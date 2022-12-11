@@ -37,7 +37,6 @@ class User(stat: Stat) {
     lateinit var connection: PlayerConnection
 
     var state: State = DefaultState()
-
     var dungeon: DungeonData? = null
 
     var numberOfBlocksPassed = 0

@@ -74,14 +74,7 @@ class DungeonHandler : Listener {
             val dungeonName = tag.getString("dungeon")
             val uuid = player.uniqueId
             val dungeon = DungeonType.values().find { dungeonName == it.tag } ?: return
-            val mobLocations = app.worldMeta.labels("$dungeonName-mob")
-            val dungeonData = DungeonData(
-                UUID.randomUUID(),
-                dungeon.location,
-                dungeon.entities,
-                mobLocations,
-                uuid
-            )
+            val dungeonData = DungeonData(UUID.randomUUID(), dungeon, uuid)
             val partySnapshot = IPartyService.get().getPartyByMember(uuid).get()
 
             if (partySnapshot.isPresent) {

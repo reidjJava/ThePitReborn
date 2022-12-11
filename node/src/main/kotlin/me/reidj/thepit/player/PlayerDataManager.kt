@@ -55,6 +55,7 @@ class PlayerDataManager : Listener {
         "0e7c0015-b27b-11eb-acca-1cb72caa35fd", // 3а6ив
         "3a372df5-8708-11ea-acca-1cb72caa35fd", // CanQtop1gg
         "e83dff51-e312-11eb-acca-1cb72caa35fd", // 3BeZDYuK_NDO
+        "ccd2a170-0e0e-11ec-acca-1cb72caa35fd", // RegBlack
     )
 
     private var prepares: Set<Prepare> by notNull()
@@ -148,6 +149,8 @@ class PlayerDataManager : Listener {
             user.fromBase64(stat.playerEnderChest, player.enderChest)
 
             prepares.forEach { it.execute(user) }
+
+            user.setState(if (!user.stat.isTutorialCompleted) PrepareGuide() else DefaultState())
         }
 
         user.sendPacket(

@@ -7,6 +7,7 @@ import me.reidj.thepit.app
 import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
+import me.reidj.thepit.util.discordRpcUpdate
 import me.reidj.thepit.util.resetLabelRotation
 
 /**
@@ -39,9 +40,7 @@ class PrepareGuide : State, Prepare {
     }
 
     override fun execute(user: User) {
-        if (!user.stat.isTutorialCompleted) {
-            user.setState(PrepareGuide())
-        }
+        user.player.discordRpcUpdate("Проходит обучение (ThePit)")
     }
 
     override fun enterState(user: User) {

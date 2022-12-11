@@ -7,6 +7,7 @@ import me.reidj.thepit.entity.EntityUtil
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
+import me.reidj.thepit.util.discordRpcUpdate
 
 /**
  * @project : ThePitReborn
@@ -16,14 +17,17 @@ class Dungeon : State {
 
     override fun enterState(user: User) {
         val player = user.player
+        val dungeon = user.dungeon!!
 
         EntityUtil.spawn(user)
 
         Anime.overlayText(player, Position.BOTTOM_RIGHT, "Покинуть подземелье §e[O]")
         Anime.topMessage(user.player, "Вы вошли в подземелье")
 
-        user.dungeon?.teleport(player)
+        dungeon.teleport(player)
         user.stat.numberVisitsToDungeon++
+
+        player.discordRpcUpdate("Проходит подземелье: ${dungeon.type.title} (ThePit)")
     }
 
     override fun playerVisible() = false

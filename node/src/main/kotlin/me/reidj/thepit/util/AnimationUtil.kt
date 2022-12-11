@@ -22,6 +22,10 @@ fun Player.attributeUpdate(name: String, value: Double) =
 
 fun Player.setSkin(id: Int, skinName: String) = ModTransfer(id, skinName).send("thepit:mob-skin", this)
 
+fun Player.discordRpcUpdate(state: String) {
+    ModTransfer(state).send("thepit:discord:update", this)
+}
+
 fun sendRank(player: Player, image: String, players: Player) =
     ModTransfer()
         .uuid(player.uniqueId)

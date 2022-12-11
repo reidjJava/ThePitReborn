@@ -28,14 +28,15 @@ object EntityUtil {
 
     fun spawn(user: User) {
         val dungeon = user.dungeon!!
+        val type = dungeon.type
         val partySize = dungeon.party.size
         val uuid = user.stat.uuid
 
         after(3) {
             enemies[uuid] = arrayListOf()
 
-            dungeon.entitiesLocations.forEach { location ->
-                val mob = dungeon.entities.random()
+            type.entitiesLocations.forEach { location ->
+                val mob = type.entities.random()
                 if (dungeon.leader == uuid) {
                     mob.create(user.player, location)
                     mob.setTarget(uuid)

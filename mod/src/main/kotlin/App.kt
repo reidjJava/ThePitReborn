@@ -1,5 +1,6 @@
 
 import attribute.AttributeManager
+import discord.DiscordRpc
 import key_press.KeyManager
 import mob.SkinManager
 import overlay.TimerBar
@@ -21,6 +22,7 @@ class App : KotlinMod() {
     override fun onEnable() {
         UIEngine.initialize(this)
 
+        DiscordRpc()
         PlayerManager()
         TimerBar()
         Rank()
