@@ -19,6 +19,7 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftSound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import ru.cristalix.core.formatting.Formatting
 
 /**
  * @project : ThePitReborn
@@ -29,10 +30,15 @@ private val barrier: ItemStack by lazy { ItemStack(Material.BARRIER) }
 
 fun coroutine() = CoroutineScope(Dispatchers.IO)
 
-fun Player.errorMessage(subTitle: String) {
+fun Player.errorMessageOnScreen(subTitle: String) {
     Glow.animate(this, 2.0, GlowColor.RED)
     Anime.itemTitle(this, barrier, "Ошибка", subTitle, 2.0)
     Anime.close(this)
+}
+
+fun Player.errorMessageOnChat(message: String) {
+    Glow.animate(this, 2.0, GlowColor.RED)
+    sendMessage(Formatting.error("Ошибка! $message"))
 }
 
 fun Location.getBlockAt() = app.getWorld().getBlockAt(this.clone().also {
@@ -73,9 +79,6 @@ fun User.playSound(sound: Sound, x: Double, y: Double, z: Double) {
 }
 
 fun ItemStack.isWeapon(): Boolean {
-    if (this == null) {
-        return false
-    }
     val name = getType().name
     if (name.endsWith("AXE") || name.endsWith("SWORD")) {
         return true

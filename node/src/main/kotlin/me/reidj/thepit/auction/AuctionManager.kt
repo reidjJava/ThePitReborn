@@ -135,7 +135,7 @@ class AuctionManager {
                                         ).await()
                                         if (response.isBought) {
                                             Anime.close(confirmPlayer)
-                                            confirmPlayer.errorMessage("Этого лота не существует!")
+                                            confirmPlayer.errorMessageOnScreen("Этого лота не существует!")
                                             confirmPlayer.playSound(Sound.BLOCK_ANVIL_BREAK)
                                             return@click
                                         }
@@ -154,7 +154,7 @@ class AuctionManager {
 
                                         confirmPlayer.inventory.addItem(itemStack)
                                     }
-                                }, "Недостаточно средств")
+                                }, { player.errorMessageOnScreen("Недостаточно средств") })
                             }
                         }.open(player)
                     }

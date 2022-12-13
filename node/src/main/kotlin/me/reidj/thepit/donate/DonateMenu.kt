@@ -10,7 +10,7 @@ import me.func.mod.ui.menu.selection
 import me.func.protocol.data.color.GlowColor
 import me.reidj.thepit.app
 import me.reidj.thepit.client
-import me.reidj.thepit.util.errorMessage
+import me.reidj.thepit.util.errorMessageOnScreen
 import org.bukkit.entity.Player
 import ru.cristalix.core.formatting.Formatting
 import ru.cristalix.core.network.packages.MoneyTransactionRequestPackage
@@ -99,7 +99,7 @@ class DonateMenu {
             val user = app.getUser(player) ?: return@Confirmation
             val stat = user.stat
             if (donate.getObjectName() in stat.donates) {
-                player.errorMessage("Вы уже приобрели этот товар!")
+                player.errorMessageOnScreen("Вы уже приобрели этот товар!")
                 return@Confirmation
             }
             user.armLock {

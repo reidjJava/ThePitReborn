@@ -11,7 +11,7 @@ enum class AttributeType(val title: String, val isPercentage: Boolean) {
     REGENERATION("§5♨ §7Регенерация", false),
     DAMAGE("§4⚔ §7Урон", false),
     CHANCE_CRITICAL_DAMAGE("§e⚡ §7Шанс крит.урона", true),
-    CRITICAL_DAMAGE_STRENGTH("§3✤ §7Сила крит.урона", true),
+    CRITICAL_DAMAGE_STRENGTH("§3✤ §7Сила крит.урона", false),
     MOVE_SPEED("§b❖ §7Скорость передвижения", true),
     VAMPIRISM("§c☩ §7Похищение крови", true),
     PROTECTION("§5⛨ §7Защита", true),

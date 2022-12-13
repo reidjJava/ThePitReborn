@@ -6,7 +6,6 @@ import me.reidj.thepit.app
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
-import me.reidj.thepit.util.errorMessage
 import me.reidj.thepit.util.playSound
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PlayerConnection
@@ -105,13 +104,13 @@ class User(stat: Stat) {
         after(5) { isArmLock = false }
     }
 
-    fun tryPurchase(price: Double, acceptAction: () -> Unit, errorMessage: String) {
+    fun tryPurchase(price: Double, acceptAction: () -> Unit, denyAction: () -> Unit) {
         if (stat.money >= price) {
             giveMoney(-price)
             acceptAction()
         } else {
             player.playSound(Sound.ENTITY_VILLAGER_NO)
-            player.errorMessage(errorMessage)
+            denyAction()
         }
     }
 

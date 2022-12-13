@@ -7,7 +7,7 @@ import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.item.ItemManager
-import me.reidj.thepit.util.errorMessage
+import me.reidj.thepit.util.errorMessageOnChat
 import me.reidj.thepit.util.playSound
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
@@ -45,17 +45,17 @@ class SharpeningManager : Listener {
 
             if (sharpeningStone.hasTag() && sharpeningTag.hasKeyOfType("sharpening_chance", 99)) {
                 if (sharpeningLevel == 10) {
-                    player.errorMessage("У вас максимальный уровень заточки!")
+                    player.errorMessageOnChat("У вас максимальный уровень заточки!")
                     player.playSound(Sound.BLOCK_ANVIL_BREAK)
                     isCancelled = true
                     return
                 }
                 user.tryPurchase(price, {
                     if (Math.random() < chance && chance < 100.0) {
-                        player.errorMessage("Точильный камень был разрушен")
+                        player.errorMessageOnChat("Точильный камень был разрушен.")
                         player.playSound(Sound.BLOCK_ANVIL_DESTROY)
                     } else {
-                        Anime.topMessage(player, "§aПредмет был заточен")
+                        Anime.topMessage(player, "§aПредмет был заточен.")
                         Glow.animate(player, 1.0, GlowColor.GREEN)
 
                         player.playSound(Sound.BLOCK_ANVIL_USE)
@@ -74,7 +74,10 @@ class SharpeningManager : Listener {
                     }
                     cursor.setAmount(cursor.getAmount() - 1)
                     isCancelled = true
-                }, "Недостаточно средств")
+                }, {
+                    isCancelled = true
+                    player.errorMessageOnChat("Недостаточно средств.")
+                   })
             }
         }
     }

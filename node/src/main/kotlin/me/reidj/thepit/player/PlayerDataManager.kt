@@ -56,6 +56,7 @@ class PlayerDataManager : Listener {
         "3a372df5-8708-11ea-acca-1cb72caa35fd", // CanQtop1gg
         "e83dff51-e312-11eb-acca-1cb72caa35fd", // 3BeZDYuK_NDO
         "ccd2a170-0e0e-11ec-acca-1cb72caa35fd", // RegBlack
+        "09717683-9e2e-11ec-9f9a-1cb72caa35fd", // хХ_Единорог_Хх
     )
 
     private var prepares: Set<Prepare> by notNull()

@@ -12,7 +12,6 @@ class DiscordRpc {
 
     init {
         mod.registerChannel("thepit:discord:update") {
-            println(123)
             UIEngine.clientApi.discordRpc().updateState(readUtf8())
         }
     }

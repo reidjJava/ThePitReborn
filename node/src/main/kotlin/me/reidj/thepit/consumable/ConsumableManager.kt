@@ -100,7 +100,7 @@ class ConsumableManager : Listener {
                             }
 
                         if (consumableAmount.sumOf { it.asBukkitMirror().getAmount() } == 10) {
-                            player.errorMessage("У вас максимальное количество флаконов!")
+                            player.errorMessageOnScreen("У вас максимальное количество флаконов!")
                             player.playSound(Sound.BLOCK_ANVIL_BREAK)
                             return@armLock
                         }
@@ -122,7 +122,7 @@ class ConsumableManager : Listener {
                                 nbt("consumable", it.getObjectName())
                             })
                             generateButtons(player)
-                        }, "Недостаточно средств!")
+                        }, { player.errorMessageOnScreen("Недостаточно средств") })
                     }
                 }
             }
