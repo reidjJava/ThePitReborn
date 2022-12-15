@@ -52,11 +52,10 @@ class PlayerDataManager : Listener {
         "bf30a1df-85de-11e8-a6de-1cb72caa35fd", // Reidj
         "ca87474e-b15c-11e9-80c4-1cb72caa35fd", // Moisei
         "d5c6967a-2fd9-11eb-acca-1cb72caa35fd", // pokanoname
-        "0e7c0015-b27b-11eb-acca-1cb72caa35fd", // 3а6ив
         "3a372df5-8708-11ea-acca-1cb72caa35fd", // CanQtop1gg
-        "e83dff51-e312-11eb-acca-1cb72caa35fd", // 3BeZDYuK_NDO
         "ccd2a170-0e0e-11ec-acca-1cb72caa35fd", // RegBlack
-        "09717683-9e2e-11ec-9f9a-1cb72caa35fd", // хХ_Единорог_Хх
+        "b5bd070c-afee-11ec-9f9a-1cb72caa35fd", // district9
+        "761e547c-e108-11ec-bc0d-1cb72caa35fd", // cqpsuler_anarchy
     )
 
     private var prepares: Set<Prepare> by notNull()

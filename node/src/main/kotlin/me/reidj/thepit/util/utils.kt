@@ -15,6 +15,7 @@ import net.minecraft.server.v1_12_R1.SoundCategory
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.block.Block
 import org.bukkit.craftbukkit.v1_12_R1.CraftSound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -41,7 +42,7 @@ fun Player.errorMessageOnChat(message: String) {
     sendMessage(Formatting.error("Ошибка! $message"))
 }
 
-fun Location.getBlockAt() = app.getWorld().getBlockAt(this.clone().also {
+fun Location.getBlockAt(): Block = app.getWorld().getBlockAt(this.clone().also {
     it.x += 0.5
     it.z += 0.5
 })

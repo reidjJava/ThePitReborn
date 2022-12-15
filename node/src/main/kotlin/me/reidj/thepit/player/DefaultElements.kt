@@ -24,6 +24,6 @@ object DefaultElements {
         setOf(),
         "",
         "",
-        false
+        false,
     )
 }

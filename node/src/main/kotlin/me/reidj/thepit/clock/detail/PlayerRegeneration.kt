@@ -14,18 +14,15 @@ class PlayerRegeneration : ClockInject {
 
     override fun run(tick: Int) {
         if (tick % 400 == 0) {
-            Bukkit.getOnlinePlayers()
-                .filter { it.inventory.armorContents.isNotEmpty() }
-                .forEach {
-                    val armorContents = AttributeUtil.getAllItems(it)
-                    PreparePlayerBrain.setHealth(
-                        it, AttributeUtil.getAttributeValue(
-                            AttributeType.REGENERATION,
-                            armorContents
-                        )
+            Bukkit.getOnlinePlayers().forEach {
+                val armorContents = AttributeUtil.getAllItems(it)
+                PreparePlayerBrain.setHealth(
+                    it, AttributeUtil.getAttributeValue(
+                        AttributeType.REGENERATION,
+                        armorContents
                     )
-                    AttributeUtil.updateAllAttributes(it, armorContents)
-                }
+                )
+            }
         }
     }
 }
