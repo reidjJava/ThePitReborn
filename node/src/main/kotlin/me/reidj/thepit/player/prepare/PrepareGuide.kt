@@ -35,7 +35,7 @@ class PrepareGuide : State, Prepare {
             }
         }.forEach { titles.add(it) }
 
-        dots.forEach { resetLabelRotation(it, 1) }
+        dots.forEach { it.resetLabelRotation(1) }
         dots = dots.sortedBy { it.tag.split(" ")[0] }
     }
 

@@ -18,7 +18,6 @@ import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.craftbukkit.v1_12_R1.CraftSound
 import org.bukkit.entity.Player
-import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import ru.cristalix.core.formatting.Formatting
 
@@ -54,8 +53,6 @@ fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: S
 
 fun Player.playSound(sound: Sound) = playSound(location, sound, 1F, 1F)
 
-fun Player.topInventory(): Inventory = openInventory.topInventory
-
 fun Player.itemInMainHand(): ItemStack = inventory.itemInMainHand
 
 fun Player.itemInOffHand(): ItemStack = inventory.itemInOffHand
@@ -87,10 +84,10 @@ fun ItemStack.isWeapon(): Boolean {
     return false
 }
 
-fun resetLabelRotation(input: Label, characterOffset: Int): Label {
+fun Label.resetLabelRotation(characterOffset: Int): Label {
     var offSet = characterOffset
-    val ss = input.tag.split(" ")
-    input.setYaw(ss[characterOffset].toFloat())
-    input.setPitch(ss[++offSet].toFloat())
-    return input
+    val ss = tag.split(" ")
+    setYaw(ss[characterOffset].toFloat())
+    setPitch(ss[++offSet].toFloat())
+    return this
 }
