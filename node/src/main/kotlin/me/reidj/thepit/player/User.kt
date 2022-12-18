@@ -168,7 +168,9 @@ class User(stat: Stat) {
     fun generateStat(): Stat {
         stat.playerInventory = toBase64(player.inventory)
         stat.playerEnderChest = toBase64(player.enderChest)
-        stat.bags = bagInventory.map { Bag(it.title, it.size, toBase64(it)) }
+        if (this::bagInventory.isInitialized) {
+            stat.bags = bagInventory.map { Bag(it.title, it.size, toBase64(it)) }
+        }
         return stat
     }
 
