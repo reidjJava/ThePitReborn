@@ -3,7 +3,6 @@ package me.reidj.thepit.entity
 import me.func.protocol.data.emoji.Emoji
 import me.reidj.thepit.app
 import me.reidj.thepit.player.User
-import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.playSound
 import me.reidj.thepit.util.worldMessage
 import net.minecraft.server.v1_12_R1.EnumParticle
@@ -72,11 +71,6 @@ class EntityHandler : Listener {
                 location.y,
                 location.z
             )
-
-            damager.worldMessage(location.clone().also {
-                it.x += 2.0
-                it.y += 2.0
-            }, "§4-${Formatter.toFormat(damage)} §f\uE19A", 2)
 
             val ability = entityType.entity.abilities.find { !it.isOnCoolDown() } ?: return
 

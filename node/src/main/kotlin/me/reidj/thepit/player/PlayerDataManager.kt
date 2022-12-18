@@ -56,6 +56,7 @@ class PlayerDataManager : Listener {
         "ccd2a170-0e0e-11ec-acca-1cb72caa35fd", // RegBlack
         "b5bd070c-afee-11ec-9f9a-1cb72caa35fd", // district9
         "761e547c-e108-11ec-bc0d-1cb72caa35fd", // cqpsuler_anarchy
+        "e83dff51-e312-11eb-acca-1cb72caa35fd", // 3BeZDYuK_NDO
     )
 
     private var prepares: Set<Prepare> by notNull()
