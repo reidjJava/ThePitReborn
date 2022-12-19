@@ -18,8 +18,8 @@ class Bag : Listener {
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
         val tag = nmsItem.tag
-        if (tag.hasKeyOfType("bagUUID", 99)) {
-            player.openInventory(user.bagInventory[tag.getUUID("bagUUID")])
+        if (nmsItem.hasTag() && tag.hasKeyOfType("bag", 8)) {
+            player.openInventory((user.bagInventory[tag.getUUID("bag")] ?: return).second)
         }
     }
 }

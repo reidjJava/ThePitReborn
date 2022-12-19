@@ -150,6 +150,8 @@ class PlayerDataManager : Listener {
             user.fromBase64(stat.playerInventory, player.inventory)
             user.fromBase64(stat.playerEnderChest, player.enderChest)
 
+            user.createBag()
+
             prepares.forEach { it.execute(user) }
 
             user.setState(if (!user.stat.isTutorialCompleted) PrepareGuide() else DefaultState())

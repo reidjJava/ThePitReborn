@@ -92,7 +92,7 @@ class App : JavaPlugin() {
 
         Platforms.set(PlatformDarkPaper())
 
-        Anime.include(NPC, EXPERIMENTAL, DIALOG, STANDARD, HEALTH_BAR, LOOTBOX)
+        Anime.include(NPC, EXPERIMENTAL, DIALOG, STANDARD, LOOTBOX)
 
         ModLoader.loadAll("mods")
 

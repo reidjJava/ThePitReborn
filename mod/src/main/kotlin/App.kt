@@ -4,6 +4,7 @@ import discord.DiscordRpc
 import key_press.KeyManager
 import mob.SkinManager
 import overlay.TimerBar
+import player.Healthbar
 import player.KillBoard
 import player.PlayerManager
 import rank.Rank
@@ -22,6 +23,7 @@ class App : KotlinMod() {
     override fun onEnable() {
         UIEngine.initialize(this)
 
+        Healthbar()
         DiscordRpc()
         PlayerManager()
         TimerBar()

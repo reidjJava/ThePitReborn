@@ -37,22 +37,23 @@ class User(stat: Stat) {
     lateinit var player: CraftPlayer
     lateinit var connection: PlayerConnection
 
+    private var isArmLock = false
+
     var bagInventory = hashMapOf<UUID, Pair<BagType, Inventory>>()
     var state: State = DefaultState()
     var dungeon: DungeonData? = null
 
     var numberOfBlocksPassed = 0
-    var isArmLock = false
     var isActive = false
 
     init {
         this.stat = stat
+    }
 
-        after(1) {
-            this.stat.bags.forEach { bag ->
-                bagInventory[bag.uuid] = bag.type to Bukkit.createInventory(player, bag.type.size, bag.type.title).also {
-                    fromBase64(bag.items, it)
-                }
+    fun createBag() {
+        stat.bags.forEach { bag ->
+            bagInventory[bag.uuid] = bag.type to Bukkit.createInventory(player, bag.type.size, bag.type.title).also {
+                fromBase64(bag.items, it)
             }
         }
     }

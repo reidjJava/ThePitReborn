@@ -28,6 +28,7 @@ class ItemManager {
             configuration.getConfigurationSection("items").getKeys(false).forEach {
                 val path = "items.$it."
                 items[it] = item {
+                    Bag(this).init(it)
                     Equipment(this).init(it)
                     SharpeningStone(this).init(it)
                     Cards(this).init(it)
