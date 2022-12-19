@@ -11,3 +11,7 @@ npc:
     title: 'Умбра'
     command: 'barter'
     skin: '228e839b-ea88-11ec-bc0d-1cb72caa35fd'
+  auction:
+    title: 'Аукцион'
+    command: 'ah'
+    skin: '3f7b9b24-c64c-11eb-acca-1cb72caa35fd'

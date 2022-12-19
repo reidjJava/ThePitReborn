@@ -13,6 +13,7 @@ import me.func.protocol.data.status.MessageStatus
 import me.func.world.MapLoader
 import me.func.world.WorldMeta
 import me.reidj.thepit.auction.AuctionManager
+import me.reidj.thepit.bag.Bag
 import me.reidj.thepit.barter.BarterManager
 import me.reidj.thepit.clock.GameTimer
 import me.reidj.thepit.clock.detail.CombatManager
@@ -132,7 +133,8 @@ class App : JavaPlugin() {
             EntityHandler(),
             HeldItemHandler(),
             ThePitHandler(),
-            SharpeningManager()
+            SharpeningManager(),
+            Bag()
         )
 
         eventManager = EventManager()

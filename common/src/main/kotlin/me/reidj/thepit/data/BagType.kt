@@ -1,10 +1,11 @@
-package me.reidj.thepit.bag
+package me.reidj.thepit.data
 
 /**
  * @project : ThePitReborn
  * @author : Рейдж
  **/
 enum class BagType(val title: String, val size: Int) {
-    NONE("", 0),
-    TEST("", 27)
+    TEST("Тест", 9),
+    TEST2("Тест2", 18),
+    TEST3("Тест3", 27),
 }
