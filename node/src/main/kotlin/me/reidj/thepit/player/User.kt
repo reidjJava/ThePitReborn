@@ -3,7 +3,6 @@ package me.reidj.thepit.player
 import me.func.mod.Anime
 import me.func.mod.util.after
 import me.reidj.thepit.app
-import me.reidj.thepit.data.Bag
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
@@ -46,14 +45,6 @@ class User(stat: Stat) {
 
     init {
         this.stat = stat
-
-        after(1) {
-            this.stat.bags.forEach { bag ->
-                bagInventory.add(Bukkit.createInventory(player, bag.size, bag.title).also {
-                    fromBase64(bag.items, it)
-                })
-            }
-        }
     }
 
     fun toBase64(inventory: Inventory): String {
@@ -168,9 +159,6 @@ class User(stat: Stat) {
     fun generateStat(): Stat {
         stat.playerInventory = toBase64(player.inventory)
         stat.playerEnderChest = toBase64(player.enderChest)
-        if (this::bagInventory.isInitialized) {
-            stat.bags = bagInventory.map { Bag(it.title, it.size, toBase64(it)) }
-        }
         return stat
     }
 

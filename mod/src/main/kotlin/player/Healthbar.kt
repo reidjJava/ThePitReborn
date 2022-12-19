@@ -61,7 +61,7 @@ class Healthbar {
                 entity.lastZ + (entity.z - entity.lastZ) * partialTicks
             )
 
-            val width = 200.0
+            val width = 30.0
             bar.size.x = width * part
             body.size.x = width + 1.0
 

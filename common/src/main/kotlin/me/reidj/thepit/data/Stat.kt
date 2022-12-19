@@ -20,7 +20,6 @@ data class Stat(
     var dailyClaimTimestamp: Long,
     var contractsTypes: Set<Contract>,
     val donates: Set<String>,
-    var bags: List<BagData>,
     var playerInventory: String,
     var playerEnderChest: String,
     var isTutorialCompleted: Boolean,
