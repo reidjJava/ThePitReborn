@@ -10,7 +10,6 @@ import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBedEnterEvent
@@ -76,7 +75,7 @@ class UnusedListener : Listener {
     @EventHandler
     fun InventoryOpenEvent.handle() {
         val type = inventory.type
-        isCancelled = type != InventoryType.PLAYER && type != InventoryType.ENDER_CHEST
+        //isCancelled = type != InventoryType.PLAYER && type != InventoryType.ENDER_CHEST
     }
 
     @EventHandler

@@ -88,7 +88,8 @@ class PlayerDataManager : Listener {
 
     @EventHandler
     fun AsyncPlayerPreLoginEvent.handle() {
-        val lockKey = "thepit-$uniqueId"
+        // TODO Раскоментировать на релизе
+        /*val lockKey = "thepit-$uniqueId"
         val lock = Lock.getLock(lockKey, TimeUnit.SECONDS)
         if (lock > 0) {
             disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Ваши данные сохраняются...")
@@ -97,7 +98,7 @@ class PlayerDataManager : Listener {
             }
         } else {
             Lock.lock(lockKey, 5, TimeUnit.HOURS)
-        }
+        }*/
         registerIntent(app).apply {
             coroutine().launch {
                 if (uniqueId.toString() !in godSet) {
@@ -149,6 +150,7 @@ class PlayerDataManager : Listener {
 
             user.fromBase64(stat.playerInventory, player.inventory)
             user.fromBase64(stat.playerEnderChest, player.enderChest)
+            user.createBackpack()
 
             prepares.forEach { it.execute(user) }
 

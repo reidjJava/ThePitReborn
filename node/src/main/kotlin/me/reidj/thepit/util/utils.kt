@@ -55,6 +55,10 @@ fun Player.playSound(sound: Sound) = playSound(location, sound, 1F, 1F)
 
 fun Player.itemInMainHand(): ItemStack = inventory.itemInMainHand
 
+fun Player.setItemInMainHand(itemInHand: ItemStack) {
+    inventory.itemInMainHand = itemInHand
+}
+
 fun Player.itemInOffHand(): ItemStack = inventory.itemInOffHand
 
 fun Player.teleportAndPlayMusic(location: Location) {

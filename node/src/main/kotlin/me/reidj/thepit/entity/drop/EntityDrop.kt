@@ -1,7 +1,7 @@
 package me.reidj.thepit.entity.drop
 
 import me.func.mod.Anime
-import org.bukkit.entity.Player
+import me.reidj.thepit.player.User
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -10,10 +10,10 @@ import org.bukkit.inventory.ItemStack
  **/
 data class EntityDrop(private val chance: Double, private val itemStack: ItemStack) {
 
-    fun give(player: Player) {
+    fun give(user: User) {
         if (Math.random() > chance) {
-            player.inventory.addItem(itemStack)
-            Anime.alert(player, "Поздравляем!", "Вам выпал предмет - ${itemStack.itemMeta.displayName}")
+            user.player.inventory.addItem(itemStack)
+            Anime.alert(user.player, "Поздравляем!", "Вам выпал предмет - ${itemStack.itemMeta.displayName}")
         }
     }
 }

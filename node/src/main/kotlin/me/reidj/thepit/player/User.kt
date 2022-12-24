@@ -12,6 +12,7 @@ import net.minecraft.server.v1_12_R1.PlayerConnection
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -34,24 +35,39 @@ class User(stat: Stat) {
     lateinit var killer: Player
     lateinit var player: CraftPlayer
     lateinit var connection: PlayerConnection
-    lateinit var bagInventory: MutableList<Inventory>
+
+    private var isArmLock = false
+
+    var backpackInventory = hashMapOf<UUID, Inventory>()
 
     var state: State = DefaultState()
     var dungeon: DungeonData? = null
 
     var numberOfBlocksPassed = 0
-    var isArmLock = false
     var isActive = false
 
     init {
         this.stat = stat
     }
 
+    fun createBackpack() {
+        player.inventory.filterNotNull().forEach { itemStack ->
+            val nmsItem = CraftItemStack.asNMSCopy(itemStack)
+            val tag = nmsItem.tag
+            if (nmsItem.hasTag() && tag.hasKeyOfType("uuidBackpack", 8)) {
+                backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))] =
+                    (Bukkit.createInventory(player, tag.getInt("size"), itemStack.i18NDisplayName).also {
+                        fromBase64(tag.getString("items"), it)
+                    })
+            }
+        }
+    }
+
     fun toBase64(inventory: Inventory): String {
         val outputStream = ByteArrayOutputStream()
         val dataOutput = BukkitObjectOutputStream(outputStream)
 
-        for (slot in 0..inventory.size) {
+        for (slot in 0 until inventory.size) {
             dataOutput.writeObject(inventory.getItem(slot))
         }
         dataOutput.close()

@@ -44,15 +44,15 @@ class EntityHandler : Listener {
 
         killer.worldMessage(getEntity().location.clone().also { it.y += 2.0 }, "§l+3${Emoji.COIN}", 3)
 
-        entityType.entity.run {
-            getDrops().forEach { it.give(killer) }
-            abilities.clear()
-            getDrops()
-        }
-
         EntityUtil.removeEntity(getEntity(), true)
 
         playKillSound(killer, entityType.entity.sound, location.x, location.y, location.z)
+
+        entityType.entity.run {
+            getDrops().forEach { it.give(app.getUser(killer) ?: return@forEach) }
+            abilities.clear()
+            getDrops().clear()
+        }
     }
 
     @EventHandler
