@@ -13,6 +13,7 @@ data class EntityDrop(private val chance: Double, private val itemStack: ItemSta
     fun give(user: User) {
         if (Math.random() > chance) {
             user.player.inventory.addItem(itemStack)
+            user.createBackpack()
             Anime.alert(user.player, "Поздравляем!", "Вам выпал предмет - ${itemStack.itemMeta.displayName}")
         }
     }

@@ -32,7 +32,9 @@ class AdminCommands {
             (app.getUser(Bukkit.getPlayer(args[0])) ?: return@regAdminCommand).giveDeath(args[1].toInt())
         }
         regAdminCommand("item") { _, args ->
-            Bukkit.getPlayer(args[0]).inventory.addItem(AttributeUtil.generateAttribute(ItemManager[args[1]]) )
+            val player = Bukkit.getPlayer(args[0])
+            player.inventory.addItem(AttributeUtil.generateAttribute(ItemManager[args[1]]) )
+            (app.getUser(player) ?: return@regAdminCommand).createBackpack()
         }
         regAdminCommand("hide") { user, _ -> user.hideFromAll() }
         regAdminCommand("show") { user, _ -> user.showToAllState() }
