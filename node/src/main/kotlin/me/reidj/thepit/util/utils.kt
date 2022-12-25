@@ -17,6 +17,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.craftbukkit.v1_12_R1.CraftSound
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.inventory.ItemStack
@@ -85,7 +86,10 @@ fun User.playSound(sound: Sound, x: Double, y: Double, z: Double) {
 
 fun ItemStack.isWeapon(): Boolean {
     val name = getType().name
-    if (name.endsWith("AXE") || name.endsWith("SWORD")) {
+    val nmsItem = CraftItemStack.asNMSCopy(this)
+    val tag = nmsItem.tag
+
+    if (name.endsWith("AXE") || name.endsWith("SWORD") || nmsItem.hasTag() && tag.hasKeyOfType("isArtefact", 3)) {
         return true
     }
     return false

@@ -10,6 +10,7 @@ class Equipment(override val itemBuilder: ItemBuilder) : Item() {
 
     override fun init(objectName: String) {
         val attributesPath = "${path}$objectName.attributes"
+        val sharpeningLevelPath = "${path}$objectName.sharpeningLevel"
         if (configuration.isList(attributesPath)) {
             itemBuilder.nbt("address", objectName)
             configuration.getStringList(attributesPath).forEach { attributes ->
@@ -17,8 +18,8 @@ class Equipment(override val itemBuilder: ItemBuilder) : Item() {
                 itemBuilder.nbt(attribute[0], attribute[1] + ":" + attribute[2])
             }
         }
-        if (configuration.isInt("${path}$objectName.sharpeningLevel")) {
-            itemBuilder.nbt("sharpeningLevel", 0)
+        if (configuration.isInt(sharpeningLevelPath)) {
+            itemBuilder.nbt("sharpeningLevel", configuration.getInt(sharpeningLevelPath))
         }
     }
 }
