@@ -68,8 +68,12 @@ object AttributeUtil {
 
     fun getAllItems(player: Player, current: ItemStack?): Array<ItemStack> {
         val inventory = player.inventory.armorContents.toMutableList()
+        val artefact = player.inventory.getItem(17)
         if (current != null && current.isWeapon()) {
             inventory.add(current)
+        }
+        if (artefact != null && CraftItemStack.asNMSCopy(artefact).hasKeyOfType("isArtefact", 3)) {
+            inventory.add(artefact)
         }
         return inventory.toTypedArray()
     }

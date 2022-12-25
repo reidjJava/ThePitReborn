@@ -17,7 +17,6 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.craftbukkit.v1_12_R1.CraftSound
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.inventory.ItemStack
@@ -96,10 +95,7 @@ fun net.minecraft.server.v1_12_R1.ItemStack.hasKeyOfType(s: String, i: Int): Boo
 
 fun ItemStack.isWeapon(): Boolean {
     val name = getType().name
-    val nmsItem = CraftItemStack.asNMSCopy(this)
-    val tag = nmsItem.tag
-
-    if (name.endsWith("AXE") || name.endsWith("SWORD") || nmsItem.hasTag() && tag.hasKeyOfType("isArtefact", 3)) {
+    if (name.endsWith("AXE") || name.endsWith("SWORD")) {
         return true
     }
     return false
