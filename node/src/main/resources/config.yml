@@ -1,4 +1,8 @@
 npc:
+  sharpening:
+    title: 'Дальгриг'
+    command: 'sharpening'
+    skin: '9cf8d51a-69a4-11ed-bdb3-1cb72cb014ae'
   consumable:
     title: 'Франк'
     command: 'consumable'
