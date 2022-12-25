@@ -1,6 +1,7 @@
 package me.reidj.thepit.attribute
 
 import me.reidj.thepit.item.ItemManager
+import me.reidj.thepit.player.SlotType
 import me.reidj.thepit.util.*
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
@@ -68,7 +69,7 @@ object AttributeUtil {
 
     fun getAllItems(player: Player, current: ItemStack?): Array<ItemStack> {
         val inventory = player.inventory.armorContents.toMutableList()
-        val artefact = player.inventory.getItem(17)
+        val artefact = player.inventory.getItem(SlotType.ARTEFACT.slot)
         if (current != null && current.isWeapon()) {
             inventory.add(current)
         }
