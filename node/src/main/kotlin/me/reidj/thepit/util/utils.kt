@@ -10,6 +10,7 @@ import me.func.protocol.data.status.MessageStatus
 import me.func.world.Label
 import me.reidj.thepit.app
 import me.reidj.thepit.player.User
+import me.reidj.thepit.protocol.LogPackage
 import net.minecraft.server.v1_12_R1.PacketPlayOutCustomSoundEffect
 import net.minecraft.server.v1_12_R1.SoundCategory
 import org.bukkit.Location
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.inventory.ItemStack
 import ru.cristalix.core.formatting.Formatting
+import ru.cristalix.core.network.ISocketClient
 
 /**
  * @project : ThePitReborn
@@ -100,6 +102,8 @@ fun ItemStack.isWeapon(): Boolean {
     }
     return false
 }
+
+fun ISocketClient.writeLog(message: String) = write(LogPackage(message))
 
 fun Label.resetLabelRotation(characterOffset: Int): Label {
     var offSet = characterOffset

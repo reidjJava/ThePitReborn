@@ -25,6 +25,7 @@ import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.Formatter
 import me.reidj.thepit.util.ImageType
 import me.reidj.thepit.util.coroutine
+import me.reidj.thepit.util.writeLog
 import net.minecraft.server.v1_12_R1.PacketDataSerializer
 import net.minecraft.server.v1_12_R1.PacketPlayOutCustomPayload
 import org.bukkit.Bukkit
@@ -125,6 +126,8 @@ class PlayerDataManager : Listener {
         user.player = player
         user.connection = connection
 
+        client().writeLog("${player.name} присоединился к игре.")
+
         after(5) {
             Anime.loadTextures(player, *ImageType.values().map { it.path() }.toTypedArray())
 
@@ -174,6 +177,8 @@ class PlayerDataManager : Listener {
     @EventHandler
     fun PlayerQuitEvent.handle() {
         val uuid = player.uniqueId
+
+        client().writeLog("${player.name} вышел из игры.")
 
         RankUtil.remove(uuid)
 

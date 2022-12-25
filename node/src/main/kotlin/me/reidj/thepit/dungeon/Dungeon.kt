@@ -3,11 +3,13 @@ package me.reidj.thepit.dungeon
 import me.func.mod.Anime
 import me.func.protocol.math.Position
 import me.reidj.thepit.app
+import me.reidj.thepit.client
 import me.reidj.thepit.entity.EntityUtil
 import me.reidj.thepit.player.State
 import me.reidj.thepit.player.User
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.discordRpcUpdate
+import me.reidj.thepit.util.writeLog
 
 /**
  * @project : ThePitReborn
@@ -18,6 +20,7 @@ class Dungeon : State {
     override fun enterState(user: User) {
         val player = user.player
         val dungeon = user.dungeon!!
+        val dungeonTitle = dungeon.type.title
 
         EntityUtil.spawn(user)
 
@@ -27,7 +30,9 @@ class Dungeon : State {
         dungeon.teleport(player)
         user.stat.numberVisitsToDungeon++
 
-        player.discordRpcUpdate("Проходит подземелье: ${dungeon.type.title} (ThePit)")
+        player.discordRpcUpdate("Проходит подземелье: $dungeonTitle(ThePit)")
+
+        client().writeLog("${player.name} вышел в подземелье $dungeonTitle.")
     }
 
     override fun playerVisible() = false
@@ -49,6 +54,8 @@ class Dungeon : State {
 
         Anime.topMessage(player, "Вы покинули подземелье")
         PreparePlayerBrain.spawnTeleport(player)
+
+        client().writeLog("${player.name} покинул подземелье ${dungeon.type.title}.")
 
         user.dungeon = null
     }

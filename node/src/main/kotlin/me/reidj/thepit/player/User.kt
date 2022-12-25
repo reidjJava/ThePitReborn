@@ -3,11 +3,13 @@ package me.reidj.thepit.player
 import me.func.mod.Anime
 import me.func.mod.util.after
 import me.reidj.thepit.app
+import me.reidj.thepit.client
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
 import me.reidj.thepit.util.hasKeyOfType
 import me.reidj.thepit.util.playSound
+import me.reidj.thepit.util.writeLog
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PlayerConnection
 import org.bukkit.Bukkit
@@ -199,16 +201,21 @@ class User(stat: Stat) {
     fun giveRankingPoints(points: Int) {
         val prevRankingPoints = stat.rankingPoints
         val prevRank = RankUtil.getRank(prevRankingPoints)
+        val prevRankTitle = prevRank.title
 
         stat.rankingPoints += points
+
+        client().writeLog("${player.name} получил $points ранговых очков.")
 
         val rank = RankUtil.getRank(stat.rankingPoints)
 
         if (rank.ordinal > prevRank.ordinal) {
+            val newRankTitle = rank.title
             player.playSound(Sound.ENTITY_PLAYER_LEVELUP)
             rank.reward(this)
             RankUtil.updateRank(this)
-            Anime.alert(player, "Поздравляем!", "Ваш ранг был повышен\n${prevRank.title} §f➠§l ${rank.title}")
+            Anime.alert(player, "Поздравляем!", "Ваш ранг был повышен\n$prevRankTitle §f➠§l $newRankTitle")
+            client().writeLog("${player.name} повысил ранг! $prevRankTitle-> $newRankTitle.")
         }
     }
 

@@ -5,11 +5,13 @@ import me.func.mod.util.after
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType.*
 import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.client
 import me.reidj.thepit.clock.detail.CombatManager
 import me.reidj.thepit.dungeon.Dungeon
 import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.prepare.PreparePlayerBrain
 import me.reidj.thepit.util.killBoardMessage
+import me.reidj.thepit.util.writeLog
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
@@ -101,8 +103,11 @@ class DamageHandler : Listener {
             }
 
             val killer = app.getUser(user.killer) ?: return@after
+            val entityName = getEntity().name
 
-            user.killer.killBoardMessage("㥚 §c${getEntity().name}")
+            user.killer.killBoardMessage("㥚 §c$entityName")
+
+            client().writeLog("${user.killer.name} убил игрока $entityName.")
 
             killer.giveMoneyWithBooster(3.0)
             killer.giveKill(1)

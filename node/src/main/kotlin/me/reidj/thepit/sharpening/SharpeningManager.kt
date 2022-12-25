@@ -6,10 +6,12 @@ import me.func.protocol.data.color.GlowColor
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.client
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.errorMessageOnChat
 import me.reidj.thepit.util.hasKeyOfType
 import me.reidj.thepit.util.playSound
+import me.reidj.thepit.util.writeLog
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
@@ -72,6 +74,14 @@ class SharpeningManager : Listener {
                         AttributeUtil.setNewLoreWithAttributes(itemStack)
 
                         player.inventory.setItem(slot, itemStack)
+
+                        client().writeLog(
+                            "${player.name} заточил предмет ${itemStack.i18NDisplayName}! $sharpeningLevel -> ${
+                                sharpenedTag.getInt(
+                                    "sharpeningLevel"
+                                )
+                            }."
+                        )
                     }
                     cursor.setAmount(cursor.getAmount() - 1)
                     isCancelled = true

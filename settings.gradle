@@ -17,4 +17,5 @@ include 'node'
 include 'mod'
 include 'common'
 include 'service'
+include 'discord'
 

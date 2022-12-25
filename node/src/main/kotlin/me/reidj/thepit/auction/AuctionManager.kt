@@ -103,6 +103,7 @@ class AuctionManager {
                 )
 
             client().write(AuctionPutLotPackage(auctionData))
+            client().writeLog("${player.name} выставил на аукцион ${itemInHand.i18NDisplayName} за $price монет.")
 
             itemInHand.setAmount(0)
             player.systemMessage(MessageStatus.FINE, GlowColor.GREEN, "Лот был создан.")
@@ -148,6 +149,10 @@ class AuctionManager {
                                             )
                                         )
                                         client().write(AuctionRemoveItemPackage(it.uuid))
+                                        client().writeLog(
+                                            "${confirmPlayer.name} купил лот на аукционе - ${itemStack.i18NDisplayName}" +
+                                                    " у игрока ${it.sellerName} за ${it.price} монет."
+                                        )
 
                                         confirmUser.giveMoney(-it.price.toDouble())
 
@@ -187,6 +192,7 @@ class AuctionManager {
                                 }
                                 Anime.close(player)
                                 player.inventory.addItem(itemStack)
+                                client().writeLog("${player.name} снял предмет с аукиона - ${itemStack.i18NDisplayName}.")
                             }
                         }
                     }

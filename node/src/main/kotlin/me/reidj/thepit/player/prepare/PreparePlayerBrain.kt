@@ -6,9 +6,11 @@ import me.func.mod.util.after
 import me.reidj.thepit.app
 import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
+import me.reidj.thepit.client
 import me.reidj.thepit.content.DailyReward
 import me.reidj.thepit.player.User
 import me.reidj.thepit.util.teleportAndPlayMusic
+import me.reidj.thepit.util.writeLog
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -49,6 +51,7 @@ object PreparePlayerBrain : Prepare {
                 player.sendMessage(Formatting.fine("Ваша ежедневная награда: " + dailyReward.title))
                 dailyReward.give(user)
                 stat.rewardStreak++
+                client().writeLog("${player.name} получил ежедневную награду за ${stat.rewardStreak} день.")
             }
             stat.lastEnter = now / 10000
         }
