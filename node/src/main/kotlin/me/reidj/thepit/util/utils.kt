@@ -47,10 +47,7 @@ fun Location.getBlockAt(): Block = app.getWorld().getBlockAt(this.clone().also {
     it.z += 0.5
 })
 
-fun Action.rightClick(): Boolean {
-    if (this == Action.RIGHT_CLICK_AIR || this == Action.RIGHT_CLICK_BLOCK) return true
-    return false
-}
+fun Action.rightClick() = this == Action.RIGHT_CLICK_AIR || this == Action.RIGHT_CLICK_BLOCK
 
 fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: String) {
     Glow.animate(this, 2.0, color)
