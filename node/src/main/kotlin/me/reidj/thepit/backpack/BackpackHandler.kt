@@ -2,6 +2,7 @@ package me.reidj.thepit.backpack
 
 import me.reidj.thepit.app
 import me.reidj.thepit.util.itemInMainHand
+import me.reidj.thepit.util.rightClick
 import me.reidj.thepit.util.setItemInMainHand
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
@@ -23,7 +24,7 @@ class BackpackHandler : Listener {
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
         val tag = nmsItem.tag
-        if (nmsItem.hasTag() && tag.hasKeyOfType("uuidBackpack", 8)) {
+        if (nmsItem.hasTag() && tag.hasKeyOfType("uuidBackpack", 8) && action.rightClick()) {
             player.openInventory(user.backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))])
         }
     }

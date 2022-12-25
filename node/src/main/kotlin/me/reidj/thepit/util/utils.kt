@@ -18,6 +18,7 @@ import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.craftbukkit.v1_12_R1.CraftSound
 import org.bukkit.entity.Player
+import org.bukkit.event.block.Action
 import org.bukkit.inventory.ItemStack
 import ru.cristalix.core.formatting.Formatting
 
@@ -45,6 +46,11 @@ fun Location.getBlockAt(): Block = app.getWorld().getBlockAt(this.clone().also {
     it.x += 0.5
     it.z += 0.5
 })
+
+fun Action.rightClick(): Boolean {
+    if (this == Action.RIGHT_CLICK_AIR || this == Action.RIGHT_CLICK_BLOCK) return true
+    return false
+}
 
 fun Player.systemMessage(messageStatus: MessageStatus, color: GlowColor, text: String) {
     Glow.animate(this, 2.0, color)
