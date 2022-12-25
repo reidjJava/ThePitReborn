@@ -22,7 +22,7 @@ enum class DungeonType(
     FORGOTTEN_MINES(
         "Заброшенные шахты",
         "mine",
-        app.worldMeta.label("dungeon")!!.clone().also {
+        app.worldMeta.label("dungeon-mine")!!.clone().also {
             it.y += 1.0
             it.yaw = 90f
         },
