@@ -8,6 +8,7 @@ import me.reidj.thepit.attribute.AttributeType
 import me.reidj.thepit.attribute.AttributeUtil
 import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.errorMessageOnChat
+import me.reidj.thepit.util.hasKeyOfType
 import me.reidj.thepit.util.playSound
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
@@ -43,12 +44,12 @@ class SharpeningManager : Listener {
                 return
             }
 
-            if (sharpeningStone.hasTag() && sharpeningTag.hasKeyOfType("sharpening_chance", 99)) {
+            sharpeningStone.hasKeyOfType("sharpening_chance", 99) {
                 if (sharpeningLevel == 10) {
                     player.errorMessageOnChat("У вас максимальный уровень заточки!")
                     player.playSound(Sound.BLOCK_ANVIL_BREAK)
                     isCancelled = true
-                    return
+                    return@hasKeyOfType
                 }
                 user.tryPurchase(price, {
                     if (Math.random() < chance && chance < 100.0) {
@@ -77,7 +78,7 @@ class SharpeningManager : Listener {
                 }, {
                     isCancelled = true
                     player.errorMessageOnChat("Недостаточно средств.")
-                   })
+                })
             }
         }
     }

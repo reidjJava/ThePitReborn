@@ -96,7 +96,7 @@ class ConsumableManager : Listener {
                     user.armLock {
                         val consumableAmount =
                             player.inventory.map { CraftItemStack.asNMSCopy(it) }.filter { itemStack ->
-                                itemStack.hasTag() && itemStack.tag.hasKeyOfType("consumable", 8)
+                                itemStack.hasKeyOfType("consumable", 8)
                             }
 
                         if (consumableAmount.sumOf { it.asBukkitMirror().getAmount() } == 10) {
@@ -135,7 +135,7 @@ class ConsumableManager : Listener {
         val tag = nmsItem.tag ?: return
         val uuid = player.uniqueId
 
-        if (tag.hasKeyOfType("consumable", 8)) {
+        nmsItem.hasKeyOfType("consumable", 8) {
             if (!DelayUtil.hasCountdown(uuid)) {
                 val itemInHand = player.itemInMainHand()
                 itemInHand.setAmount(itemInHand.getAmount() - 1)
@@ -164,9 +164,7 @@ class ConsumableManager : Listener {
     fun InventoryClickEvent.handle() {
         val player = whoClicked as Player
         if (player.openInventory.type == InventoryType.ENDER_CHEST) {
-            val nmsItem = CraftItemStack.asNMSCopy(currentItem)
-            val tag = nmsItem.tag
-            if (nmsItem.hasTag() && tag.hasKeyOfType("consumable", 8)) {
+            CraftItemStack.asNMSCopy(currentItem).hasKeyOfType("consumable", 8) {
                 isCancelled = true
                 player.updateInventory()
             }

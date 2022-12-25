@@ -68,12 +68,11 @@ class AuctionManager {
             val user = app.getUser(player) ?: return@command
             val itemInHand = player.itemInMainHand()
             val nmsItem = CraftItemStack.asNMSCopy(itemInHand)
-            val tag = nmsItem.tag
 
             if (args.isEmpty()) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Использование §b/sell §6[Цена].")
                 return@command
-            } else if (!nmsItem.hasTag() || !tag.hasKeyOfType("address", 8)) {
+            } else if (!nmsItem.hasKeyOfType("address", 8)) {
                 player.systemMessage(MessageStatus.ERROR, GlowColor.RED, "Вы не можете продать этот предмет!")
                 return@command
             } else if (!NumberUtils.isNumber(args[0])) {

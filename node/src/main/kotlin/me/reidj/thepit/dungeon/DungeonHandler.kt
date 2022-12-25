@@ -12,6 +12,7 @@ import me.func.protocol.ui.alert.NotificationData
 import me.reidj.thepit.app
 import me.reidj.thepit.player.DefaultState
 import me.reidj.thepit.player.User
+import me.reidj.thepit.util.hasKeyOfType
 import me.reidj.thepit.util.itemInMainHand
 import me.reidj.thepit.util.systemMessage
 import org.bukkit.Bukkit
@@ -70,10 +71,10 @@ class DungeonHandler : Listener {
             return
         }
 
-        if (nmsItem.hasTag() && tag.hasKeyOfType("dungeon", 8)) {
+        nmsItem.hasKeyOfType("dungeon", 8) {
             val dungeonName = tag.getString("dungeon")
             val uuid = player.uniqueId
-            val dungeon = DungeonType.values().find { dungeonName == it.tag } ?: return
+            val dungeon = DungeonType.values().find { dungeonName == it.tag } ?: return@hasKeyOfType
             val dungeonData = DungeonData(UUID.randomUUID(), dungeon, uuid)
             val partySnapshot = IPartyService.get().getPartyByMember(uuid).get()
 
@@ -86,9 +87,9 @@ class DungeonHandler : Listener {
                         GlowColor.RED,
                         "Недопустимое количество участников пати!"
                     )
-                    return
+                    return@hasKeyOfType
                 } else if (checkNumberVisits(user)) {
-                    return
+                    return@hasKeyOfType
                 }
 
                 party.members.mapNotNull { Bukkit.getPlayer(it) }.forEach {

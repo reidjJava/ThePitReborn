@@ -6,6 +6,7 @@ import me.reidj.thepit.app
 import me.reidj.thepit.data.Stat
 import me.reidj.thepit.dungeon.DungeonData
 import me.reidj.thepit.rank.RankUtil
+import me.reidj.thepit.util.hasKeyOfType
 import me.reidj.thepit.util.playSound
 import net.minecraft.server.v1_12_R1.Packet
 import net.minecraft.server.v1_12_R1.PlayerConnection
@@ -54,7 +55,8 @@ class User(stat: Stat) {
         player.inventory.filterNotNull().forEach { itemStack ->
             val nmsItem = CraftItemStack.asNMSCopy(itemStack)
             val tag = nmsItem.tag
-            if (nmsItem.hasTag() && tag.hasKeyOfType("uuidBackpack", 8)) {
+            nmsItem.hasKeyOfType("uuidBackpack", 8) {
+
                 backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))] =
                     (Bukkit.createInventory(player, tag.getInt("size"), itemStack.i18NDisplayName).also {
                         fromBase64(tag.getString("items"), it)

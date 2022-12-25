@@ -1,6 +1,7 @@
 package me.reidj.thepit.backpack
 
 import me.reidj.thepit.app
+import me.reidj.thepit.util.hasKeyOfType
 import me.reidj.thepit.util.itemInMainHand
 import me.reidj.thepit.util.rightClick
 import me.reidj.thepit.util.setItemInMainHand
@@ -24,8 +25,10 @@ class BackpackHandler : Listener {
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
         val tag = nmsItem.tag
-        if (nmsItem.hasTag() && tag.hasKeyOfType("uuidBackpack", 8) && action.rightClick()) {
-            player.openInventory(user.backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))])
+        nmsItem.hasKeyOfType("uuidBackpack", 8) {
+            if (action.rightClick()) {
+                player.openInventory(user.backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))])
+            }
         }
     }
 
@@ -36,7 +39,7 @@ class BackpackHandler : Listener {
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
         val tag = nmsItem.tag
-        if (nmsItem.hasTag() && tag.hasKeyOfType("uuidBackpack", 8)) {
+        nmsItem.hasKeyOfType("uuidBackpack", 8) {
             tag.setString("items", user.toBase64(inventory))
             player.setItemInMainHand(nmsItem.asBukkitMirror())
         }

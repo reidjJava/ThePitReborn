@@ -84,6 +84,16 @@ fun User.playSound(sound: Sound, x: Double, y: Double, z: Double) {
     )
 }
 
+fun net.minecraft.server.v1_12_R1.ItemStack.hasKeyOfType(s: String, i: Int, acceptAction: () -> Unit) {
+    if (hasTag() && tag.hasKeyOfType(s, i)) {
+        acceptAction()
+    }
+}
+
+fun net.minecraft.server.v1_12_R1.ItemStack.hasKeyOfType(s: String, i: Int): Boolean {
+    return hasTag() && tag.hasKeyOfType(s, i)
+}
+
 fun ItemStack.isWeapon(): Boolean {
     val name = getType().name
     val nmsItem = CraftItemStack.asNMSCopy(this)

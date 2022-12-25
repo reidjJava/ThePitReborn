@@ -1,10 +1,7 @@
 package me.reidj.thepit.attribute
 
 import me.reidj.thepit.item.ItemManager
-import me.reidj.thepit.util.Formatter
-import me.reidj.thepit.util.attributeUpdate
-import me.reidj.thepit.util.isWeapon
-import me.reidj.thepit.util.itemInMainHand
+import me.reidj.thepit.util.*
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -35,7 +32,7 @@ object AttributeUtil {
 
         itemStack.itemMeta = itemStack.itemMeta.also { meta ->
             meta.lore = meta.lore.apply {
-                if (tag.hasKeyOfType("sharpeningLevel", 99)) {
+                nmsItem.hasKeyOfType("sharpeningLevel", 99) {
                     add("")
                 }
                 addAll(newLore)
@@ -66,7 +63,7 @@ object AttributeUtil {
 
     fun getAttributeValue(type: AttributeType, items: Array<ItemStack>) =
         items.map { CraftItemStack.asNMSCopy(it) }
-            .filter { it.hasTag() && it.tag.hasKeyOfType(type.getObjectName(), 99) }
+            .filter { it.hasKeyOfType(type.getObjectName(), 99) }
             .sumOf { it.tag.getDouble(type.getObjectName()) }
 
     fun getAllItems(player: Player, current: ItemStack?): Array<ItemStack> {
