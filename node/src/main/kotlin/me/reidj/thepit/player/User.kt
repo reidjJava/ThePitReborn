@@ -58,7 +58,6 @@ class User(stat: Stat) {
             val nmsItem = CraftItemStack.asNMSCopy(itemStack)
             val tag = nmsItem.tag
             nmsItem.hasKeyOfType("uuidBackpack", 8) {
-
                 backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))] =
                     (Bukkit.createInventory(player, tag.getInt("size"), itemStack.i18NDisplayName).also {
                         fromBase64(tag.getString("items"), it)

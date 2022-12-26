@@ -32,7 +32,7 @@ class Dungeon : State {
 
         player.discordRpcUpdate("Проходит подземелье: $dungeonTitle(ThePit)")
 
-        client().writeLog("${player.name} вышел в подземелье $dungeonTitle.")
+        client().writeLog("${player.name} вошёл в подземелье $dungeonTitle.")
     }
 
     override fun playerVisible() = false

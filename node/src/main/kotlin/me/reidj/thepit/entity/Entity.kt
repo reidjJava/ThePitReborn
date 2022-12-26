@@ -1,8 +1,8 @@
 package me.reidj.thepit.entity
 
 import me.reidj.thepit.app
+import me.reidj.thepit.drop.Drop
 import me.reidj.thepit.entity.ability.Ability
-import me.reidj.thepit.entity.drop.EntityDrop
 import me.reidj.thepit.item.ItemManager
 import org.bukkit.Location
 import org.bukkit.Sound
@@ -60,7 +60,7 @@ abstract class Entity(private val entityType: EntityType) {
     abstract var sound: Sound
 
     @JvmName("getDrops1")
-    fun getDrops() = drops.map { EntityDrop(it.first, ItemManager[it.second]) }.toMutableSet()
+    fun getDrops() = drops.map { Drop(it.first, ItemManager[it.second]) }.toMutableSet()
 
     fun setTarget(uuid: UUID) {
         EntityUtil.targetPlayer[entity.uniqueId] = uuid

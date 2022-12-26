@@ -1,7 +1,6 @@
 package me.reidj.thepit.item
 
 import dev.implario.bukkit.item.ItemBuilder
-import java.util.*
 
 /**
  * @project : ThePitReborn
@@ -13,7 +12,7 @@ class Bag(override val itemBuilder: ItemBuilder) : Item() {
         val sizePath = "${path}$objectName.size"
         val itemsPath = "${path}$objectName.items"
         if (configuration.isString("${path}$objectName.uuidBackpack")) {
-            itemBuilder.nbt("uuidBackpack", UUID.randomUUID().toString())
+            itemBuilder.nbt("uuidBackpack", "")
         }
         if (configuration.isInt(sizePath)) {
             itemBuilder.nbt("size", configuration.getInt(sizePath))

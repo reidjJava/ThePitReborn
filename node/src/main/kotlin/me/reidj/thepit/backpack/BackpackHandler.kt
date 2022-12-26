@@ -38,9 +38,8 @@ class BackpackHandler : Listener {
         val player = player as Player
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
-        val tag = nmsItem.tag
         nmsItem.hasKeyOfType("uuidBackpack", 8) {
-            tag.setString("items", user.toBase64(inventory))
+            nmsItem.tag.setString("items", user.toBase64(inventory))
             player.setItemInMainHand(nmsItem.asBukkitMirror())
         }
     }

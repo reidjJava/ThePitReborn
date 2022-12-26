@@ -30,21 +30,19 @@ suspend fun main() {
 
     MicroserviceBootstrap.bootstrap(MicroServicePlatform(2))
 
-    val client = ISocketClient.get()
+    ISocketClient.get().also {
+        it.registerCapabilities(
+            Capability.builder()
+                .className(LogPackage::class.java.name)
+                .notification(true)
+                .build()
+        )
 
-    client.registerCapabilities(
-        Capability.builder()
-            .className(LogPackage::class.java.name)
-            .notification(true)
-            .build()
-    )
-
-    val scope = CoroutineScope(Dispatchers.IO)
-
-    client.addListener(LogPackage::class.java) { realm, pckg ->
-        scope.launch {
-            rest.channel.createMessage(Snowflake(968266478363213834)) {
-                content = "${dateFormat.format(Date())} | ${realm.realmName} | ${pckg.message}"
+        it.addListener(LogPackage::class.java) { realm, pckg ->
+            CoroutineScope(Dispatchers.IO).launch {
+                rest.channel.createMessage(Snowflake(968266478363213834)) {
+                    content = "${dateFormat.format(Date())} | ${realm.realmName} | ${pckg.message}"
+                }
             }
         }
     }
