@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.inventory.InventoryType.CHEST
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.*
 
@@ -25,8 +25,8 @@ class BackpackHandler : Listener {
         val user = app.getUser(player) ?: return
         val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
         val tag = nmsItem.tag
-        nmsItem.hasKeyOfType("uuidBackpack", 8) {
-            if (action.rightClick()) {
+        if (action.rightClick()) {
+            nmsItem.hasKeyOfType("uuidBackpack", 8) {
                 player.openInventory(user.backpackInventory[UUID.fromString(tag.getString("uuidBackpack"))])
             }
         }
@@ -34,13 +34,21 @@ class BackpackHandler : Listener {
 
     @EventHandler
     fun InventoryCloseEvent.handle() {
-        if (inventory.type != InventoryType.CHEST) return
-        val player = player as Player
-        val user = app.getUser(player) ?: return
-        val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
-        nmsItem.hasKeyOfType("uuidBackpack", 8) {
-            nmsItem.tag.setString("items", user.toBase64(inventory))
-            player.setItemInMainHand(nmsItem.asBukkitMirror())
+        if (inventory.type == CHEST) {
+            val player = player as Player
+            inventory.filterNotNull().forEach {
+                val nmsItem = CraftItemStack.asNMSCopy(it)
+                if (nmsItem.hasKeyOfType("uuidBackpack", 8)) {
+                    player.setItemInMainHand(it)
+                    inventory.remove(it)
+                }
+            }
+            val user = app.getUser(player) ?: return
+            val nmsItem = CraftItemStack.asNMSCopy(player.itemInMainHand())
+            nmsItem.hasKeyOfType("uuidBackpack", 8) {
+                nmsItem.tag.setString("items", user.toBase64(inventory))
+                player.setItemInMainHand(nmsItem.asBukkitMirror())
+            }
         }
     }
 }

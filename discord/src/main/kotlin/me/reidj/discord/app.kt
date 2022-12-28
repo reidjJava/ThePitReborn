@@ -27,6 +27,7 @@ private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
 suspend fun main() {
     val kord = Kord(TOKEN)
     val rest = RestClient(TOKEN)
+    val scope = CoroutineScope(Dispatchers.IO)
 
     MicroserviceBootstrap.bootstrap(MicroServicePlatform(2))
 
@@ -39,7 +40,7 @@ suspend fun main() {
         )
 
         it.addListener(LogPackage::class.java) { realm, pckg ->
-            CoroutineScope(Dispatchers.IO).launch {
+            scope.launch {
                 rest.channel.createMessage(Snowflake(968266478363213834)) {
                     content = "${dateFormat.format(Date())} | ${realm.realmName} | ${pckg.message}"
                 }
