@@ -118,14 +118,15 @@ class AuctionManager {
             auction.storage = auctionData.filter { user.stat.uuid != it.seller }.map {
                 val itemStack = user.toFromBase64ItemStack(it.item) ?: return@launch
                 val displayName = itemStack.i18NDisplayName
+                val price = (it.price * 0.15) + it.price
                 button {
                     title = displayName
                     description = "Продавец §b${it.sellerName}"
-                    price = it.price.toLong()
+                    this.price = it.price.toLong()
                     item = itemStack
                     hover(itemStack.itemMeta.lore)
                     onClick { player, _, _ ->
-                        Confirmation("Купить", displayName, "за ${it.price} ${Emoji.COIN}") { confirmPlayer ->
+                        Confirmation("Купить", displayName, "за $price ${Emoji.COIN}") { confirmPlayer ->
                             val confirmUser = app.getUser(confirmPlayer) ?: return@Confirmation
                             confirmUser.armLock {
                                 confirmUser.tryPurchase(it.price.toDouble(), {
@@ -154,7 +155,7 @@ class AuctionManager {
                                                     " у игрока ${it.sellerName} за ${it.price} монет."
                                         )
 
-                                        confirmUser.giveMoney(-it.price.toDouble())
+                                        confirmUser.giveMoney(-price)
 
                                         confirmPlayer.inventory.addItem(itemStack)
                                     }
