@@ -6,10 +6,10 @@ import me.func.mod.util.command
 import me.func.protocol.data.emoji.Emoji
 import me.func.protocol.ui.dialog.*
 import me.reidj.thepit.app
-import me.reidj.thepit.item.ItemManager
 import me.reidj.thepit.util.errorMessageOnScreen
 import me.reidj.thepit.util.hasKeyOfType
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
+import org.bukkit.entity.Player
 
 /**
  * @project : ThePitReborn
@@ -67,7 +67,10 @@ class BarterManager {
             },
             button {
                 title = "Ваши предложения"
-                onClick { player, _, _ -> suggestions.open(player) }
+                onClick { player, _, _ ->
+                    generateSuggestionsButtons(player)
+                    suggestions.open(player)
+                }
             }
         )
     }
@@ -84,7 +87,6 @@ class BarterManager {
         hint = "Продать"
         rows = 2
         columns = 4
-        storage = generateSuggestionsButtons()
     }
 
     init {
@@ -106,9 +108,8 @@ class BarterManager {
         command("barterMenu") { player, _ -> barter.open(player) }
     }
 
-    private fun generateSuggestionsButtons() = ItemManager.items
-        .filter { CraftItemStack.asNMSCopy(it.value).hasKeyOfType("barterPrice", 99) }
-        .map { it.value }
+    private fun generateSuggestionsButtons(player: Player) = player.inventory
+        .filter { CraftItemStack.asNMSCopy(it).hasKeyOfType("barterPrice", 99) }
         .map {
             val tag = CraftItemStack.asNMSCopy(it).tag
             val price = tag.getInt("barterPrice")
