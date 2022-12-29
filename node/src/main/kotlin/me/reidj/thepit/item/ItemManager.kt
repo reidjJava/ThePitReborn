@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack
 class ItemManager {
 
     companion object {
-        private val items = hashMapOf<String, ItemStack>()
+        val items = hashMapOf<String, ItemStack>()
 
         operator fun get(objectName: String) = items[objectName]!!
     }
